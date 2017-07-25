@@ -1,0 +1,178 @@
+﻿CREATE EXTENSION IF NOT EXISTS citext;
+
+drop table if exists Level CASCADE;
+create table Level
+(
+  LevelId int not null primary key,
+  LevelName varchar(50)
+);
+insert into Level (LevelId, LevelName)
+values (1, 'Administrator'),(2, 'Doctor'),(3, 'Pharmacist'),(4, 'Patient');
+
+drop table if exists Gender CASCADE;
+create table Gender
+(
+  GenderId char(1) not null primary key,
+  GenderName varchar(20)
+);
+insert into Gender (GenderId, GenderName) values ('m', 'male'), ('f', 'female'), ('b','both');
+
+
+drop table if exists "User" CASCADE;
+create table "User"
+(
+  UserId SERIAL primary key,
+  LevelId int not null references Level(LevelId),
+  UserName citext not null,
+  Password citext not null,
+  IsFB boolean not null,
+  Name varchar(100)
+  
+);
+insert into "User" (LevelId, UserName, Password, IsFB)
+values (1, 'admin', '202cb962ac59075b964b07152d234b70', false);
+
+
+drop table if exists Doctor CASCADE;
+create table Doctor
+(
+  DoctorId SERIAL primary key,
+  UserId int not null references "User"(UserId),
+  img bytea,
+  Specialization text,
+  Description text  
+);
+
+
+drop table if exists PayType CASCADE;
+create table PayType
+(
+  PayTypeId int not null primary key,
+  PayTypeName varchar(50)
+);
+insert into PayType (PayTypeId, PayTypeName)
+values (1, 'PayNone'), (2, 'PayMonthly');
+
+drop table if exists Patient CASCADE;
+create table Patient
+(
+  PatientId SERIAL primary key,
+  UserId int not null references "User"(UserId),
+  PayTypeId int not null references PayType(PayTypeId),
+  EndDate date
+);
+
+
+drop table if exists Who CASCADE;
+create table Who
+(
+  WhoId int not null primary key,
+  WhoName varchar(50)
+);
+insert into Who (WhoId, WhoName)
+values (1, 'Ме'),(2, 'Mychild'),(3, 'Someoneelse');
+
+drop table if exists IssueStatus CASCADE;
+create table IssueStatus
+(
+  IssueStatusId int not null primary key,
+  IssueStatusName varchar(50)
+);
+insert into IssueStatus (IssueStatusId, IssueStatusName)
+values (1, 'Initial'),(2, 'Taken'),(3, 'Done');
+
+drop table if exists Issue CASCADE;
+create table Issue
+(
+  IssueId SERIAL primary key,
+  PatientUserId int not null references "User"(UserId),
+  DoctorUserId int references "User"(UserId),
+  WhoId int not null references Who(WhoId),
+  GenderId char(1) not null references Gender(GenderId),
+  BirthMonth smallint,
+  BirthYear int,
+  Description text not null,
+  ChronicIllnessDescription text,
+  AllergyDescription text,
+  MedicineDescription text,
+  Paid boolean not null  
+);
+
+drop table if exists Chronic CASCADE;
+create table Chronic
+(
+  ChronicId SERIAL not null primary key,
+  ChronicParentId int references Chronic(ChronicId),
+  ChronicName varchar(100)
+);
+
+drop table if exists Issue2Chronic CASCADE;
+create table Issue2Chronic
+(
+  Issue2ChronicId SERIAL not null primary key,
+  ChronicId int not null references Chronic(ChronicId),
+  IssueId int not null references Issue(IssueId)
+);
+
+drop table if exists Allergy CASCADE;
+create table Allergy
+(
+  AllergyId SERIAL not null primary key,
+  AllergyParentId int references Allergy(AllergyId),
+  AllergyName varchar(100)
+);
+
+drop table if exists Issue2Allergy CASCADE;
+create table Issue2Allergy
+(
+  Issue2AllergyId SERIAL not null primary key,
+  AllergyId int not null references Allergy(AllergyId),
+  IssueId int not null references Issue(IssueId)
+);
+
+
+drop table if exists Symptom CASCADE;
+create table Symptom
+(
+  SymptomId SERIAL not null primary key,
+  SymptomParentId int references Symptom(SymptomId),
+  SymptomName varchar(100)
+);
+
+drop table if exists Issue2Symptom CASCADE;
+create table Issue2Symptom
+(
+  Issue2SymptomId SERIAL not null primary key,
+  SymptomId int not null references Symptom(SymptomId),
+  IssueId int not null references Issue(IssueId)
+);
+
+drop table if exists ObjType CASCADE;
+create table ObjType
+(
+  ObjTypeId int not null primary key,
+  ObjTypeName varchar(50)
+);
+insert into ObjType (ObjTypeId, ObjTypeName)
+values (1, 'Image'),(2, 'Video'),(3, 'Audio');
+
+drop table if exists Obj CASCADE;
+create table Obj
+(
+  ObjId SERIAL not null primary key,
+  ObjTypeId int not null references ObjType(ObjTypeId),
+  ObjData bytea not null
+);
+
+
+drop table if exists Chat CASCADE;
+create table Chat
+(
+  ChatId SERIAL not null primary key,
+  IssueId int not null references Issue(IssueId),
+  PatientSaid boolean not null,
+  OnDate timestamp,
+  Said text not null,
+  ObjId int references Obj(ObjId)
+);
+
