@@ -26,7 +26,8 @@ create table "User"
   UserName citext not null,
   Password citext not null,
   IsFB boolean not null,
-  Name varchar(100)
+  Name varchar(100),
+  Active boolean not null default true
   
 );
 insert into "User" (LevelId, UserName, Password, IsFB)
@@ -81,14 +82,26 @@ create table IssueStatus
 insert into IssueStatus (IssueStatusId, IssueStatusName)
 values (1, 'Initial'),(2, 'Taken'),(3, 'Done');
 
+drop table if exists Since CASCADE;
+create table Since
+(
+  SinceId int not null primary key,
+  SinceName varchar(50)
+);
+insert into Since (SinceId, SinceName)
+values (1, 'Today'),(2, 'Yesterday'),(3, 'Week'),(4, 'Month'),(5, 'Year'),(6, 'Year+');
+
+
 drop table if exists Issue CASCADE;
 create table Issue
 (
   IssueId SERIAL primary key,
   PatientUserId int not null references "User"(UserId),
-  DoctorUserId int references "User"(UserId),
+  ReqExpertLevelId int not null references Level(LevelId),
+  ExpertUserId int references "User"(UserId),
   WhoId int not null references Who(WhoId),
   GenderId char(1) not null references Gender(GenderId),
+  SinceId int null references Since(SinceId),
   BirthMonth smallint,
   BirthYear int,
   Description text not null,
@@ -101,8 +114,7 @@ create table Issue
 drop table if exists Chronic CASCADE;
 create table Chronic
 (
-  ChronicId SERIAL not null primary key,
-  ChronicParentId int references Chronic(ChronicId),
+  ChronicId int not null primary key,
   ChronicName varchar(100)
 );
 
@@ -111,23 +123,17 @@ create table Issue2Chronic
 (
   Issue2ChronicId SERIAL not null primary key,
   ChronicId int not null references Chronic(ChronicId),
-  IssueId int not null references Issue(IssueId)
+  IssueId int not null references Issue(IssueId),
+  ChronicFree varchar(100)
 );
 
-drop table if exists Allergy CASCADE;
-create table Allergy
-(
-  AllergyId SERIAL not null primary key,
-  AllergyParentId int references Allergy(AllergyId),
-  AllergyName varchar(100)
-);
 
 drop table if exists Issue2Allergy CASCADE;
 create table Issue2Allergy
 (
   Issue2AllergyId SERIAL not null primary key,
-  AllergyId int not null references Allergy(AllergyId),
-  IssueId int not null references Issue(IssueId)
+  IssueId int not null references Issue(IssueId),
+  Allergy varchar(100)
 );
 
 
@@ -176,3 +182,12 @@ create table Chat
   ObjId int references Obj(ObjId)
 );
 
+
+drop table if exists Issue2Medication CASCADE;
+create table Issue2Medication
+(
+  Issue2MedicationId SERIAL not null primary key,
+  SinceId int not null references Since(SinceId),
+  Medication varchar(100),
+  IssueId int not null references Issue(IssueId)
+);
