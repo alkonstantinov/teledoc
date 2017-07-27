@@ -26,7 +26,7 @@ create table "User"
   UserName citext not null,
   Password citext not null,
   IsFB boolean not null,
-  Name varchar(100),
+  Name text,
   Active boolean not null default true
   
 );
@@ -39,6 +39,7 @@ create table Doctor
 (
   DoctorId SERIAL primary key,
   UserId int not null references "User"(UserId),
+  UIN varchar (50),
   img bytea,
   Specialization text,
   Description text  
