@@ -106,14 +106,151 @@ $$ LANGUAGE sql;
 
 -- -------------------
 -- въвеждане на всички параметри по ишу от страна на потребителя
+create or replace function pIssueSet (_IssueData json)
+returns integer
+ as $$
+ declare _IssueId integer;
+begin
+  insert into Issue 
+  (
+    PatientUserId,
+    ReqExpertLevelId,
+    ExpertUserId,
+    WhoId,
+    GenderId,
+    SinceId,
+    BirthMonth,
+    BirthYear,
+    Description,
+    Paid  
+  )
+  values 
+  (_IssueData->>'PatientUserId',
+  _IssueData->>'ReqExpertLevelId',
+  null,
+  _IssueData->>'WhoId',
+  _IssueData->>'GenderId',
+  _IssueData->>'SinceId',
+  _IssueData->>'BirthMonth',
+  _IssueData->>'BirthYear',
+  _IssueData->>'Description',
+  _IssueData->>'LevelId'
+  )
+  returning IssueId into _IssueId;
+  
+  return _IssueId; 
+end $$ LANGUAGE plpgsql; 
+
+
+
 -- извличане на хронични болести
+create or replace function pChronicSelect () 
+returns table (ChronicId int, ChronicName varchar(100))
+ as $$
+  select ChronicId, ChronicName
+  from Chronic
+  order by OrderBy asc
+$$ LANGUAGE sql; 
+
 -- извличане на симптоми
+create or replace function pSymptomSelect () 
+returns table (SymptomId int, SymptomParentId int, SymptomName varchar(100))
+ as $$
+  select SymptomId, SymptomParentId, SymptomName
+  from Symptom
+  order by orderby, SymptomParentId asc
+$$ LANGUAGE sql; 
+
+
 -- извличане на времетраене за лекарства
+create or replace function pSinceSelect () 
+returns table (SinceId int, SinceName varchar(100))
+ as $$
+  select SinceId, SinceName
+  from Since
+  
+$$ LANGUAGE sql; 
+
+
 -- извличане на предходни параметри по ишу
+create or replace function pIssueLastParamsGet (_UserId int, _WhoId int) 
+returns json
+ as $$
+declare _IssueId integer;
+begin
+  
+end  
+$$ LANGUAGE plpgsql; 
 -- Поемане на ишу
+create or replace function pIssueAssign (_IssueId int, _ExpertUserId int) 
+returns void
+ as $$
+  update Issue
+  set ExpertUserId = _ExpertUserId
+  where IssueId = _IssueId;
+$$ LANGUAGE sql; 
+
 -- затваряне на ишу
+create or replace function pIssueSetStatus (_IssueId int, _IssueStatusId int) 
+returns void
+ as $$
+  update Issue
+  set IssueStatusId = _IssueStatusId
+  where IssueId = _IssueId;
+$$ LANGUAGE sql; 
+
 -- извличане на отворени ишута по специалист
+create or replace function pIssueGetOpened (_ReqExpertLevelId int) 
+returns table (IssueId int, OnDate timestamp, PatientName text)
+ as $$
+
+  select
+    i.IssueId,
+    (select min(ondate) from IssueEvent where IssueId = i.IssueId) OnDate,
+    u.Name
+  from Issue i
+  join "User" u on u.UserId = i.PatientUserId
+  where i.ReqExpertLevelId = _ReqExpertLevelId and i.IssueStatusId = 1;
+$$ LANGUAGE sql; 
+
 -- ---------------------
+
 -- извличане на чат
+create or replace function pChatGet (_IssueId int) 
+returns table (ChatId int, PatientSaid boolean, OnDate timestamp, Said text, ObjId int)
+ as $$
+  select ChatId, PatientSaid, OnDate, Said, ObjId
+  from Chat
+  where IssueId = _IssueId
+  order by OnDate;
+$$ LANGUAGE sql; 
+
+
 -- добавяне на елемент в чат
--- извличане на обект за даунлоуд
+create or replace function pChatNewItem (_ChatId int, _PatientSaid boolean, _Said text, _ObjTypeId int, _ObjData bytea, _ObjPreviewData bytea) 
+returns integer
+ as $$
+declare _ObjId integer;
+begin
+  _ObjId := null;
+  if ObjData is not null then
+    insert into Obj(ObjTypeId, ObjData, ObjPreviewData)
+    values (_ObjTypeId, _ObjData, _ObjPreviewData)
+    returning ObjId into _ObjId;
+  end if;
+  insert into Chat (ChatId, PatientSaid, Said, ObjId, OnDate)
+  values (_ChatId, _PatientSaid, _Said, _ObjId, now());
+  return _ObjId; 
+end  
+$$ LANGUAGE plpgsql; 
+
+
+-- извличане на обект
+
+create or replace function pObjGet (_ObjId int)
+returns table (ObjTypeId int, ObjData bytea, ObjPreviewData bytea)
+as $$
+  select ObjTypeId, ObjData, ObjPreviewData
+  from Obj
+  where ObjId = _ObjId;
+$$ LANGUAGE sql;

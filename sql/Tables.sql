@@ -97,6 +97,7 @@ drop table if exists Issue CASCADE;
 create table Issue
 (
   IssueId SERIAL primary key,
+  IssueStatusId int not null references IssueStatus (IssueStatusId),
   PatientUserId int not null references "User"(UserId),
   ReqExpertLevelId int not null references Level(LevelId),
   ExpertUserId int references "User"(UserId),
@@ -105,18 +106,25 @@ create table Issue
   SinceId int null references Since(SinceId),
   BirthMonth smallint,
   BirthYear int,
-  Description text not null,
-  ChronicIllnessDescription text,
-  AllergyDescription text,
-  MedicineDescription text,
+  Description text not null, 
   Paid boolean not null  
+);
+
+drop table if exists IssueEvent CASCADE;
+create table IssueEvent
+(
+  IssueEventId SERIAL primary key,
+  IssueId int not null references Issue (IssueId),
+  IssueStatusId int not null references IssueStatus (IssueStatusId),
+  OnDate timestamp not null
 );
 
 drop table if exists Chronic CASCADE;
 create table Chronic
 (
   ChronicId int not null primary key,
-  ChronicName varchar(100)
+  ChronicName varchar(100),
+  OrderBy int not null
 );
 
 drop table if exists Issue2Chronic CASCADE;
@@ -143,7 +151,8 @@ create table Symptom
 (
   SymptomId SERIAL not null primary key,
   SymptomParentId int references Symptom(SymptomId),
-  SymptomName varchar(100)
+  SymptomName varchar(100),
+  OrderBy int
 );
 
 drop table if exists Issue2Symptom CASCADE;
@@ -168,7 +177,8 @@ create table Obj
 (
   ObjId SERIAL not null primary key,
   ObjTypeId int not null references ObjType(ObjTypeId),
-  ObjData bytea not null
+  ObjData bytea not null,
+  ObjPreviewData bytea not null
 );
 
 
