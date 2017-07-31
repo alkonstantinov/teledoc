@@ -110,6 +110,7 @@ create or replace function pIssueSet (_IssueData json)
 returns integer
  as $$
  declare _IssueId integer;
+ declare _i json;
 begin
   insert into Issue 
   (
@@ -137,6 +138,27 @@ begin
   _IssueData->>'LevelId'
   )
   returning IssueId into _IssueId;
+
+  FOR _i IN select * from json_array_elements((_IssueData->'Chronic')::json) LOOP
+        insert into Issue2Chronic (ChronicId, IssueId, ChronicFree)
+        values (_i->'ChronicId', _IssueId, _i->'ChronicFree');
+  END LOOP;
+
+  FOR _i IN select * from json_array_elements((_IssueData->'Allergy')::json) LOOP
+        insert into Issue2Allergy (IssueId, Allergy)
+        values (_IssueId, _i->'Allergy');
+  END LOOP;
+
+  FOR _i IN select * from json_array_elements((_IssueData->'Symptom')::json) LOOP
+        insert into Issue2Symptom (SymptomId, IssueId)
+        values (_i->'SymptomId', _IssueId);
+  END LOOP;
+
+  FOR _i IN select * from json_array_elements((_IssueData->'Medication')::json) LOOP
+        insert into Issue2Medication (SinceId, IssueId, Medication)
+        values (_i->'SinceId', _IssueId, _i->'Medication');
+  END LOOP;
+
   
   return _IssueId; 
 end $$ LANGUAGE plpgsql; 
@@ -173,14 +195,14 @@ $$ LANGUAGE sql;
 
 
 -- извличане на предходни параметри по ишу
-create or replace function pIssueLastParamsGet (_UserId int, _WhoId int) 
-returns json
+create or replace function pIssueLastGet (_UserId int, _WhoId int) 
+returns table (IssueId integer)
  as $$
-declare _IssueId integer;
-begin
-  
-end  
-$$ LANGUAGE plpgsql; 
+ select max (IssueId)
+ from Issue
+ where PatientUserId = _UserId and WhoId = _WhoId;
+$$ LANGUAGE sql; 
+
 -- Поемане на ишу
 create or replace function pIssueAssign (_IssueId int, _ExpertUserId int) 
 returns void
@@ -254,3 +276,39 @@ as $$
   from Obj
   where ObjId = _ObjId;
 $$ LANGUAGE sql;
+
+
+
+-- Извличане на данни за ишу
+create or replace function pIssueGet (_IssueId int) 
+returns json
+ as $$
+declare result json;
+_i json;
+begin
+  FOR result in select row_to_json (Issue) from Issue where IssueId = _IssueId LOOP END LOOP;
+
+  result := jsonb_set( result::jsonb,'{Chronic}','[]');
+  FOR _i IN select row_to_json (Issue2Chronic)from Issue2Chronic where IssueId = _IssueId LOOP
+    result := jsonb_insert(result ::jsonb,'{Chronic,1}',_i::jsonb);
+  end loop;
+  
+  result := jsonb_set( result::jsonb,'{Allergy}','[]');
+  FOR _i IN select row_to_json (Issue2Allergy)from Issue2Allergy where IssueId = _IssueId LOOP
+    result := jsonb_insert(result ::jsonb,'{Allergy,1}',_i::jsonb);
+  end loop;
+    
+  result := jsonb_set( result::jsonb,'{Symptom}','[]');
+  FOR _i IN select row_to_json (Issue2Symptom)from Issue2Symptom where IssueId = _IssueId LOOP
+    result := jsonb_insert(result ::jsonb,'{Symptom,1}',_i::jsonb);
+  end loop;
+
+
+  result := jsonb_set( result::jsonb,'{Medication}','[]');
+  FOR _i IN select row_to_json (Issue2Medication)from Issue2Medication where IssueId = _IssueId LOOP
+    result := jsonb_insert(result ::jsonb,'{Medication,1}',_i::jsonb);
+  end loop;
+  
+  return result;
+end  
+$$ LANGUAGE plpgsql; 
