@@ -1,0 +1,9 @@
+{
+  "name": "teledoc.web-app",
+  "version": "0.0.0",
+  "description": "Teledoc.WebApp",
+  "main": "server.js",
+  "author": {
+    "name": "alkon"
+  }
+}
