@@ -33,10 +33,11 @@ var Login = (function (_super) {
                 alert(3);
                 break;
             case 4:
-                alert(4);
+                var page = Comm.GET("/getissuetargetpage");
+                $("#dContent").html(page);
                 break;
         }
     };
     return Login;
 }(BasePage));
-//# sourceMappingURL=Login.js.map
+//# sourceMappingURL=login.js.map

@@ -4,5 +4,12 @@
   "password": "Парола",
   "invalidusername": "Невалиден имейл или парола",
   "forgottenpassword": "Забравена парола",
-  "registration": "Регистрация"
+  "registration": "Регистрация",
+  "consultationfor": "Консултация за",
+  "me": "Мен",
+  "mychild": "Моето дете",
+  "consultationfrom": "Консултация от",
+  "doctor": "Лекар",
+  "pharmacist": "Фармацевт"
+
 }

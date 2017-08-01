@@ -50,7 +50,7 @@ function GetLevelId(req) {
 
 function TranslateString(locale, input) {
     var match = input.match(/#([^#]+)#/);
-    while (match!=null) {
+    while (match != null) {
         input = input.replace(match[0], translate.Translate(locale, match[1], fileSystem));
         match = input.match(/#([a-zA-Z]+)#/);
     }
@@ -98,6 +98,12 @@ app.get('/getinitialpage', function (req, res) {
             res.send(content);
             res.end();
             break;
+        case 4:
+            var content = fileSystem.readFileSync("pages/issuetarget.html", "utf8");
+            content = TranslateString(locale, content);
+            res.send(content);
+            res.end();
+            break;
     }
 
 
@@ -107,14 +113,22 @@ app.post('/login', function (req, res) {
 
     res.setHeader('Content-Type', 'application/json');
     dl.Login(Pool, req.body.Username, md5(req.body.Password), function (jsonResult) {
+        req.session.levelid = (jsonResult == null ? -1 : jsonResult.levelid);
         res.send({ LevelId: (jsonResult == null ? -1 : jsonResult.levelid) });
         res.end();
     });
-    
+
 });
 
 
-
+app.get('/getissuetargetpage', function (req, res) {
+    res.setHeader('Content-Type', 'text/html');
+    var locale = GetLocale(req);
+    var content = fileSystem.readFileSync("pages/issuetarget.html", "utf8");
+    content = TranslateString(locale, content);
+    res.send(content);
+    res.end();
+});
 
 
 

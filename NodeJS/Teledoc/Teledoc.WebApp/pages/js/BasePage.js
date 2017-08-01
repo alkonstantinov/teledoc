@@ -193,4 +193,4 @@ var BasePage = (function () {
     };
     return BasePage;
 }());
-//# sourceMappingURL=BasePage.js.map
+//# sourceMappingURL=basepage.js.map

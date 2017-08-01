@@ -2,15 +2,14 @@
 declare var login: Login;
 
 class Login extends BasePage {
-    
+
     public DoLogin() {
         BasePage.HideErrors();
-        let result = Comm.POST("/login",{
+        let result = Comm.POST("/login", {
             Username: $("#tbUsername").val(),
             Password: $("#tbPassword").val()
         });
-        switch (result.LevelId)
-        {
+        switch (result.LevelId) {
             case -1:
                 $("#lErrUser").show(); break;
             case 1:
@@ -20,12 +19,14 @@ class Login extends BasePage {
             case 3:
                 alert(3); break;
             case 4:
-                alert(4); break;
+                var page = Comm.GET("/getissuetargetpage");
+                $("#dContent").html(page);
+                break;
         }
     }
 
     constructor() {
-        
+
         super();
     }
 

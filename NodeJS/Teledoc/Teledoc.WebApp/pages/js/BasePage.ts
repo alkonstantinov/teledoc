@@ -5,6 +5,7 @@ class BasePage {
     static LastErrorA: String;
     static LastErrorB: String;
     static LastErrorC: String;
+    static Issue: any;
 
     static ApplyNumbersOnly() {
         $(".numbersonly").keyup(
