@@ -8,4 +8,17 @@ exports.Test = function (pool,callback) {
         callback(respResult);
     });
 
+
+
+};
+
+
+exports.Login = function (pool, username, password, callback) {
+    pool.query("select * from login('" + username + "', '" + password + "');", function (err, result) {
+        var respResult = (result.rows.length > 0 ? result.rows[0]:null);
+        callback(respResult);
+    });
+
+
+
 };

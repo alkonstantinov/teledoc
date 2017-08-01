@@ -32,19 +32,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="server.js" />
+    <Content Include="css\bootstrap.css" />
+    <Content Include="css\site.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="img\logobg.png" />
+    <Content Include="img\logoen.png" />
     <Content Include="index.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="js\translate\en.json" />
     <Content Include="js\translate\bg.json">
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
+    <Content Include="pages\login.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="js\" />
     <Folder Include="js\dl\" />
     <Folder Include="js\translate\" />
+    <Folder Include="css\" />
+    <Folder Include="img\" />
+    <Folder Include="pages\" />
+    <Folder Include="pages\js\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="js\dl\dl.ts">
@@ -53,6 +67,11 @@
     <TypeScriptCompile Include="js\translate\translate.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="pages\js\BasePage.ts" />
+    <TypeScriptCompile Include="pages\js\comm.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="pages\js\Login.ts" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

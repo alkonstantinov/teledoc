@@ -1,1 +1,8 @@
-{"login": "Вход"}
+{
+  "login": "Вход",
+  "username": "Имейл",
+  "password": "Парола",
+  "invalidusername": "Невалиден имейл или парола",
+  "forgottenpassword": "Забравена парола",
+  "registration": "Регистрация"
+}
