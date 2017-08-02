@@ -149,7 +149,7 @@ create table Issue2Allergy
 drop table if exists Symptom CASCADE;
 create table Symptom
 (
-  SymptomId SERIAL not null primary key,
+  SymptomId int not null primary key,
   SymptomParentId int references Symptom(SymptomId),
   SymptomName varchar(100),
   OrderBy int
