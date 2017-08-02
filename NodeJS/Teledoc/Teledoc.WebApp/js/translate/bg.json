@@ -10,6 +10,24 @@
   "mychild": "Моето дете",
   "consultationfrom": "Консултация от",
   "doctor": "Лекар",
-  "pharmacist": "Фармацевт"
-
+  "pharmacist": "Фармацевт",
+  "issuedescription": "Описание на проблема",
+  "entervalue": "Моля, въведете данни",
+  "sex": "Пол",
+  "female": "Жена",
+  "male": "Мъж",
+  "othersex": "Друго",
+  "bornon": "Роден",
+  "january": "Януари",
+  "february": "Февруари",
+  "march": "Март",
+  "april": "Април",
+  "may": "Май",
+  "june": "Юни",
+  "july": "Юли",
+  "august": "Август",
+  "september": "Септември",
+  "october": "Октомври",
+  "november": "Ноември",
+  "december": "Декември"
 }

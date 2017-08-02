@@ -19,8 +19,8 @@ class Login extends BasePage {
             case 3:
                 alert(3); break;
             case 4:
-                var page = Comm.GET("/getissuetargetpage");
-                $("#dContent").html(page);
+                parent.location.hash = "issuetarget";
+                BasePage.LoadCurrentPage()
                 break;
         }
     }

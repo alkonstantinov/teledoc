@@ -57,6 +57,15 @@ function TranslateString(locale, input) {
     return input;
 }
 
+function SendPage(url, req, res) {
+    res.setHeader('Content-Type', 'text/html');
+    var locale = GetLocale(req);
+    var content = fileSystem.readFileSync(url, "utf8");
+    content = TranslateString(locale, content);
+    res.send(content);
+    res.end();
+}
+
 //-------------------------------requests
 
 app.get('/kor', function (req, res) {
@@ -87,24 +96,38 @@ app.post('/changelocale', function (req, res) {
     res.end();
 });
 
-app.get('/getinitialpage', function (req, res) {
-    res.setHeader('Content-Type', 'text/html');
+//app.get('/getinitialpage', function (req, res) {
+//    res.setHeader('Content-Type', 'text/html');
+//    var levelId = GetLevelId(req);
+//    var locale = GetLocale(req);
+//    switch (levelId) {
+//        case -1:
+//            var content = fileSystem.readFileSync("pages/login.html", "utf8");
+//            content = TranslateString(locale, content);
+//            res.send(content);
+//            res.end();
+//            break;
+//        case 4:
+//            var content = fileSystem.readFileSync("pages/issuetarget.html", "utf8");
+//            content = TranslateString(locale, content);
+//            res.send(content);
+//            res.end();
+//            break;
+//    }
+
+
+//});
+
+app.get('/getloginpage', function (req, res) {
+    SendPage("pages/login.html", req, res);
+});
+
+
+app.get('/getlevel', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
     var levelId = GetLevelId(req);
-    var locale = GetLocale(req);
-    switch (levelId) {
-        case -1:
-            var content = fileSystem.readFileSync("pages/login.html", "utf8");
-            content = TranslateString(locale, content);
-            res.send(content);
-            res.end();
-            break;
-        case 4:
-            var content = fileSystem.readFileSync("pages/issuetarget.html", "utf8");
-            content = TranslateString(locale, content);
-            res.send(content);
-            res.end();
-            break;
-    }
+    res.send({ LevelId: levelId });
+    res.end();
 
 
 });
@@ -122,12 +145,16 @@ app.post('/login', function (req, res) {
 
 
 app.get('/getissuetargetpage', function (req, res) {
-    res.setHeader('Content-Type', 'text/html');
-    var locale = GetLocale(req);
-    var content = fileSystem.readFileSync("pages/issuetarget.html", "utf8");
-    content = TranslateString(locale, content);
-    res.send(content);
-    res.end();
+    SendPage("pages/issuetarget.html", req, res);    
+});
+
+
+app.get('/getissuedescriptionpage', function (req, res) {
+    SendPage("pages/issuedescription.html", req, res);
+});
+
+app.get('/getissuesexyearspage', function (req, res) {
+    SendPage("pages/issuesexyears.html", req, res);
 });
 
 

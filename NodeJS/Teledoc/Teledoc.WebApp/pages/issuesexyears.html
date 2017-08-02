@@ -1,0 +1,60 @@
+﻿<div class="jumbotron">
+    <div class="panel panel-info">
+        <div class="panel-heading">#sex#</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="radio-inline"><input type="radio" id="rbFemale" name="Who" checked>#female#</label>
+            </div>
+            <div class="form-group">
+                <label class="radio-inline"><input type="radio" id="rbMale" name="Who">#male#</label>
+            </div>
+            <div class="form-group">
+                <label class="radio-inline"><input type="radio" id="rbOther" name="Who">#othersex#</label>
+            </div>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel panel-info">
+        <div class="panel-heading">#bornon#</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <select id="ddlMonth" class="form-control">
+                        <option value="1">#january#</option>
+                        <option value="2">#february#</option>
+                        <option value="3">#march#</option>
+                        <option value="4">#april#</option>
+                        <option value="5">#may#</option>
+                        <option value="6">#june#</option>
+                        <option value="7">#july#</option>
+                        <option value="8">#august#</option>
+                        <option value="9">#september#</option>
+                        <option value="10">#october#</option>
+                        <option value="11">#november#</option>
+                        <option value="12">#december#</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <select id="ddlYear" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-1"><span class="glyphicon glyphicon-backward pull-left" aria-hidden="true" onclick="issueSexYears.Prev()"></span></div>
+    <div class="col-md-10"></div>
+    <div class="col-md-1"><span class="glyphicon glyphicon-forward pull-right" aria-hidden="true" onclick="issueSexYears.Next()"></span></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var year = (new Date()).getFullYear();
+        alert(year);
+        for (var i = year; i > year - 100; i--)
+            $("#ddlYear").append("<option value='" + i + "'>" + i + "</option>");
+
+        issueSexYears = new IssueSexYears();
+        issueSexYears.LoadFromIssue();
+
+    })
+</script>

@@ -3,23 +3,47 @@ declare var issuetarget: IssueTarget;
 
 class IssueTarget extends BasePage {
 
+    public LoadFromIssue() {
+        var issue = BasePage.LoadIssue();
+        if (issue == null)
+            return;
+
+        if (issue.whoid != null) {
+            if (issue.whoid == 1)
+                $("#rbMe").prop("checked", true);
+            else
+                $("#rbMyChild").prop("checked", true);
+        }
+        if (issue.reqexpertlevelid != null) {
+            if (issue.reqexpertlevelid == 2)
+                $("#rbDoctor").prop("checked", true);
+            else
+                $("#rbPharmacist").prop("checked", true);
+        }
+    }
+
     public Next() {
+        var issue = BasePage.LoadIssue();
+        if (issue == null)
+            issue = {};
+
         if ($("#rbMe").prop("checked"))
-            BasePage.Issue.WhoId = 1;
+            issue.whoid = 1;
         else
-            BasePage.Issue.WhoId = 2;
+            issue.whoid = 2;
         if ($("#rbDoctor").prop("checked"))
-            BasePage.Issue.ReqExpertLevelId = 2;
+            issue.reqexpertlevelid = 2;
         else
-            BasePage.Issue.ReqExpertLevelId = 3;
-        
+            issue.reqexpertlevelid = 3;
+        BasePage.SaveIssue(issue);
+        BasePage.NavigateTo("issuedescription");
 
     }
 
     constructor() {
 
         super();
-        
+
     }
 
 }
