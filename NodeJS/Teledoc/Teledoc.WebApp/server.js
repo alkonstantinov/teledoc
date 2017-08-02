@@ -66,6 +66,8 @@ function SendPage(url, req, res) {
     res.end();
 }
 
+
+
 //-------------------------------requests
 
 app.get('/kor', function (req, res) {
@@ -157,6 +159,26 @@ app.get('/getissuesexyearspage', function (req, res) {
     SendPage("pages/issuesexyears.html", req, res);
 });
 
+app.get('/getissuesymptomspage', function (req, res) {
+    SendPage("pages/issuesymptoms.html", req, res);
+});
+
+app.get('/getsymptoms', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    var locale = GetLocale(req);
+
+    dl.GetSymptoms(Pool, function (jsonResult) {
+        for (var group of jsonResult)
+        {
+            group.Name = translate.Translate(locale, group.Name, fileSystem);
+            for (var sym of group.Symptoms)
+                sym.Name = translate.Translate(locale, sym.Name, fileSystem);
+        }
+        
+        res.send(jsonResult);
+        res.end();
+    });
+});
 
 
 //--------------------------------------------------------------

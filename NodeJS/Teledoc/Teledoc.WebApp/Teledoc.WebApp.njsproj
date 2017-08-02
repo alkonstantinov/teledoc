@@ -51,6 +51,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
+    <Content Include="pages\issuesymptoms.html" />
     <Content Include="pages\issuedescription.html" />
     <Content Include="pages\issuesexyears.html" />
     <Content Include="pages\issuetarget.html" />
@@ -80,6 +81,7 @@
     <TypeScriptCompile Include="pages\js\comm.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="pages\js\issuesymptoms.ts" />
     <TypeScriptCompile Include="pages\js\issuedescription.ts" />
     <TypeScriptCompile Include="pages\js\issuesexyears.ts" />
     <TypeScriptCompile Include="pages\js\issuetarget.ts" />

@@ -42,7 +42,7 @@ class IssueSexYears extends BasePage {
         
 
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issuesexyears");
+        BasePage.NavigateTo("issuesymptoms");
 
     }
 

@@ -15,4 +15,26 @@ exports.Login = function (pool, username, password, callback) {
         callback(respResult);
     });
 };
+exports.GetSymptoms = function (pool, callback) {
+    pool.query('select * from pSymptomSelect ()', function (err, result) {
+        var respResult = [];
+        for (var _i = 0, _a = result.rows; _i < _a.length; _i++) {
+            var row = _a[_i];
+            if (row.symptomparentid == null) {
+                respResult.push({
+                    Id: row.symptomid,
+                    Name: row.symptomname,
+                    Symptoms: []
+                });
+            }
+            else {
+                respResult[respResult.length - 1].Symptoms.push({
+                    Id: row.symptomid,
+                    Name: row.symptomname
+                });
+            }
+        }
+        callback(respResult);
+    });
+};
 //# sourceMappingURL=dl.js.map

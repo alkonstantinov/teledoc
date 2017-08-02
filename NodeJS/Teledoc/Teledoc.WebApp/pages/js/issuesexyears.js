@@ -50,7 +50,7 @@ var IssueSexYears = (function (_super) {
         issue.birthmonth = $("#ddlMonth").val();
         issue.birthyear = $("#ddlYear").val();
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issuesexyears");
+        BasePage.NavigateTo("issuesymptoms");
     };
     IssueSexYears.prototype.Prev = function () {
         BasePage.NavigateTo("issuedescription");

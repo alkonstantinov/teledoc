@@ -39,10 +39,15 @@ var BasePage = (function () {
                 page = Comm.GET("/getissuetargetpage");
             if (parent.location.hash.search("issuedescription") > -1)
                 page = Comm.GET("/getissuedescriptionpage");
-            if (parent.location.hash.search("issuesexyears") > -1)
+            if (parent.location.hash.search("issuesexyears") > -1) {
                 page = Comm.GET("/getissuesexyearspage");
+                alert($("#dContent"));
+            }
+            if (parent.location.hash.search("issuesymptoms") > -1)
+                page = Comm.GET("/getissuesymptomspage");
         }
         $("#dContent").html(page);
+        window.scrollTo(0, 0);
     };
     BasePage.HideErrors = function () {
         $("div[id^='lErr']").hide();

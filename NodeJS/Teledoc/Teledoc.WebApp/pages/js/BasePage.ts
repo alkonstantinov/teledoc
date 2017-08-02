@@ -41,8 +41,7 @@ class BasePage {
         BasePage.LoadCurrentPage();
     }
 
-    static NavigateTo(hash)
-    {
+    static NavigateTo(hash) {
         parent.location.hash = hash;
         BasePage.LoadCurrentPage();
     }
@@ -58,14 +57,18 @@ class BasePage {
                 page = Comm.GET("/getissuetargetpage");
             if (parent.location.hash.search("issuedescription") > -1)
                 page = Comm.GET("/getissuedescriptionpage");
-            if (parent.location.hash.search("issuesexyears") > -1)
+            if (parent.location.hash.search("issuesexyears") > -1) {                
                 page = Comm.GET("/getissuesexyearspage");
-            
+                alert($("#dContent"));
+            }
+            if (parent.location.hash.search("issuesymptoms") > -1)
+                page = Comm.GET("/getissuesymptomspage");
+
 
         }
 
-
         $("#dContent").html(page);
+        window.scrollTo(0, 0);
     }
 
 
