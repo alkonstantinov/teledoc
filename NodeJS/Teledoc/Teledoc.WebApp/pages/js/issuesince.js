@@ -27,15 +27,19 @@ var IssueSince = (function (_super) {
             $("input[sinceid='" + issue.sinceid + "']").prop("checked", true);
         }
     };
-    IssueSince.prototype.Next = function () {
+    IssueSince.prototype.Save = function () {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
         issue.sinceid = $("input[type='radio']:checked").attr("sinceid");
         BasePage.SaveIssue(issue);
+    };
+    IssueSince.prototype.Next = function () {
+        this.Save();
         BasePage.NavigateTo("issuechronics");
     };
     IssueSince.prototype.Prev = function () {
+        this.Save();
         BasePage.NavigateTo("issuesymptoms");
     };
     ;

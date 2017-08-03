@@ -1,0 +1,25 @@
+﻿<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-1"><span class="glyphicon glyphicon-backward pull-left" aria-hidden="true" onclick="issueMedicines.Prev()"></span></div>
+        <div class="col-md-10"></div>
+        <div class="col-md-1"><span class="glyphicon glyphicon-forward pull-right" aria-hidden="true" onclick="issueMedicines.Next()"></span></div>
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel panel-info">
+        <div class="panel-heading">#issuemedicines#</div>
+        <div class="panel-body">
+            <div class="form-group" id="dMedicine">
+
+            </div>
+            <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true" onclick="issueMedicines.Add()"></span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        issueMedicines = new IssueMedicines();
+        issueMedicines.LoadFromIssue();
+        BasePage.HideErrors();
+    })
+</script>

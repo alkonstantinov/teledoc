@@ -72,7 +72,10 @@ class BasePage {
             if (parent.location.hash.search("issuechronics") > -1) {
                 page = Comm.GET("/getissuechronicspage");
             }
-            
+            if (parent.location.hash.search("issuemedicines") > -1) {
+                page = Comm.GET("/getissuemedicinespage");
+            }
+
         }
 
         $("#dContent").html(page);

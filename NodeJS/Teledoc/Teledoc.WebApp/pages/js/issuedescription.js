@@ -21,7 +21,7 @@ var IssueDescription = (function (_super) {
             $("#tbDesc").val(issue.description);
         }
     };
-    IssueDescription.prototype.Next = function () {
+    IssueDescription.prototype.Save = function () {
         var error = false;
         BasePage.HideErrors();
         if ($("#tbDesc").val() == "") {
@@ -29,16 +29,21 @@ var IssueDescription = (function (_super) {
             $("#lErrtbDesc").show();
         }
         if (error)
-            return;
+            return false;
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
         issue.description = $("#tbDesc").val();
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issuesexyears");
+        return true;
+    };
+    IssueDescription.prototype.Next = function () {
+        if (this.Save())
+            BasePage.NavigateTo("issuesexyears");
     };
     IssueDescription.prototype.Prev = function () {
-        BasePage.NavigateTo("issuetarget");
+        if (this.Save())
+            BasePage.NavigateTo("issuetarget");
     };
     ;
     return IssueDescription;

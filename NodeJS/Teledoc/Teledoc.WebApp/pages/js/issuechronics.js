@@ -17,6 +17,7 @@ var IssueChronics = (function (_super) {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
+        this.placeHolderText = Comm.POST("/translatestring", { word: "enterchronic" }).Translate;
         var chronics = Comm.GET("/getchronics");
         for (var _i = 0, chronics_1 = chronics; _i < chronics_1.length; _i++) {
             var c = chronics_1[_i];
@@ -31,15 +32,15 @@ var IssueChronics = (function (_super) {
                 if (c.chronicid > -1)
                     $("input[chronicid='" + c.chronicid + "']").prop("checked", true);
                 else
-                    $("#dChronic").append("<div class='row'><div class='col-md-12'><input type='text' value='" + c.chronicfree + "' placeholder='#enterchronic#' class='form-control'></div></div>");
+                    $("#dChronic").append("<div class='row'><div class='col-md-12'><input type='text' value='" + c.chronicfree + "' placeholder='" + this.placeHolderText + "' class='form-control'></div></div>");
             }
         }
         this.Add();
     };
     IssueChronics.prototype.Add = function () {
-        $("#dChronic").append("<div class='row'><div class='col-md-12'><input type='text' value='' placeholder='#enterchronic#' class='form-control'></div></div>");
+        $("#dChronic").append("<div class='row'><div class='col-md-12'><input type='text' value='' placeholder='" + this.placeHolderText + "' class='form-control'></div></div>");
     };
-    IssueChronics.prototype.Next = function () {
+    IssueChronics.prototype.Save = function () {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -50,17 +51,20 @@ var IssueChronics = (function (_super) {
             });
         });
         $("input[type='text']").filter(function () { return this.value.length > 0; }).each(function (i, e) {
-            alert($(e).val());
             issue.chronic.push({
                 chronicid: -1,
                 chronicfree: $(e).val()
             });
         });
         BasePage.SaveIssue(issue);
+    };
+    IssueChronics.prototype.Next = function () {
+        this.Save();
         BasePage.NavigateTo("issueallergies");
     };
     IssueChronics.prototype.Prev = function () {
-        BasePage.NavigateTo("issuesymptoms");
+        this.Save();
+        BasePage.NavigateTo("issuesince");
     };
     ;
     return IssueChronics;

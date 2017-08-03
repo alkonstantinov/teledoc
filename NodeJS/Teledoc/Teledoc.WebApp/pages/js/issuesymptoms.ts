@@ -23,7 +23,7 @@ class IssueSymptoms extends BasePage {
         }
     }
 
-    public Next() {
+    public Save() {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -31,16 +31,21 @@ class IssueSymptoms extends BasePage {
         $("input[type='checkbox']:checked").each(function (i, e) {
             issue.symptom.push({
                 symptomid: $(e).attr("symptomid")
-            })    
+            })
         });
 
-        
+
         BasePage.SaveIssue(issue);
+
+    }
+    public Next() {
+        this.Save();
         BasePage.NavigateTo("issuesince");
 
     }
 
     public Prev() {
+        this.Save();
         BasePage.NavigateTo("issuesexyears");
     };
 

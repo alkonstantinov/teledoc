@@ -14,21 +14,22 @@ var IssueAllergies = (function (_super) {
         return _super.call(this) || this;
     }
     IssueAllergies.prototype.LoadFromIssue = function () {
+        this.placeHolderText = Comm.POST("/translatestring", { word: "enterallergy" }).Translate;
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
         if (issue.allergy != null) {
             for (var _i = 0, _a = issue.allergy; _i < _a.length; _i++) {
                 var al = _a[_i];
-                $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='" + al.allergy + "' class='form-control'></div></div>");
+                $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='" + al.allergy + "' placeholder='" + this.placeHolderText + "' class='form-control'></div></div>");
             }
         }
         this.Add();
     };
     IssueAllergies.prototype.Add = function () {
-        $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='' placeholder='#enterallergy#' class='form-control'></div></div>");
+        $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='' placeholder='" + this.placeHolderText + "' class='form-control'></div></div>");
     };
-    IssueAllergies.prototype.Next = function () {
+    IssueAllergies.prototype.Save = function () {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -44,9 +45,13 @@ var IssueAllergies = (function (_super) {
             }
         }
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issueallergies");
+    };
+    IssueAllergies.prototype.Next = function () {
+        this.Save();
+        BasePage.NavigateTo("issuemedicines");
     };
     IssueAllergies.prototype.Prev = function () {
+        this.Save();
         BasePage.NavigateTo("issuechronics");
     };
     ;

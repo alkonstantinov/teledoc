@@ -23,10 +23,8 @@ class IssueSexYears extends BasePage {
         }
     }
 
-    public Next() {
-        
-
-
+    public Save()
+    {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -39,14 +37,21 @@ class IssueSexYears extends BasePage {
             issue.sexid = "b";
         issue.birthmonth = $("#ddlMonth").val();
         issue.birthyear = $("#ddlYear").val();
-        
+
 
         BasePage.SaveIssue(issue);
+
+    }
+    public Next() {
+
+        this.Save();
+
         BasePage.NavigateTo("issuesymptoms");
 
     }
 
     public Prev() {
+        this.Save();
         BasePage.NavigateTo("issuedescription");
     };
 

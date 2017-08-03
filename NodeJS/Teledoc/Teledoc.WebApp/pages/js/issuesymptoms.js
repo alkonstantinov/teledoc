@@ -33,7 +33,7 @@ var IssueSymptoms = (function (_super) {
             }
         }
     };
-    IssueSymptoms.prototype.Next = function () {
+    IssueSymptoms.prototype.Save = function () {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -44,9 +44,13 @@ var IssueSymptoms = (function (_super) {
             });
         });
         BasePage.SaveIssue(issue);
+    };
+    IssueSymptoms.prototype.Next = function () {
+        this.Save();
         BasePage.NavigateTo("issuesince");
     };
     IssueSymptoms.prototype.Prev = function () {
+        this.Save();
         BasePage.NavigateTo("issuesexyears");
     };
     ;

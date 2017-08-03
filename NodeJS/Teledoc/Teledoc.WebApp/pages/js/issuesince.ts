@@ -19,20 +19,24 @@ class IssueSince extends BasePage {
         }
     }
 
-    public Next() {
-        
-
+    public Save() {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
 
         issue.sinceid = $("input[type='radio']:checked").attr("sinceid");
         BasePage.SaveIssue(issue);
+
+    }
+    public Next() {
+
+        this.Save();
         BasePage.NavigateTo("issuechronics");
 
     }
 
     public Prev() {
+        this.Save();
         BasePage.NavigateTo("issuesymptoms");
     };
 

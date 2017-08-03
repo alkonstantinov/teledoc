@@ -37,7 +37,7 @@ var IssueSexYears = (function (_super) {
             $("#ddlYear").val(issue.birthyear);
         }
     };
-    IssueSexYears.prototype.Next = function () {
+    IssueSexYears.prototype.Save = function () {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -50,9 +50,13 @@ var IssueSexYears = (function (_super) {
         issue.birthmonth = $("#ddlMonth").val();
         issue.birthyear = $("#ddlYear").val();
         BasePage.SaveIssue(issue);
+    };
+    IssueSexYears.prototype.Next = function () {
+        this.Save();
         BasePage.NavigateTo("issuesymptoms");
     };
     IssueSexYears.prototype.Prev = function () {
+        this.Save();
         BasePage.NavigateTo("issuedescription");
     };
     ;

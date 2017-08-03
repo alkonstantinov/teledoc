@@ -2,27 +2,27 @@
 declare var issueAllergies: IssueAllergies;
 
 class IssueAllergies extends BasePage {
+    private placeHolderText;
 
     public LoadFromIssue() {
+        this.placeHolderText = Comm.POST("/translatestring", { word: "enterallergy" }).Translate;
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
 
         if (issue.allergy != null) {
             for (var al of issue.allergy)
-                $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='" + al.allergy + "' class='form-control'></div></div>");
+                $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='" + al.allergy + "' placeholder='" + this.placeHolderText + "' class='form-control'></div></div>");
         }
 
         this.Add();
     }
 
     public Add() {
-        $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='' placeholder='#enterallergy#' class='form-control'></div></div>");
+        $("#dAllergy").append("<div class='row'><div class='col-md-12'><input type='text' value='' placeholder='" + this.placeHolderText + "' class='form-control'></div></div>");
     }
 
-    public Next() {
-
-
+    public Save() {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -37,11 +37,19 @@ class IssueAllergies extends BasePage {
 
         }
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issueallergies");
+
+    }
+
+    public Next() {
+
+
+        this.Save();
+        BasePage.NavigateTo("issuemedicines");
 
     }
 
     public Prev() {
+        this.Save();
         BasePage.NavigateTo("issuechronics");
     };
 

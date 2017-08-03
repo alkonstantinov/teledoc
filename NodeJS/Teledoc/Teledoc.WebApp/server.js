@@ -145,6 +145,15 @@ app.post('/login', function (req, res) {
 
 });
 
+app.post('/translatestring', function (req, res) {
+
+    res.setHeader('Content-Type', 'application/json');
+    var locale = GetLocale(req);
+    var trans = translate.Translate(locale, req.body.word, fileSystem);
+    res.send({ Translate: trans });
+    res.end();
+});
+
 
 app.get('/getissuetargetpage', function (req, res) {
     SendPage("pages/issuetarget.html", req, res);    
@@ -207,6 +216,11 @@ app.get('/getissueallergiespage', function (req, res) {
 app.get('/getissuechronicspage', function (req, res) {
     SendPage("pages/issuechronics.html", req, res);
 });
+
+app.get('/getissuemedicinespage', function (req, res) {
+    SendPage("pages/issuemedicines.html", req, res);
+});
+
 
 app.get('/getchronics', function (req, res) {
     res.setHeader('Content-Type', 'application/json');

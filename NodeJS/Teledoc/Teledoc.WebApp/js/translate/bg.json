@@ -145,6 +145,7 @@
   "EatingDisorder": "Хранително разстройство",
   "OtherChronicIllness": "Друго заболяване",
   "issuechronics": "Хронични заболявания",
-  "enterchronic": "Въведете хронично заболяване"
-
+  "enterchronic": "Въведете хронично заболяване",
+  "issuemedicines": "Приемани медикаменти",
+  "entermedication": "Въведете приеман медикамент"
 }

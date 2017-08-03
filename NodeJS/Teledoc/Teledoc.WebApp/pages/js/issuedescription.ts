@@ -3,30 +3,27 @@ declare var issueDescription: IssueDescription;
 
 class IssueDescription extends BasePage {
 
-    public LoadFromIssue()
-    {
+    public LoadFromIssue() {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
-        if (issue.description != null)
-        {
+        if (issue.description != null) {
             $("#tbDesc").val(issue.description);
         }
     }
 
-    public Next() {
+    public Save() {
         var error = false;
         BasePage.HideErrors();
-        if ($("#tbDesc").val() == "")
-        {
+        if ($("#tbDesc").val() == "") {
             error = true;
             $("#lErrtbDesc").show();
         }
 
         if (error)
-            return;
+            return false;
 
-        
+
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
@@ -34,18 +31,23 @@ class IssueDescription extends BasePage {
         issue.description = $("#tbDesc").val();
 
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issuesexyears");
+        return true;
+    }
+    public Next() {
+        if (this.Save())
+            BasePage.NavigateTo("issuesexyears");
 
     }
 
     public Prev() {
-        BasePage.NavigateTo("issuetarget");
+        if (this.Save())
+            BasePage.NavigateTo("issuetarget");
     };
 
     constructor() {
 
         super();
-        
+
     }
 
 }
