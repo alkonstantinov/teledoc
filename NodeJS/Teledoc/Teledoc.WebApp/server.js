@@ -180,6 +180,48 @@ app.get('/getsymptoms', function (req, res) {
     });
 });
 
+app.get('/getissuesincepage', function (req, res) {
+    SendPage("pages/issuesince.html", req, res);
+});
+
+app.get('/getsinces', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    var locale = GetLocale(req);
+
+    dl.GetSince(Pool, function (jsonResult) {
+        for (var since of jsonResult.rows) {
+            since.sincename = translate.Translate(locale, since.sincename, fileSystem);
+        }
+
+        res.send(jsonResult.rows);
+        res.end();
+    });
+});
+
+
+app.get('/getissueallergiespage', function (req, res) {
+    SendPage("pages/issueallergies.html", req, res);
+});
+
+
+app.get('/getissuechronicspage', function (req, res) {
+    SendPage("pages/issuechronics.html", req, res);
+});
+
+app.get('/getchronics', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    var locale = GetLocale(req);
+
+    dl.GetChronics(Pool, function (jsonResult) {
+        for (var c of jsonResult.rows) {
+            c.chronicname = translate.Translate(locale, c.chronicname, fileSystem);
+        }
+
+        res.send(jsonResult.rows);
+        res.end();
+    });
+})
+
 
 //--------------------------------------------------------------
 app.get('*', function (req, res) {

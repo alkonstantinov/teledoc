@@ -90,7 +90,7 @@ create table Since
   SinceName varchar(50)
 );
 insert into Since (SinceId, SinceName)
-values (1, 'Today'),(2, 'Yesterday'),(3, 'Week'),(4, 'Month'),(5, 'Year'),(6, 'Year+');
+values (1, 'Today'),(2, 'Yesterday'),(3, 'Week'),(4, 'Month'),(5, 'Year'),(6, 'Years');
 
 
 drop table if exists Issue CASCADE;

@@ -37,4 +37,14 @@ exports.GetSymptoms = function (pool, callback) {
         callback(respResult);
     });
 };
+exports.GetSince = function (pool, callback) {
+    pool.query("select * from psinceselect();", function (err, result) {
+        callback(result);
+    });
+};
+exports.GetChronics = function (pool, callback) {
+    pool.query("select * from pchronicselect();", function (err, result) {
+        callback(result);
+    });
+};
 //# sourceMappingURL=dl.js.map

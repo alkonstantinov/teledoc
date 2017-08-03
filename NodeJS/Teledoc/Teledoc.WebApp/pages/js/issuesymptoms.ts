@@ -36,7 +36,7 @@ class IssueSymptoms extends BasePage {
 
         
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issuesymptoms");
+        BasePage.NavigateTo("issuesince");
 
     }
 

@@ -59,12 +59,20 @@ class BasePage {
                 page = Comm.GET("/getissuedescriptionpage");
             if (parent.location.hash.search("issuesexyears") > -1) {                
                 page = Comm.GET("/getissuesexyearspage");
-                alert($("#dContent"));
             }
             if (parent.location.hash.search("issuesymptoms") > -1)
                 page = Comm.GET("/getissuesymptomspage");
-
-
+            if (parent.location.hash.search("issuesince") > -1)
+            {
+                page = Comm.GET("/getissuesincepage");
+            }
+            if (parent.location.hash.search("issueallergies") > -1) {
+                page = Comm.GET("/getissueallergiespage");
+            }
+            if (parent.location.hash.search("issuechronics") > -1) {
+                page = Comm.GET("/getissuechronicspage");
+            }
+            
         }
 
         $("#dContent").html(page);

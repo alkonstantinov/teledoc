@@ -51,3 +51,24 @@ exports.GetSymptoms = function (pool, callback) {
 
 
 };
+
+
+exports.GetSince = function (pool,callback) {
+    pool.query("select * from psinceselect();", function (err, result) {
+        
+        callback(result);
+    });
+
+
+
+};
+
+exports.GetChronics = function (pool, callback) {
+    pool.query("select * from pchronicselect();", function (err, result) {
+
+        callback(result);
+    });
+
+
+
+};

@@ -44,7 +44,7 @@ var IssueSymptoms = (function (_super) {
             });
         });
         BasePage.SaveIssue(issue);
-        BasePage.NavigateTo("issuesymptoms");
+        BasePage.NavigateTo("issuesince");
     };
     IssueSymptoms.prototype.Prev = function () {
         BasePage.NavigateTo("issuesexyears");

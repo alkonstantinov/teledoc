@@ -1,16 +1,22 @@
 ﻿<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-1"><span class="glyphicon glyphicon-backward pull-left" aria-hidden="true" onclick="issueDescription.Prev()"></span></div>
+        <div class="col-md-10"><div id="lErrtbDesc" class="label-danger">#entervalue#</div></div>
+        <div class="col-md-1"><span class="glyphicon glyphicon-forward pull-right" aria-hidden="true" onclick="issueDescription.Next()"></span></div>
+        <div class="clearfix"></div>
+    </div>
     <div class="panel panel-info">
         <div class="panel-heading">#issuedescription#</div>
+
+
         <div class="panel-body">
             <div class="form-group">
                 <textarea id="tbDesc" class="form-control" rows="5"></textarea>
-            </div>            
+            </div>
         </div>
     </div>
-    <div class="clearfix"></div>
-    <div class="col-md-1"><span class="glyphicon glyphicon-backward pull-left" aria-hidden="true" onclick="issueDescription.Prev()"></span></div>
-    <div class="col-md-10"><div id="lErrtbDesc" class="label-danger">#entervalue#</div></div>
-    <div class="col-md-1"><span class="glyphicon glyphicon-forward pull-right" aria-hidden="true" onclick="issueDescription.Next()"></span></div>
+
+
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
