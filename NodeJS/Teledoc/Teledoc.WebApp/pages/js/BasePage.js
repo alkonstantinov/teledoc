@@ -31,10 +31,14 @@ var BasePage = (function () {
     BasePage.LoadCurrentPage = function () {
         var level = Comm.GET("/getlevel");
         var page = null;
-        if (level.LevelId === -1) {
+        if (parent.location.hash.search("registeruser") > -1)
+            page = Comm.GET("/getregisteruserpage");
+        else if (level.LevelId === -1) {
             page = Comm.GET("/getloginpage");
         }
         else {
+            if (parent.location.hash.search("loginpage") > -1)
+                page = Comm.GET("/getloginpage");
             if (parent.location.hash.search("issuetarget") > -1)
                 page = Comm.GET("/getissuetargetpage");
             if (parent.location.hash.search("issuedescription") > -1)

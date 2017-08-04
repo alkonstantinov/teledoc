@@ -32,6 +32,17 @@ app.use(session({ secret: 'VerySpecific', resave: true, saveUninitialized: true 
 
 
 //-------------------------------functions
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
+
+
 function GetLocale(req) {
     var sess = req.session;
     if (sess.locale == undefined)
@@ -66,8 +77,19 @@ function SendPage(url, req, res) {
     res.end();
 }
 
+function ThrowNoAccess(res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send({ errorCode: -1 });
+    res.end();
+}
 
-
+function RequireLevel(level, req, res) {
+    if (GetLevelId(req) != level) {
+        ThrowNoAccess(res);
+        return false;
+    }
+    return true;
+}
 //-------------------------------requests
 
 app.get('/kor', function (req, res) {
@@ -156,7 +178,7 @@ app.post('/translatestring', function (req, res) {
 
 
 app.get('/getissuetargetpage', function (req, res) {
-    SendPage("pages/issuetarget.html", req, res);    
+    SendPage("pages/issuetarget.html", req, res);
 });
 
 
@@ -173,17 +195,19 @@ app.get('/getissuesymptomspage', function (req, res) {
 });
 
 app.get('/getsymptoms', function (req, res) {
+    if (!RequireLevel(4, req, res))
+        return;
+
     res.setHeader('Content-Type', 'application/json');
     var locale = GetLocale(req);
 
     dl.GetSymptoms(Pool, function (jsonResult) {
-        for (var group of jsonResult)
-        {
+        for (var group of jsonResult) {
             group.Name = translate.Translate(locale, group.Name, fileSystem);
             for (var sym of group.Symptoms)
                 sym.Name = translate.Translate(locale, sym.Name, fileSystem);
         }
-        
+
         res.send(jsonResult);
         res.end();
     });
@@ -194,6 +218,9 @@ app.get('/getissuesincepage', function (req, res) {
 });
 
 app.get('/getsinces', function (req, res) {
+    if (!RequireLevel(4, req, res))
+        return;
+
     res.setHeader('Content-Type', 'application/json');
     var locale = GetLocale(req);
 
@@ -223,6 +250,9 @@ app.get('/getissuemedicinespage', function (req, res) {
 
 
 app.get('/getchronics', function (req, res) {
+    if (!RequireLevel(4, req, res))
+        return;
+
     res.setHeader('Content-Type', 'application/json');
     var locale = GetLocale(req);
 
@@ -234,6 +264,38 @@ app.get('/getchronics', function (req, res) {
         res.send(jsonResult.rows);
         res.end();
     });
+})
+
+app.get('/getregisteruserpage', function (req, res) {
+    SendPage("pages/registeruser.html", req, res);
+});
+
+app.post('/userexists', function (req, res) {
+    
+    res.setHeader('Content-Type', 'application/json');
+    
+    dl.UserExists(Pool, req.body.email, function (jsonResult) {
+        res.send({ Exists: jsonResult });
+        res.end();
+    });
+})
+
+app.post('/registeruser', function (req, res) {
+
+    res.setHeader('Content-Type', 'application/json');
+
+    dl.RegisterUser(Pool, req.body.email, md5(req.body.password), req.body.name, guid(), function (jsonResult) {
+        res.send({ ok: true});
+        res.end();
+    });
+})
+
+app.get('/activateuser', function (req, res) {
+
+    
+    dl.ActivateUser(Pool, req.query.guid, function (jsonResult) {
+    });
+    SendPage("pages/activation.html", req, res);
 })
 
 

@@ -1,0 +1,34 @@
+﻿<div class="jumbotron">
+    <div class="panel panel-info">
+        <div class="panel-heading">#RegisterUser#</div>
+
+
+        <div class="panel-body">
+            <div class="form-group">
+                <input type="text" class="form-control" id="tbRegEmail" placeholder="#email#"/>
+                <div id="lErrExists" class="label-danger">#emailexists#</div>
+                <div id="lErrtbRegEmail" class="label-danger">#entercorrectvalue#</div>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="tbRegPassword" placeholder="#password#" />
+                <div id="lErrtbRegPassword" class="label-danger">#entervalue#</div>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="tbName" placeholder="#fullname#" />
+            </div>
+            <div class="form-group">
+                <button id="bRegister" class="btn btn-primary pull-right" type="button" onclick="registerUser.Register()">#register#</button>
+                <div id="dOK" class="label-info" style="display:none">#activationemail#</div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        registerUser = new RegisterUser();
+        
+        BasePage.HideErrors();
+    })
+</script>

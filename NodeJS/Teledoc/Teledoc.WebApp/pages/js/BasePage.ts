@@ -49,34 +49,38 @@ class BasePage {
     static LoadCurrentPage() {
         var level = Comm.GET("/getlevel");
         var page = null;
-        if (level.LevelId === -1) {
-            page = Comm.GET("/getloginpage");
-        }
-        else {
-            if (parent.location.hash.search("issuetarget") > -1)
-                page = Comm.GET("/getissuetargetpage");
-            if (parent.location.hash.search("issuedescription") > -1)
-                page = Comm.GET("/getissuedescriptionpage");
-            if (parent.location.hash.search("issuesexyears") > -1) {                
-                page = Comm.GET("/getissuesexyearspage");
+        if (parent.location.hash.search("registeruser") > -1)
+            page = Comm.GET("/getregisteruserpage");
+        else
+            if (level.LevelId === -1) {
+                page = Comm.GET("/getloginpage");
             }
-            if (parent.location.hash.search("issuesymptoms") > -1)
-                page = Comm.GET("/getissuesymptomspage");
-            if (parent.location.hash.search("issuesince") > -1)
-            {
-                page = Comm.GET("/getissuesincepage");
-            }
-            if (parent.location.hash.search("issueallergies") > -1) {
-                page = Comm.GET("/getissueallergiespage");
-            }
-            if (parent.location.hash.search("issuechronics") > -1) {
-                page = Comm.GET("/getissuechronicspage");
-            }
-            if (parent.location.hash.search("issuemedicines") > -1) {
-                page = Comm.GET("/getissuemedicinespage");
-            }
+            else {
+                if (parent.location.hash.search("loginpage") > -1)
+                    page = Comm.GET("/getloginpage");
+                if (parent.location.hash.search("issuetarget") > -1)
+                    page = Comm.GET("/getissuetargetpage");
+                if (parent.location.hash.search("issuedescription") > -1)
+                    page = Comm.GET("/getissuedescriptionpage");
+                if (parent.location.hash.search("issuesexyears") > -1) {
+                    page = Comm.GET("/getissuesexyearspage");
+                }
+                if (parent.location.hash.search("issuesymptoms") > -1)
+                    page = Comm.GET("/getissuesymptomspage");
+                if (parent.location.hash.search("issuesince") > -1) {
+                    page = Comm.GET("/getissuesincepage");
+                }
+                if (parent.location.hash.search("issueallergies") > -1) {
+                    page = Comm.GET("/getissueallergiespage");
+                }
+                if (parent.location.hash.search("issuechronics") > -1) {
+                    page = Comm.GET("/getissuechronicspage");
+                }
+                if (parent.location.hash.search("issuemedicines") > -1) {
+                    page = Comm.GET("/getissuemedicinespage");
+                }
 
-        }
+            }
 
         $("#dContent").html(page);
         window.scrollTo(0, 0);

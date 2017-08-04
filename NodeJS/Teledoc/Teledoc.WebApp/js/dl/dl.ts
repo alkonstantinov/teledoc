@@ -72,3 +72,24 @@ exports.GetChronics = function (pool, callback) {
 
 
 };
+
+exports.UserExists = function (pool, username, callback) {
+    pool.query("select * from pLoginExists('" + username + "');", function (err, result) {
+        var respResult = result.rows!=null&&result.rows.length > 0;
+        callback(respResult);
+    });
+};
+
+exports.RegisterUser = function (pool, username, password, name, activationstring, callback) {
+    pool.query("select * from pUserRegister('" + username + "','" + password + "', '" + name + "', '" + activationstring+"');", function (err, result) {
+        
+        callback(result);
+    });
+};
+
+exports.ActivateUser = function (pool, activationstring, callback) {
+    pool.query("select * from pUserActivate('" + activationstring + "');", function (err, result) {
+
+        callback(result);
+    });
+};

@@ -11,6 +11,12 @@ class Comm {
             contentType: "application/json; charset=utf-8",
             async: false,
             success: function (res) {
+                if (res.errorCode == -1)
+                {                    
+                    parent.location.hash = "loginpage";
+                    BasePage.LoadCurrentPage();
+                    return;
+                }
                 result = res;
 
             },
@@ -36,6 +42,11 @@ class Comm {
             data: JSON.stringify(data),
             async: false,
             success: function (res) {
+                if (res.errorCode == -1) {
+                    parent.location.hash = "loginpage";
+                    BasePage.LoadCurrentPage();
+                    return;
+                }
                 result = res;
             },
             error: function (a, b, c) {

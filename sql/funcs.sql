@@ -21,6 +21,42 @@ returns table (UserId int)
   select u.UserId from "User" u where u.Username = _Username
 $$ LANGUAGE sql;  
 
+--регистрация на потребител
+create or replace function pUserRegister (_Username citext, _Password citext, _Name text, _ActivationString citext) 
+returns void
+ as $$
+  insert into "User"
+  (
+    levelid,
+    username,
+    password,
+    isfb,
+    name,
+    active,
+    activationstring
+  )
+  values 
+  (
+    4,
+    _Username,
+    _Password,
+    false,
+    _Name,
+    false,
+    _ActivationString
+  );
+$$ LANGUAGE sql;  
+
+
+--активация на потребител
+create or replace function pUserActivate (_ActivationString citext) 
+returns void
+ as $$
+  update "User"
+  set active = true
+  where activationstring = _ActivationString;
+$$ LANGUAGE sql;  
+
 --регистрация експерт
 create or replace function pDoctorSet (_DoctorData json)
 returns integer
