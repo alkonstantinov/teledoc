@@ -1,0 +1,45 @@
+﻿<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-1"><span class="glyphicon glyphicon-backward pull-left" aria-hidden="true" onclick="issueAnswerType.Prev()"></span></div>
+        <div class="col-md-10">
+
+
+        </div>
+        <div class="col-md-1"><span class="glyphicon glyphicon-forward pull-right" aria-hidden="true" onclick="issueAnswerType.Next()"></span></div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">#answertype#</div>
+
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-2"><label class="radio-inline"><input type="radio" id="rbChat" name="Who" checked>#Chat#</label></div>
+                <div class="col-md-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><label class="radio-inline"><input type="radio" id="rbeMail" name="Who">#eMail#</label></div>
+                <div class="col-md-2">
+                    <input id="tbEmail" class="form-control" placeholder="#eMail#">
+                    <div id="lErrtbEmail" class="label-danger">#entercorrectvalue#</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><label class="radio-inline"><input type="radio" id="rbCall" name="Who">#Call#</label></div>
+                <div class="col-md-2">
+                    <input id="tbPhone" class="form-control" placeholder="#PhoneNumber#">
+                    <div id="lErrtbPhone" class="label-danger">#entervalue#</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        issueAnswerType = new IssueAnswerType();
+        issueAnswerType.LoadFromIssue();
+        BasePage.HideErrors();
+    })
+</script>

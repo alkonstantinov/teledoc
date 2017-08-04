@@ -60,6 +60,9 @@ var BasePage = (function () {
             if (parent.location.hash.search("issuemedicines") > -1) {
                 page = Comm.GET("/getissuemedicinespage");
             }
+            if (parent.location.hash.search("issueanswertype") > -1) {
+                page = Comm.GET("/getissueanswertypepage");
+            }
         }
         $("#dContent").html(page);
         window.scrollTo(0, 0);

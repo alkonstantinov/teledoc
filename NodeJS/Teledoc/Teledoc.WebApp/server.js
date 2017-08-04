@@ -299,6 +299,10 @@ app.get('/activateuser', function (req, res) {
 })
 
 
+app.get('/getissueanswertypepage', function (req, res) {
+    SendPage("pages/issueanswertype.html", req, res);
+});
+
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
     //res.send("-1");

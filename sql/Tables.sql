@@ -27,6 +27,7 @@ create table "User"
   Password citext not null,
   IsFB boolean not null,
   Name text,
+  ActivationString citext,
   Active boolean not null default true
   
 );
@@ -92,6 +93,16 @@ create table Since
 insert into Since (SinceId, SinceName)
 values (1, 'Today'),(2, 'Yesterday'),(3, 'Week'),(4, 'Month'),(5, 'Year'),(6, 'Years');
 
+drop table if exists AnswerType CASCADE;
+create table AnswerType
+(
+  AnswerTypeId int not null primary key,
+  AnswerTypeName varchar(50)
+);
+insert into Since (SinceId, SinceName)
+values (1, 'Chat'),(2, 'eMail'),(3, 'Call');
+
+
 
 drop table if exists Issue CASCADE;
 create table Issue
@@ -107,6 +118,8 @@ create table Issue
   BirthMonth smallint,
   BirthYear int,
   Description text not null, 
+  AnsweTypeId int not null references AnsweType(AnsweTypeId),
+  AdditionalInfo text,
   Paid boolean not null  
 );
 

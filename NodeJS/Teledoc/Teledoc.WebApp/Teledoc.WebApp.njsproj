@@ -52,6 +52,7 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
+    <Content Include="pages\issueanswertype.html" />
     <Content Include="pages\registeruser.html" />
     <Content Include="pages\issuemedicines.html" />
     <Content Include="pages\issueallergies.html" />
@@ -87,6 +88,7 @@
     <TypeScriptCompile Include="pages\js\comm.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="pages\js\issueanswertype.ts" />
     <TypeScriptCompile Include="pages\js\registeruser.ts" />
     <TypeScriptCompile Include="pages\js\issuemedicines.ts" />
     <TypeScriptCompile Include="pages\js\issueallergies.ts" />

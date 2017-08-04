@@ -62,7 +62,7 @@ class IssueMedicines extends BasePage {
     public Next() {
 
         this.Save();
-        BasePage.NavigateTo("issuemedicines");
+        BasePage.NavigateTo("issueanswertype");
 
     }
 

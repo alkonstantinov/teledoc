@@ -63,7 +63,7 @@ var IssueMedicines = (function (_super) {
     };
     IssueMedicines.prototype.Next = function () {
         this.Save();
-        BasePage.NavigateTo("issuemedicines");
+        BasePage.NavigateTo("issueanswertype");
     };
     IssueMedicines.prototype.Prev = function () {
         this.Save();
