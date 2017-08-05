@@ -93,3 +93,12 @@ exports.ActivateUser = function (pool, activationstring, callback) {
         callback(result);
     });
 };
+
+exports.StoreDoctor = function (pool, json, callback) {
+    pool.query("select * from pDoctorSet('" + json + "');", function (err, result) {        
+        callback(result);
+    });
+
+
+
+};

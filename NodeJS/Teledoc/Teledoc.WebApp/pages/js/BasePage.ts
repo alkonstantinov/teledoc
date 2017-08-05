@@ -7,6 +7,33 @@ class BasePage {
     static LastErrorC: String;
     static Issue: any;
 
+    static ShapeImage(img, maxSize)
+    {
+        var width = img.clientWidth;
+        var height = img.clientHeight;
+        var r = 1;
+        if (width > height) {
+            r = width / maxSize;
+
+        }
+        else {
+            r = height / maxSize;
+        }
+        $(img).width(Math.round(width / r));
+        $(img).height(Math.round(height / r));
+    }
+
+    static Guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    }
+
+
     static ApplyNumbersOnly() {
         $(".numbersonly").keyup(
             function (e) {
@@ -82,6 +109,8 @@ class BasePage {
                 if (parent.location.hash.search("issueanswertype") > -1) {
                     page = Comm.GET("/getissueanswertypepage");
                 }
+                if (parent.location.hash.search("registerdoctor") > -1)
+                    page = Comm.GET("/getregisterdoctorpage");
             }
 
         $("#dContent").html(page);

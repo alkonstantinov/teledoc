@@ -69,7 +69,14 @@ begin
       LevelId = _DoctorData->>'LevelId',
       Name = _DoctorData->>'Name'
     where UserId = _DoctorData->'UserId';
-  
+
+    update Doctor
+    set
+      UIN  = _DoctorData->>'UIN',
+    img = _DoctorData->>'img',
+    Specialization = _DoctorData->>'Specialization',
+    Description = _DoctorData->>'Description'
+    where UserId = _DoctorData->'UserId';
   else
     insert into "User" 
     (LevelId, 

@@ -53,6 +53,7 @@
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
     <Content Include="pages\issueanswertype.html" />
+    <Content Include="pages\registerdoctor.html" />
     <Content Include="pages\registeruser.html" />
     <Content Include="pages\issuemedicines.html" />
     <Content Include="pages\issueallergies.html" />
@@ -74,6 +75,7 @@
     <Folder Include="js\translate\" />
     <Folder Include="css\" />
     <Folder Include="img\" />
+    <Folder Include="files\" />
     <Folder Include="pages\" />
     <Folder Include="pages\js\" />
   </ItemGroup>
@@ -89,6 +91,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="pages\js\issueanswertype.ts" />
+    <TypeScriptCompile Include="pages\js\registerdoctor.ts" />
     <TypeScriptCompile Include="pages\js\registeruser.ts" />
     <TypeScriptCompile Include="pages\js\issuemedicines.ts" />
     <TypeScriptCompile Include="pages\js\issueallergies.ts" />

@@ -156,6 +156,8 @@
   "email": "Електронна поща",
   "entercorrectvalue": "Моля, въведете коректна стойност",
   "activation": "Активация",
+  "activationEmailSubject": "Активационен линк Teledoc",
+  "activationEmailText": "Моля, кликнете <a href='http://www.teledoc.bg/guid={guid}'>тук</a>",
   "profileactivation": "Вашият профил е активиран",
   "Chat": "Чат",
   "eMail": "Електронна поща",

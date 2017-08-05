@@ -29,6 +29,8 @@ var RegisterUser = (function (_super) {
             error = true;
             $("#lErrtbRegPassword").show();
         }
+        if (error)
+            return;
         Comm.POST("/registeruser", {
             email: $("#tbRegEmail").val(),
             password: $("#tbRegPassword").val(),

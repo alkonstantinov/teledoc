@@ -1,6 +1,28 @@
 var BasePage = (function () {
     function BasePage() {
     }
+    BasePage.ShapeImage = function (img, maxSize) {
+        var width = img.clientWidth;
+        var height = img.clientHeight;
+        var r = 1;
+        if (width > height) {
+            r = width / maxSize;
+        }
+        else {
+            r = height / maxSize;
+        }
+        $(img).width(Math.round(width / r));
+        $(img).height(Math.round(height / r));
+    };
+    BasePage.Guid = function () {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    };
     BasePage.ApplyNumbersOnly = function () {
         $(".numbersonly").keyup(function (e) {
             this.value = this.value.replace(/[^0-9]/gi, '');
@@ -63,6 +85,8 @@ var BasePage = (function () {
             if (parent.location.hash.search("issueanswertype") > -1) {
                 page = Comm.GET("/getissueanswertypepage");
             }
+            if (parent.location.hash.search("registerdoctor") > -1)
+                page = Comm.GET("/getregisterdoctorpage");
         }
         $("#dContent").html(page);
         window.scrollTo(0, 0);

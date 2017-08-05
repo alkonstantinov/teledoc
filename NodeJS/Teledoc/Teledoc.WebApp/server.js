@@ -7,10 +7,25 @@ const pool = require('pg').Pool;
 const path = require('path');
 const bodyParser = require("body-parser");
 const md5 = require("md5");
-
+const nodemailer = require('nodemailer');
+const Busboy = require('busboy');
 
 const translate = require('./js/translate/translate');
 const dl = require('./js/dl/dl');
+
+
+var transporter = nodemailer.createTransport({
+    host: 'hopkins.host.bg',
+    secureConnection: true,
+
+    auth: {
+        user: 'contact@birex43.com',
+        pass: 'AAaa12345^'
+    }
+});
+
+
+
 
 const app = express();
 const pgConfig = {
@@ -30,9 +45,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({ secret: 'VerySpecific', resave: true, saveUninitialized: true }));
 
-
 //-------------------------------functions
-function guid() {
+function getExtension(filename) {
+    return filename.split('.').pop();
+}
+function Guid() {
     function s4() {
         return Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
@@ -271,9 +288,9 @@ app.get('/getregisteruserpage', function (req, res) {
 });
 
 app.post('/userexists', function (req, res) {
-    
+
     res.setHeader('Content-Type', 'application/json');
-    
+
     dl.UserExists(Pool, req.body.email, function (jsonResult) {
         res.send({ Exists: jsonResult });
         res.end();
@@ -282,17 +299,28 @@ app.post('/userexists', function (req, res) {
 
 app.post('/registeruser', function (req, res) {
 
+    var locale = GetLocale(req);
+    var guid = Guid();
+    var mailOptions = {
+        from: 'contact@birex43.com',
+        to: req.body.email,
+        subject: translate.Translate(locale, "activationEmailSubject", fileSystem),
+        html: translate.Translate(locale, "activationEmailText", fileSystem).replace("{guid}", guid)
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+
+    });
     res.setHeader('Content-Type', 'application/json');
 
-    dl.RegisterUser(Pool, req.body.email, md5(req.body.password), req.body.name, guid(), function (jsonResult) {
-        res.send({ ok: true});
+    dl.RegisterUser(Pool, req.body.email, md5(req.body.password), req.body.name, guid, function (jsonResult) {
+        res.send({ ok: true });
         res.end();
     });
 })
 
 app.get('/activateuser', function (req, res) {
 
-    
+
     dl.ActivateUser(Pool, req.query.guid, function (jsonResult) {
     });
     SendPage("pages/activation.html", req, res);
@@ -302,6 +330,43 @@ app.get('/activateuser', function (req, res) {
 app.get('/getissueanswertypepage', function (req, res) {
     SendPage("pages/issueanswertype.html", req, res);
 });
+
+app.get('/getregisterdoctorpage', function (req, res) {
+    SendPage("pages/registerdoctor.html", req, res);
+});
+
+app.post('/uploadimage', function (req, res) {
+    var guid = Guid();
+
+
+    var busboy = new Busboy({ headers: req.headers });
+    req.pipe(busboy);
+    busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+        guid += "." + getExtension(filename);
+        var fstream = fileSystem.createWriteStream(__dirname + "/files/" + guid);
+        file.pipe(fstream);
+        file.on('end', function () {
+            fstream.close();
+            res.send({ imageId: guid });
+            res.end();
+        });
+    });
+
+});
+
+app.get("/gettempimage", function (req, res) {
+    var fstream = fileSystem.createReadStream(__dirname + "/files/" + req.query.fnm);
+    fstream.pipe(res);
+})
+
+app.post("/registerdoctor", function (req, res) {
+    var json = JSON.parse(req.body.json);
+    json.Password = md5(json.Password);
+    json.img = '\\x' + fileSystem.readFileSync(__dirname + "/files/" + json.Fnm, 'hex');
+    dl.StoreDoctor(Pool, JSON.stringify(json), function () { })
+    res.end();
+})
+
 
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
@@ -313,5 +378,6 @@ app.get('*', function (req, res) {
 //var fs = require('fs');
 
 app.listen(port, function () {
+
     console.log('Example app listening on port 3000!')
 })

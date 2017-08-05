@@ -58,4 +58,31 @@ class Comm {
         return result;
     }
 
+    static POSTImage(url, formId): any {
+        
+        //$("#" + formId).submit();
+
+        var result: any;
+
+        var formData = new FormData($("#" + formId)[0]);
+        
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            async: false,
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                result = data.imageId;
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+        return result;
+    }
 }
