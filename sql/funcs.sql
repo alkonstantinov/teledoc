@@ -63,20 +63,20 @@ returns integer
  as $$
  declare _UserId integer;
 begin
-  if (_DoctorData->'UserId' is not null) then
+  if (_DoctorData->>'UserId' != '') then
     update "User"
     set
-      LevelId = _DoctorData->>'LevelId',
+      LevelId = (_DoctorData->>'LevelId')::int,
       Name = _DoctorData->>'Name'
-    where UserId = _DoctorData->'UserId';
+    where UserId = (_DoctorData->'UserId')::int;
 
     update Doctor
     set
       UIN  = _DoctorData->>'UIN',
-    img = _DoctorData->>'img',
+    img = _DoctorData->>'img'::bytea,
     Specialization = _DoctorData->>'Specialization',
     Description = _DoctorData->>'Description'
-    where UserId = _DoctorData->'UserId';
+    where UserId = _DoctorData->'UserId'::int;
   else
     insert into "User" 
     (LevelId, 
@@ -86,12 +86,12 @@ begin
     Name, 
     Active)
     values 
-    (_DoctorData->>'LevelId',
+    ((_DoctorData->>'LevelId')::int,
     _DoctorData->>'UserName',
     _DoctorData->>'Password',
-    _DoctorData->>'IsFB',
+    (_DoctorData->>'IsFB')::boolean,
     _DoctorData->>'Name',
-    _DoctorData->>'Active')
+    (_DoctorData->>'Active')::boolean)
     returning UserId into _UserId;
 
     insert into Doctor
@@ -104,11 +104,12 @@ begin
     values
     (_UserId,
     _DoctorData->>'UIN',
-    _DoctorData->>'img',
+    (_DoctorData->>'img')::bytea,
     _DoctorData->>'Specialization',
     _DoctorData->>'Description'
     );
   end if;
+  return _UserId;
 end $$ LANGUAGE plpgsql; 
  
 
