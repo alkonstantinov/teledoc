@@ -13,7 +13,7 @@ class Login extends BasePage {
             case -1:
                 $("#lErrUser").show(); break;
             case 1:
-                parent.location.hash = "registerdoctor";
+                parent.location.hash = "userlist";
                 BasePage.LoadCurrentPage();
                 break;
             case 2:

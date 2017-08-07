@@ -1,5 +1,6 @@
 var BasePage = (function () {
     function BasePage() {
+        this.pageSize = 2;
     }
     BasePage.ShapeImage = function (img, maxSize) {
         var width = img.clientWidth;
@@ -59,6 +60,16 @@ var BasePage = (function () {
             page = Comm.GET("/getloginpage");
         }
         else {
+            if (parent.location.hash == "") {
+                switch (level.LevelId) {
+                    case 1:
+                        page = Comm.GET("/getuserlistpage");
+                        break;
+                    case 4:
+                        page = page = Comm.GET("/getissuetargetpage");
+                        break;
+                }
+            }
             if (parent.location.hash.search("loginpage") > -1)
                 page = Comm.GET("/getloginpage");
             if (parent.location.hash.search("issuetarget") > -1)
@@ -87,6 +98,8 @@ var BasePage = (function () {
             }
             if (parent.location.hash.search("registerdoctor") > -1)
                 page = Comm.GET("/getregisterdoctorpage");
+            if (parent.location.hash.search("userlist") > -1)
+                page = Comm.GET("/getuserlistpage");
         }
         $("#dContent").html(page);
         window.scrollTo(0, 0);

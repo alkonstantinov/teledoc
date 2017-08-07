@@ -56,6 +56,11 @@ var RegisterDoctor = (function (_super) {
         $("#hFnm").val(imageId);
         $("#iImg").prop("src", "/gettempimage?fnm=" + imageId);
     };
+    RegisterDoctor.prototype.ShowDoctor = function () {
+        var parts = parent.location.hash.split("|");
+        if (parts.length < 2)
+            return;
+    };
     return RegisterDoctor;
 }(BasePage));
 //# sourceMappingURL=registerdoctor.js.map

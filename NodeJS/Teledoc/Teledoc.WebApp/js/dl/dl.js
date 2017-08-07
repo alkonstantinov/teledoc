@@ -68,4 +68,17 @@ exports.StoreDoctor = function (pool, json, callback) {
         callback(result);
     });
 };
+exports.SearchUsers = function (pool, ss, pos, pagesize, callback) {
+    pool.query("select * from pusersearch ('" + ss + "'," + pos + "," + pagesize + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows);
+    });
+};
+exports.ChangeActiveUser = function (pool, userid, callback) {
+    pool.query("select * from puserchangeactive (" + userid + ")", function (err, result) {
+        callback();
+    });
+};
 //# sourceMappingURL=dl.js.map

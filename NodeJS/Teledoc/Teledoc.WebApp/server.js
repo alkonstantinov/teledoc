@@ -363,10 +363,43 @@ app.post("/registerdoctor", function (req, res) {
     var json = JSON.parse(req.body.json);
     json.Password = md5(json.Password);
     json.img = '\\x' + fileSystem.readFileSync(__dirname + "/files/" + json.Fnm, 'hex');
-    dl.StoreDoctor(Pool, JSON.stringify(json), function () { })
+    dl.StoreDoctor(Pool, JSON.stringify(json), function () { });
+    fileSystem.unlink(__dirname + "/files/" + json.Fnm, function (err) {
+        if (err) return console.log(err);
+        console.log('file deleted successfully');
+    });
     res.end();
 })
 
+app.get('/getuserlistpage', function (req, res) {
+    SendPage("pages/userlist.html", req, res);
+});
+
+app.post("/searchusers", function (req, res) {
+    var locale = GetLocale(req);
+    dl.SearchUsers(Pool, req.body.SS, req.body.Pos, req.body.PageSize, function (result) {
+        if (result != null) {
+            for (var r of result) {
+                r.levelname = translate.Translate(locale, r.levelname, fileSystem);
+                r.active = translate.Translate(locale, r.active + "", fileSystem);
+
+            }
+        }
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+app.post("/changeactiveuser", function (req, res) {
+    dl.ChangeActiveUser(Pool, req.body.UserId, function () {
+        
+        res.end();
+    });
+
+
+})
 
 //--------------------------------------------------------------
 app.get('*', function (req, res) {

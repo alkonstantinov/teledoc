@@ -170,5 +170,16 @@
   "Pharmacist": "Фармацевт",
   "specialization": "Специализации",
   "description": "Описание",
-  "registrationOK": "Успешна регистрация"
+  "registrationOK": "Успешна регистрация",
+  "users": "Потребители",
+  "search": "Търси",
+  "searchtext": "Текст за търсене",
+  "newexpert": "Нов експерт",
+  "levelname": "Вид потребител",
+  "active": "Активен",
+  "norecords": "Няма открити резултати",
+  "Administrator": "Админнистратор",
+  "Patient": "Пациент",
+  "true": "Да",
+  "false": "Не"
 }

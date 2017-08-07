@@ -24,7 +24,7 @@ var Login = (function (_super) {
                 $("#lErrUser").show();
                 break;
             case 1:
-                parent.location.hash = "registerdoctor";
+                parent.location.hash = "userlist";
                 BasePage.LoadCurrentPage();
                 break;
             case 2:

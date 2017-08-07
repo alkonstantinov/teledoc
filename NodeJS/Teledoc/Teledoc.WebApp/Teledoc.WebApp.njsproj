@@ -52,6 +52,7 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
+    <Content Include="pages\userlist.html" />
     <Content Include="pages\issueanswertype.html" />
     <Content Include="pages\registerdoctor.html" />
     <Content Include="pages\registeruser.html" />
@@ -92,6 +93,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="pages\js\issueanswertype.ts" />
     <TypeScriptCompile Include="pages\js\registerdoctor.ts" />
+    <TypeScriptCompile Include="pages\js\userlist.ts" />
     <TypeScriptCompile Include="pages\js\registeruser.ts" />
     <TypeScriptCompile Include="pages\js\issuemedicines.ts" />
     <TypeScriptCompile Include="pages\js\issueallergies.ts" />

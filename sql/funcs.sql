@@ -356,3 +356,12 @@ begin
   return result;
 end  
 $$ LANGUAGE plpgsql; 
+
+create or replace function pDoctorGet (_userId int)
+returns table (ObjTypeId int, ObjData bytea, ObjPreviewData bytea)
+as $$
+  select u.UserName, u.Name, 
+  from Obj
+  where ObjId = _ObjId;
+$$ LANGUAGE sql;
+

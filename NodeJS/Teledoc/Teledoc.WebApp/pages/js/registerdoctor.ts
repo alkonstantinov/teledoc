@@ -41,6 +41,7 @@ class RegisterDoctor extends BasePage {
 
         };
         Comm.POST("/registerdoctor", { json: JSON.stringify(json) });
+
         $("#dOK").show();
 
     }
@@ -49,6 +50,15 @@ class RegisterDoctor extends BasePage {
         $("#hFnm").val(imageId);
         $("#iImg").prop("src", "/gettempimage?fnm=" + imageId);
         
+    }
+
+    public ShowDoctor()
+    {
+
+        var parts = parent.location.hash.split("|");
+        if (parts.length < 2)
+            return;
+
     }
 
     constructor() {
