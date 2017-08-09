@@ -81,4 +81,20 @@ exports.ChangeActiveUser = function (pool, userid, callback) {
         callback();
     });
 };
+exports.GetDoctor = function (pool, userid, callback) {
+    pool.query("select * from pDoctorGet (" + userid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows[0]);
+    });
+};
+exports.GetDoctorImage = function (pool, userid, callback) {
+    pool.query("select * from pDoctorImageGet (" + userid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows[0].img);
+    });
+};
 //# sourceMappingURL=dl.js.map

@@ -362,12 +362,16 @@ app.get("/gettempimage", function (req, res) {
 app.post("/registerdoctor", function (req, res) {
     var json = JSON.parse(req.body.json);
     json.Password = md5(json.Password);
-    json.img = '\\x' + fileSystem.readFileSync(__dirname + "/files/" + json.Fnm, 'hex');
+    if (json.Fnm != "")
+        json.img = '\\x' + fileSystem.readFileSync(__dirname + "/files/" + json.Fnm, 'hex');
+    else
+        json.img = '';
     dl.StoreDoctor(Pool, JSON.stringify(json), function () { });
-    fileSystem.unlink(__dirname + "/files/" + json.Fnm, function (err) {
-        if (err) return console.log(err);
-        console.log('file deleted successfully');
-    });
+    if (json.Fnm != "")
+        fileSystem.unlink(__dirname + "/files/" + json.Fnm, function (err) {
+            if (err) return console.log(err);
+            console.log('file deleted successfully');
+        });
     res.end();
 })
 
@@ -394,8 +398,26 @@ app.post("/searchusers", function (req, res) {
 
 app.post("/changeactiveuser", function (req, res) {
     dl.ChangeActiveUser(Pool, req.body.UserId, function () {
-        
+
         res.end();
+    });
+
+
+})
+
+
+app.post("/getdoctor", function (req, res) {
+    dl.GetDoctor(Pool, req.body.UserId, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+app.get("/getdoctorimage", function (req, res) {
+    dl.GetDoctorImage(Pool, req.query.UserId, function (result) {
+        res.end(result, 'binary');
     });
 
 

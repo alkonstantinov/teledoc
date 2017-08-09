@@ -32,7 +32,9 @@ class UserList extends BasePage {
                     "<td>" + r.levelname + "</td>" +
                     "<td>" + (r.name == null ? "" : r.name) + "</td>" +
                     "<td><button class='btn btn-primary' onclick='userList.ChangeActiveUser(" + r.userid + ")'>" + r.active + "</button></td>" +
-                    "<td><span class='glyphicon glyphicon-edit pull-right' aria-hidden='true' onclick='userList.EditUser(" + r.userid + ")'></span></td>" +
+                    ((r.levelid == 2 || r.levelid == 3)?
+                        "<td><span class='glyphicon glyphicon-edit pull-right' aria-hidden='true' onclick='userList.EditUser(" + r.userid + ")'></span></td>" :
+                    "<td> </td>")+
                     "</tr>");
             }
         }

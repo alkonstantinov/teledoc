@@ -62,21 +62,24 @@ create or replace function pDoctorSet (_DoctorData json)
 returns integer
  as $$
  declare _UserId integer;
+ _img bytea;
 begin
   if (_DoctorData->>'UserId' != '') then
     update "User"
     set
       LevelId = (_DoctorData->>'LevelId')::int,
       Name = _DoctorData->>'Name'
-    where UserId = (_DoctorData->'UserId')::int;
+    where UserId = (_DoctorData->>'UserId')::int;
+
+    _img := (_DoctorData->>'img')::bytea;
 
     update Doctor
     set
       UIN  = _DoctorData->>'UIN',
-    img = _DoctorData->>'img'::bytea,
+    img = case _img when '' then img else _img end,
     Specialization = _DoctorData->>'Specialization',
     Description = _DoctorData->>'Description'
-    where UserId = _DoctorData->'UserId'::int;
+    where UserId = (_DoctorData->>'UserId')::int;
   else
     insert into "User" 
     (LevelId, 
@@ -112,12 +115,12 @@ begin
   return _UserId;
 end $$ LANGUAGE plpgsql; 
  
-
+-- drop function pUserSearch (_ss text, _pos integer, _pageSize integer)
 -- Извличане на всички потребители
 create or replace function pUserSearch (_ss text, _pos integer, _pageSize integer)
-returns table(UserId integer, Username citext, LevelName varchar(50), Name text, Active boolean, total bigint)
+returns table(UserId integer, Username citext, LevelId int, LevelName varchar(50), Name text, Active boolean, total bigint)
  as $$
-  select u.UserId, u.Username, l.LevelName, u.Name, u.Active, count(1) over() as total
+  select u.UserId, u.Username, l.LevelId, l.LevelName, u.Name, u.Active, count(1) over() as total
   from "User" u
   join Level l  on l.LevelId = u.LevelId
   where (_ss is null or u.username like '%' || _ss || '%' or u.name like '%' || _ss || '%')
@@ -356,12 +359,20 @@ begin
   return result;
 end  
 $$ LANGUAGE plpgsql; 
-
+--drop function pDoctorGet (_userId int)
 create or replace function pDoctorGet (_userId int)
-returns table (ObjTypeId int, ObjData bytea, ObjPreviewData bytea)
+returns table (UserName citext, Name text, LevelId int, UIN varchar (50), Specialization text,  Description text)
 as $$
-  select u.UserName, u.Name, 
-  from Obj
-  where ObjId = _ObjId;
+  select u.UserName, u.Name, u.LevelId, d.UIN, d.specialization, d.description
+  from "User" u
+  join Doctor d on d.UserId = u.UserId
+  where u.UserId = _userId;
 $$ LANGUAGE sql;
 
+create or replace function pDoctorImageGet (_userId int)
+returns table (img bytea)
+as $$
+  select d.img
+  from Doctor d
+  where d.UserId = _userId;
+$$ LANGUAGE sql;

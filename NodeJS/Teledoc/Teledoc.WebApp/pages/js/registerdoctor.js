@@ -16,16 +16,17 @@ var RegisterDoctor = (function (_super) {
     RegisterDoctor.prototype.Register = function () {
         BasePage.HideErrors();
         var error = false;
-        if (!/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/.test($("#tbRegEmail").val())) {
+        var isNew = ($("#hUserId").val() == "");
+        if (isNew && !/^\w + ([\.-]?\ w +)*@\w + ([\.-]?\ w +)*(\.\w{2, 3 })+$ /.test($("#tbRegEmail").val())) {
             error = true;
             $("#lErrtbRegEmail").show();
         }
-        if ($("#tbRegEmail").val() != "" && $("#hUserId").val() != "" &&
+        if (isNew && $("#tbRegEmail").val() != "" && $("#hUserId").val() != "" &&
             Comm.POST("/userexists", { email: $("#tbRegEmail").val() }).Exists) {
             error = true;
             $("#lErrExists").show();
         }
-        if ($("#tbRegPassword").val() == "") {
+        if (isNew && $("#tbRegPassword").val() == "") {
             error = true;
             $("#lErrtbRegPassword").show();
         }
@@ -60,6 +61,17 @@ var RegisterDoctor = (function (_super) {
         var parts = parent.location.hash.split("|");
         if (parts.length < 2)
             return;
+        var json = Comm.POST("/getdoctor", { UserId: parts[1] });
+        $("#hUserId").val(parts[1]);
+        $("#tbRegEmail").val(json.username);
+        $("#tbRegEmail").prop("disabled", true);
+        $("#tbRegPassword").prop("disabled", true);
+        $("#ddlLevelId").val(json.levelid);
+        $("#tbName").val(json.name);
+        $("#tbUIN").val(json.uin);
+        $("#taSpecialization").val(json.specialization);
+        $("#taDescription").val(json.description);
+        $("#iImg").prop("src", "/getdoctorimage?UserId=" + parts[1]);
     };
     return RegisterDoctor;
 }(BasePage));
