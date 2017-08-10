@@ -21,15 +21,18 @@
                 </a>
             </div>
             <div class="navbar-collapse collapse">
-                <button type="button" onclick="ChangeLocale('en')" class="pull-right btn btn-primary" id="aLocaleEnglish">English</button>
-                <button type="button" onclick="ChangeLocale('bg')" class="pull-right btn btn-primary" id="aLocaleBulgarian">Български</button>
+                <ul id="dMenu" class="nav navbar-nav"></ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a onclick="ChangeLocale('en')" id="aLocaleEnglish">English</a></li>
+                    <li><a onclick="ChangeLocale('bg')" id="aLocaleBulgarian">Български</a></li>
+                </ul>
             </div>
         </div>
     </nav>
     <div class="clearfix">&nbsp;</div>
     <div class="clearfix">&nbsp;</div>
     <div class="container" id="dContent">
-        
+
     </div>
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -50,8 +53,7 @@
     <script src="pages/js/issueanswertype.js"></script>
     <script src="pages/js/userlist.js"></script>
     <script type="text/javascript">
-        function TranslateStatic(locale)
-        {
+        function TranslateStatic(locale) {
             if (locale === "bg") {
                 $("#iLogo").prop("src", "img/logobg.png");
                 $("#aLocaleEnglish").show();
@@ -74,7 +76,7 @@
         $(document).ready(function () {
             var locale = Comm.GET("/getlocale");
             TranslateStatic(locale);
-        
+
             BasePage.LoadCurrentPage();
 
 

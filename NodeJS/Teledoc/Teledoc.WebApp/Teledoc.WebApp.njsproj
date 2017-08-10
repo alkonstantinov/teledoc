@@ -52,6 +52,9 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
+    <Content Include="pages\menu.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="pages\userlist.html" />
     <Content Include="pages\issueanswertype.html" />
     <Content Include="pages\registerdoctor.html" />

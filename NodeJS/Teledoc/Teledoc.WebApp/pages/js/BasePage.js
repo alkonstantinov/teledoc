@@ -103,6 +103,41 @@ var BasePage = (function () {
         }
         $("#dContent").html(page);
         window.scrollTo(0, 0);
+        var menu = Comm.GET("/getmenu");
+        $("#dMenu").html(menu);
+        switch (level.LevelId) {
+            case -1:
+                $("#dMenu").hide();
+                break;
+            case 1:
+                $("#dMenu").show();
+                $("#miNewIssue").hide();
+                $("#miUserList").show();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+            case 2:
+                $("#dMenu").show();
+                $("#miNewIssue").hide();
+                $("#miUserList").hide();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+            case 3:
+                $("#dMenu").show();
+                $("#miNewIssue").hide();
+                $("#miUserList").hide();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+            case 4:
+                $("#dMenu").show();
+                $("#miNewIssue").show();
+                $("#miUserList").hide();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+        }
     };
     BasePage.HideErrors = function () {
         $("div[id^='lErr']").hide();

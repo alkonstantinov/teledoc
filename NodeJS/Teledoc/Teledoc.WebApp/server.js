@@ -423,6 +423,18 @@ app.get("/getdoctorimage", function (req, res) {
 
 })
 
+
+app.get("/getmenu", function (req, res) {
+    SendPage("pages/menu.html", req, res);
+
+})
+
+app.get("/logoff", function (req, res) {
+    var sess = req.session;
+    sess.levelid = -1;
+    res.end();
+})
+
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
     //res.send("-1");

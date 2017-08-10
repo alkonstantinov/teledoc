@@ -181,5 +181,8 @@
   "Administrator": "Админнистратор",
   "Patient": "Пациент",
   "true": "Да",
-  "false": "Не"
+  "false": "Не",
+  "newissue": "Консултация",
+  "changepass": "Парола",
+  "logoff": "Изход"
 }

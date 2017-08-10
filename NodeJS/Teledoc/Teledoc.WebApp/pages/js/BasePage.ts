@@ -7,8 +7,7 @@ class BasePage {
     static LastErrorC: String;
     static Issue: any;
     protected pageSize = 2;
-    static ShapeImage(img, maxSize)
-    {
+    static ShapeImage(img, maxSize) {
         var width = img.clientWidth;
         var height = img.clientHeight;
         var r = 1;
@@ -83,10 +82,8 @@ class BasePage {
                 page = Comm.GET("/getloginpage");
             }
             else {
-                if (parent.location.hash == "")
-                {
-                    switch (level.LevelId)
-                    {
+                if (parent.location.hash == "") {
+                    switch (level.LevelId) {
                         case 1: page = Comm.GET("/getuserlistpage"); break;
                         case 4: page = page = Comm.GET("/getissuetargetpage"); break;
 
@@ -126,6 +123,40 @@ class BasePage {
 
         $("#dContent").html(page);
         window.scrollTo(0, 0);
+        var menu = Comm.GET("/getmenu");
+        $("#dMenu").html(menu);
+
+        switch (level.LevelId) {
+            case -1: $("#dMenu").hide(); break;
+            case 1:
+                $("#dMenu").show();
+                $("#miNewIssue").hide();
+                $("#miUserList").show();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+            case 2:
+                $("#dMenu").show();
+                $("#miNewIssue").hide();
+                $("#miUserList").hide();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+            case 3:
+                $("#dMenu").show();
+                $("#miNewIssue").hide();
+                $("#miUserList").hide();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+            case 4:
+                $("#dMenu").show();
+                $("#miNewIssue").show();
+                $("#miUserList").hide();
+                $("#miChangePass").show();
+                $("#miLogoff").show();
+                break;
+        }
     }
 
 
