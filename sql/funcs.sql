@@ -376,3 +376,35 @@ as $$
   from Doctor d
   where d.UserId = _userId;
 $$ LANGUAGE sql;
+
+-- извличане на отворени и непоети ишута по пациент
+--drop function pIssueGetNotClosed (_PatientUserId int) 
+create or replace function pIssueGetNotClosed (_PatientUserId int) 
+returns table (IssueId int, OnDate timestamp, Description text, StatusId int, StatusName varchar(50))
+ as $$
+
+  select
+    i.IssueId,
+    (select min(ondate) from IssueEvent where IssueId = i.IssueId) OnDate,
+    i.Description,
+    st.IssueStatusId,
+    st.IssueStatusName
+  from Issue i
+  join IssueStatus st on st.IssueStatusId = i.IssueStatusId
+  where i.PatientUserId = _PatientUserId and i.IssueStatusId in (1,2);
+$$ LANGUAGE sql; 
+
+-- извличане на отворени и непоети ишута по вид експерт
+--drop function pIssueGetNotClosed (_PatientUserId int) 
+--select * from pIssueGetByExpert(1);
+create or replace function pIssueGetByExpert (_LevelId int) 
+returns table (IssueId int, OnDate timestamp, Description text)
+ as $$
+
+  select
+    i.IssueId,
+    (select min(ondate) from IssueEvent where IssueId = i.IssueId) OnDate,
+    i.Description
+  from Issue i
+  where i.ReqExpertLevelId = _LevelId and i.IssueStatusId =1;
+$$ LANGUAGE sql; 

@@ -57,6 +57,13 @@ class BasePage {
         $("#dContent").load("app/pages/" + fnm + "?" + d.getUTCMilliseconds());
     }
 
+    static PostgreTimestamp(dt: any)
+    {
+        var date = new Date(dt.replace(' ', 'T'));
+        return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();  
+
+    }
+
 
 
     static Logout() {
@@ -119,6 +126,10 @@ class BasePage {
                     page = Comm.GET("/getregisterdoctorpage");
                 if (parent.location.hash.search("userlist") > -1)
                     page = Comm.GET("/getuserlistpage");
+                if (parent.location.hash.search("patientmain") > -1)
+                    page = Comm.GET("/getpatientmain");
+                if (parent.location.hash.search("expertmain") > -1)
+                    page = Comm.GET("/getexpertmain");
             }
 
         $("#dContent").html(page);

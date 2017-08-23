@@ -1,4 +1,5 @@
 ﻿CREATE EXTENSION IF NOT EXISTS citext;
+CREATE EXTENSION IF NOT EXISTS citext;
 
 drop table if exists Level CASCADE;
 create table Level

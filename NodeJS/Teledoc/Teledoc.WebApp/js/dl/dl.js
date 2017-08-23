@@ -97,4 +97,20 @@ exports.GetDoctorImage = function (pool, userid, callback) {
             callback(result.rows[0].img);
     });
 };
+exports.GetIssuesNotClosed = function (pool, userid, callback) {
+    pool.query("select * from pIssueGetNotClosed (" + userid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows);
+    });
+};
+exports.GetIssuesByExpert = function (pool, levelid, callback) {
+    pool.query("select * from pIssueGetByExpert (" + levelid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows);
+    });
+};
 //# sourceMappingURL=dl.js.map

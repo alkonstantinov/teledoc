@@ -28,13 +28,15 @@ var Login = (function (_super) {
                 BasePage.LoadCurrentPage();
                 break;
             case 2:
-                alert(2);
+                parent.location.hash = "expertmain";
+                BasePage.LoadCurrentPage();
                 break;
             case 3:
-                alert(3);
+                parent.location.hash = "expertmain";
+                BasePage.LoadCurrentPage();
                 break;
             case 4:
-                parent.location.hash = "issuetarget";
+                parent.location.hash = "patientmain";
                 BasePage.LoadCurrentPage();
                 break;
         }

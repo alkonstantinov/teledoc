@@ -1,0 +1,22 @@
+﻿<div class="jumbotron">
+    <div class="panel panel-info">
+        <div class="panel-heading">#welcome#</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+            
+                    <table id="tIssues" class="table table-striped"></table>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        expertMain = new ExpertMain();
+        expertMain.LoadPendingIssues();
+        BasePage.HideErrors();
+    })
+</script>

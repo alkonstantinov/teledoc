@@ -17,11 +17,14 @@ class Login extends BasePage {
                 BasePage.LoadCurrentPage();
                 break;
             case 2:
-                alert(2); break;
-            case 3:
-                alert(3); break;
+                parent.location.hash = "expertmain";
+                BasePage.LoadCurrentPage();
+                break;
+            case 3: parent.location.hash = "expertmain";
+                BasePage.LoadCurrentPage();
+                break;
             case 4:
-                parent.location.hash = "issuetarget";
+                parent.location.hash = "patientmain";
                 BasePage.LoadCurrentPage();
                 break;
         }

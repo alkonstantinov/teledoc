@@ -40,6 +40,10 @@ var BasePage = (function () {
         var d = new Date();
         $("#dContent").load("app/pages/" + fnm + "?" + d.getUTCMilliseconds());
     };
+    BasePage.PostgreTimestamp = function (dt) {
+        var date = new Date(dt.replace(' ', 'T'));
+        return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+    };
     BasePage.Logout = function () {
         parent.location.hash = "";
         //!!!!!!!!!!! изпращане на сигнал за логаут
@@ -100,6 +104,10 @@ var BasePage = (function () {
                 page = Comm.GET("/getregisterdoctorpage");
             if (parent.location.hash.search("userlist") > -1)
                 page = Comm.GET("/getuserlistpage");
+            if (parent.location.hash.search("patientmain") > -1)
+                page = Comm.GET("/getpatientmain");
+            if (parent.location.hash.search("expertmain") > -1)
+                page = Comm.GET("/getexpertmain");
         }
         $("#dContent").html(page);
         window.scrollTo(0, 0);

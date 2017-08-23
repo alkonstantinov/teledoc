@@ -52,6 +52,8 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
+    <Content Include="pages\expertmain.html" />
+    <Content Include="pages\patientmain.html" />
     <Content Include="pages\menu.html">
       <SubType>Code</SubType>
     </Content>
@@ -94,6 +96,8 @@
     <TypeScriptCompile Include="pages\js\comm.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="pages\js\expertmain.ts" />
+    <TypeScriptCompile Include="pages\js\patientmain.ts" />
     <TypeScriptCompile Include="pages\js\issueanswertype.ts" />
     <TypeScriptCompile Include="pages\js\registerdoctor.ts" />
     <TypeScriptCompile Include="pages\js\userlist.ts" />

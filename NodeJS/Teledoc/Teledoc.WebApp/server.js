@@ -178,6 +178,7 @@ app.post('/login', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     dl.Login(Pool, req.body.Username, md5(req.body.Password), function (jsonResult) {
         req.session.levelid = (jsonResult == null ? -1 : jsonResult.levelid);
+        req.session.userid = (jsonResult == null ? -1 : jsonResult.userid);
         res.send({ LevelId: (jsonResult == null ? -1 : jsonResult.levelid) });
         res.end();
     });
@@ -434,6 +435,43 @@ app.get("/logoff", function (req, res) {
     sess.levelid = -1;
     res.end();
 })
+
+
+app.get('/getpatientmain', function (req, res) {
+    SendPage("pages/patientmain.html", req, res);
+});
+
+app.post("/getissuesnotclosed", function (req, res) {
+    var locale = GetLocale(req);
+    dl.GetIssuesNotClosed(Pool, req.session.userid, function (result) {
+        if (result != null) {
+            for (var r of result) {
+                r.statusname = translate.Translate(locale, r.statusname, fileSystem);
+
+            }
+        }
+
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+
+app.get('/getexpertmain', function (req, res) {
+    SendPage("pages/expertmain.html", req, res);
+});
+
+app.post("/getissuesbyexpert", function (req, res) {
+    dl.GetIssuesByExpert(Pool, req.session.levelid, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
 
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
