@@ -7,6 +7,7 @@
   "registration": "Регистрация",
   "consultationfor": "Консултация за",
   "me": "Мен",
+  "Me": "Мен",
   "mychild": "Моето дете",
   "consultationfrom": "Консултация от",
   "doctor": "Лекар",
@@ -158,6 +159,8 @@
   "activation": "Активация",
   "activationEmailSubject": "Активационен линк Teledoc",
   "activationEmailText": "Моля, кликнете <a href='http://www.teledoc.bg/guid={guid}'>тук</a>",
+  "newPassEmailSubject": "Сменена Teledoc",
+  "newPassEmailText": "Новата Ви парола е {pass}",
   "profileactivation": "Вашият профил е активиран",
   "Chat": "Чат",
   "eMail": "Електронна поща",
@@ -188,6 +191,11 @@
   "welcome": "Добре дошли",
   "Initial": "Подадено запитване",
   "Taken": "Поето от специалист",
-  "Done": "Приключено"
-
+  "Done": "Приключено",
+  "MainData": "Основни данни",
+  "from": "от",
+  "since": "от",
+  "takeissue": "Поемам случая",
+  "save": "Запис",
+  "Send": "Изпрати"
 }

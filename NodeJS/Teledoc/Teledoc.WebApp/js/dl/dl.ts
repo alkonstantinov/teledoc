@@ -161,3 +161,33 @@ exports.GetIssuesByExpert = function (pool, levelid, callback) {
             callback(result.rows);
     });
 };
+
+exports.GetIssue = function (pool, issueId, callback) {
+    pool.query("select * from pIssueGet (" + issueId + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows[0].pissueget);
+    });
+};
+
+exports.AssignIssue = function (pool, userId, issueId, callback) {
+    pool.query("select * from pIssueAssign('" + issueId + "', '" + userId + "');", function (err, result) {
+        callback(null);
+    });
+
+
+
+};
+
+exports.ChangePass = function (pool, userId, password, callback) {
+    pool.query("select * from pUserChangePass('" + userId + "', '" + password + "');", function (err, result) {
+        callback(null);
+    });
+};
+
+exports.ChangeLostPass = function (pool, userId, password, callback) {
+    pool.query("select * from pChangeLostPass('" + userId + "', '" + password + "');", function (err, result) {
+        callback(null);
+    });
+};

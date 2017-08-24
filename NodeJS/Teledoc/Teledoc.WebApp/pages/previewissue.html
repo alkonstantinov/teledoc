@@ -1,0 +1,57 @@
+﻿<div class="jumbotron">
+    <div class="panel panel-info">
+        <div class="panel-heading">#issuedescription#</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12" id="dIssue">
+                    <h3>#MainData#</h3>
+                    <ul>
+                        <li>
+                            #consultationfor#:<label class="control-label" id="lWhoName"></label>
+                        </li>
+                        <li>
+                            #sex#:<label class="control-label" id="lGenderName"></label>
+                        </li>
+                        <li>
+                            #bornon#:<label class="control-label" id="lBornOn"></label>
+                        </li>
+                        <li>
+                            #description#:<label class="control-label" id="lDescription"></label>
+                        </li>
+                    </ul>
+                    <h3>#issuesymptoms#</h3>
+                    #from#:<label class="control-label" id="lSince"></label>
+                    <ul id="ulSymptoms"></ul>
+                    <h3>#issueallergies#</h3>
+                    <ul id="ulAllergies"></ul>
+                    <h3>#issuechronics#</h3>
+                    <ul id="ulChronics"></ul>                    
+                    <table class="table table-striped" id="tMedications">
+                        <thead>
+                            <tr>
+                                <th>
+                                    #issuemedicines#
+                                </th>
+                                <th>
+                                    #since#
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" onclick="previewIssue.Take()">#takeissue#</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        previewIssue = new PreviewIssue();
+        previewIssue.ShowIssue();
+        BasePage.HideErrors();
+    })
+</script>

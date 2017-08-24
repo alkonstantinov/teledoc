@@ -74,7 +74,7 @@ create table Who
   WhoName varchar(50)
 );
 insert into Who (WhoId, WhoName)
-values (1, 'Ме'),(2, 'Mychild'),(3, 'Someoneelse');
+values (1, 'Me'),(2, 'Mychild'),(3, 'Someoneelse');
 
 drop table if exists IssueStatus CASCADE;
 create table IssueStatus
@@ -100,7 +100,7 @@ create table AnswerType
   AnswerTypeId int not null primary key,
   AnswerTypeName varchar(50)
 );
-insert into Since (SinceId, SinceName)
+insert into AnswerType (AnswerTypeId, AnswerTypeName)
 values (1, 'Chat'),(2, 'eMail'),(3, 'Call');
 
 
@@ -119,7 +119,7 @@ create table Issue
   BirthMonth smallint,
   BirthYear int,
   Description text not null, 
-  AnsweTypeId int not null references AnsweType(AnsweTypeId),
+  AnswerTypeId int not null references AnsweType(AnsweTypeId),
   AdditionalInfo text,
   Paid boolean not null  
 );

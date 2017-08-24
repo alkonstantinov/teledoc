@@ -472,6 +472,82 @@ app.post("/getissuesbyexpert", function (req, res) {
 
 })
 
+app.get('/getpreviewissue', function (req, res) {
+    SendPage("pages/previewissue.html", req, res);
+});
+
+app.post("/getissue", function (req, res) {
+    var locale = GetLocale(req);
+    dl.GetIssue(Pool, req.body.issueId, function (result) {
+        result.whoname = translate.Translate(locale, result.whoname, fileSystem);
+        result.gendername = translate.Translate(locale, result.gendername, fileSystem);
+        result.sincename = translate.Translate(locale, result.sincename, fileSystem);
+        if (result.chronics != null)
+            for (var item of result.chronics)
+                item.chronicname = translate.Translate(locale, item.chronicname, fileSystem);
+
+        if (result.medications != null)
+            for (var item of result.medications)
+                item.sincename = translate.Translate(locale, item.sincename, fileSystem);
+
+        if (result.symptoms != null)
+            for (var item of result.symptoms)
+                item.symptomname = translate.Translate(locale, item.symptomname, fileSystem);
+        
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+
+app.post("/takeissue", function (req, res) {
+    dl.AssignIssue(Pool, req.session.userid, req.body.issueId, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+
+app.get('/getchangepasspage', function (req, res) {
+    SendPage("pages/changepass.html", req, res);
+});
+
+app.post("/changepass", function (req, res) {    
+    dl.ChangePass(Pool, req.session.userid, md5(req.body.password), function (result) {
+        res.send("OK");
+        res.end();
+    });
+
+
+})
+
+app.get('/getlostpasspage', function (req, res) {
+    SendPage("pages/lostpass.html", req, res);
+});
+
+app.post("/lostpassrenew", function (req, res) {
+    var newPass = Math.floor((1 + Math.random()) * 10000);
+    dl.ChangeLostPass(Pool, req.body.email, md5(newPass), function (result) {
+        
+    });
+
+    var mailOptions = {
+        from: 'contact@birex43.com',
+        to: req.body.email,
+        subject: translate.Translate(locale, "newPassEmailSubject", fileSystem),
+        html: translate.Translate(locale, "newPassEmailText", fileSystem).replace("{pass}", newPass)
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+
+    });
+    res.send("OK");
+    res.end();
+})
+
 
 //--------------------------------------------------------------
 app.get('*', function (req, res) {

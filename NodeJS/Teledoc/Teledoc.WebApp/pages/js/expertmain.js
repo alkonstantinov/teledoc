@@ -14,17 +14,21 @@ var ExpertMain = (function (_super) {
         return _super.call(this) || this;
     }
     ExpertMain.prototype.LoadPendingIssues = function () {
-        var issues = Comm.POST("/getissuesnotclosed", {});
+        var issues = Comm.POST("/getissuesbyexpert", {});
         $("#tIssues").empty();
         if (issues == null)
             return;
         for (var _i = 0, issues_1 = issues; _i < issues_1.length; _i++) {
             var issue = issues_1[_i];
             var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
-            row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick=''></span>";
+            row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='expertMain.Preview(" + issue.issueid + ")'></span>";
             row += "</td></tr>";
             $("#tIssues").append(row);
         }
+    };
+    ExpertMain.prototype.Preview = function (issueId) {
+        parent.location.hash = "previewissue|" + issueId;
+        BasePage.LoadCurrentPage();
     };
     return ExpertMain;
 }(BasePage));

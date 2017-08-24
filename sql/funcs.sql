@@ -140,6 +140,18 @@ returns void
   
 $$ LANGUAGE sql; 
 
+-- Промяна на парола при забравена
+--drop function pUserChangePass (_UserName citext, _Password citext)
+create or replace function pChangeLostPass (_UserName citext, _Password citext)
+returns void
+ as $$
+  update "User" u
+  set Password = _Password
+  where UserName = _UserName;
+  
+$$ LANGUAGE sql; 
+
+
 -- Активиране деактивиране на потребител
 create or replace function pUserChangeActive (_UserId integer)
 returns void
@@ -255,9 +267,13 @@ create or replace function pIssueAssign (_IssueId int, _ExpertUserId int)
 returns void
  as $$
   update Issue
-  set ExpertUserId = _ExpertUserId
+  set ExpertUserId = _ExpertUserId, IssueStatusId=2
   where IssueId = _IssueId;
+  
+  insert into IssueEvent(issueid, issuestatusid,ondate)
+  values(_IssueId, 2, now())
 $$ LANGUAGE sql; 
+
 
 -- затваряне на ишу
 create or replace function pIssueSetStatus (_IssueId int, _IssueStatusId int) 
@@ -327,35 +343,36 @@ $$ LANGUAGE sql;
 
 
 -- Извличане на данни за ишу
+--select * from pIssueGet (6)
 create or replace function pIssueGet (_IssueId int) 
 returns json
  as $$
 declare result json;
 _i json;
 begin
-  FOR result in select row_to_json (Issue) from Issue where IssueId = _IssueId LOOP END LOOP;
-
-  result := jsonb_set( result::jsonb,'{Chronic}','[]');
-  FOR _i IN select row_to_json (Issue2Chronic)from Issue2Chronic where IssueId = _IssueId LOOP
-    result := jsonb_insert(result ::jsonb,'{Chronic,1}',_i::jsonb);
-  end loop;
-  
-  result := jsonb_set( result::jsonb,'{Allergy}','[]');
-  FOR _i IN select row_to_json (Issue2Allergy)from Issue2Allergy where IssueId = _IssueId LOOP
-    result := jsonb_insert(result ::jsonb,'{Allergy,1}',_i::jsonb);
-  end loop;
+  FOR result in 
     
-  result := jsonb_set( result::jsonb,'{Symptom}','[]');
-  FOR _i IN select row_to_json (Issue2Symptom)from Issue2Symptom where IssueId = _IssueId LOOP
-    result := jsonb_insert(result ::jsonb,'{Symptom,1}',_i::jsonb);
-  end loop;
-
-
-  result := jsonb_set( result::jsonb,'{Medication}','[]');
-  FOR _i IN select row_to_json (Issue2Medication)from Issue2Medication where IssueId = _IssueId LOOP
-    result := jsonb_insert(result ::jsonb,'{Medication,1}',_i::jsonb);
-  end loop;
-  
+SELECT row_to_json(
+        (SELECT x FROM 
+          (SELECT
+            *,
+            (select json_agg(row_to_json(Allergies)) FROM (select * from Issue2Allergy where issueid = i.issueid) Allergies) as Allergies,
+            (select json_agg(row_to_json(Chronics)) FROM (select * from Issue2Chronic i2c join Chronic c on c.ChronicId = i2c.ChronicId where issueid = i.issueid) Chronics) as Chronics,
+            (select json_agg(row_to_json(Medications)) FROM (select * from Issue2Medication i2m join Since s on s.SinceId = i2m.SinceId where issueid = i.issueid) Medications) as Medications,
+            (select json_agg(row_to_json(Symptoms)) FROM (select * from Issue2Symptom i2s join Symptom s on s.SymptomId = i2s.SymptomId where issueid = i.issueid) Symptoms) as Symptoms
+           from issue i
+           join "User" u on u.UserId =i.PatientUserId
+           join who w on w.whoid = i.whoid
+           join issuestatus ist on ist.issuestatusid =i.issuestatusid
+           join Level l on l.LevelId = i.ReqExpertLevelId 
+           join Gender g on g.GenderId = i.GenderId
+           join Since s on s.SinceId=i.SinceId
+           join AnswerType atp on atp.AnswerTypeId = i.AnswerTypeId
+           where i.issueid=_IssueId  
+        ) x),
+        true
+)
+LOOP END LOOP;
   return result;
 end  
 $$ LANGUAGE plpgsql; 

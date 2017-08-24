@@ -84,6 +84,8 @@ class BasePage {
         var page = null;
         if (parent.location.hash.search("registeruser") > -1)
             page = Comm.GET("/getregisteruserpage");
+        if (parent.location.hash.search("lostpass") > -1)
+            page = Comm.GET("/getlostpasspage");
         else
             if (level.LevelId === -1) {
                 page = Comm.GET("/getloginpage");
@@ -130,6 +132,10 @@ class BasePage {
                     page = Comm.GET("/getpatientmain");
                 if (parent.location.hash.search("expertmain") > -1)
                     page = Comm.GET("/getexpertmain");
+                if (parent.location.hash.search("previewissue") > -1)
+                    page = Comm.GET("/getpreviewissue");
+                if (parent.location.hash.search("changepass") > -1)
+                    page = Comm.GET("/getchangepasspage");
             }
 
         $("#dContent").html(page);

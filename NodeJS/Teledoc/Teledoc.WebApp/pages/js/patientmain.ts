@@ -9,7 +9,7 @@ class PatientMain extends BasePage {
         if (issues == null)
             return;
         for (var issue of issues) {
-
+            
             var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
             if (issue.statusid == 2)
                 row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick=''></span>";

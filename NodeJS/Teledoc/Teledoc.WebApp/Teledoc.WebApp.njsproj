@@ -52,6 +52,9 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
+    <Content Include="pages\lostpass.html" />
+    <Content Include="pages\changepass.html" />
+    <Content Include="pages\previewissue.html" />
     <Content Include="pages\expertmain.html" />
     <Content Include="pages\patientmain.html" />
     <Content Include="pages\menu.html">
@@ -93,9 +96,12 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="pages\js\basepage.ts" />
+    <TypeScriptCompile Include="pages\js\lostpass.ts" />
     <TypeScriptCompile Include="pages\js\comm.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="pages\js\changepass.ts" />
+    <TypeScriptCompile Include="pages\js\previewissue.ts" />
     <TypeScriptCompile Include="pages\js\expertmain.ts" />
     <TypeScriptCompile Include="pages\js\patientmain.ts" />
     <TypeScriptCompile Include="pages\js\issueanswertype.ts" />

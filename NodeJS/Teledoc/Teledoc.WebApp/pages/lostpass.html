@@ -1,0 +1,25 @@
+﻿<div class="jumbotron">
+    <div class="panel panel-info">
+        <div class="panel-heading">#forgottenpassword#</div>
+
+
+        <div class="panel-body">
+            <div class="form-group">
+                <input type="text" id="tbUsername" class="form-control" value="" placeholder="email"/>
+                <div id="lErrtbUsername" class="label-danger">#entercorrectvalue#</div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary pull-right" id="bChange" onclick="lostPass.Save()">#Send#</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        lostPass = new LostPass();
+
+        BasePage.HideErrors();
+    })
+</script>
