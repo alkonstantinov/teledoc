@@ -23,6 +23,8 @@ var LostPass = (function (_super) {
         if (error)
             return false;
         Comm.POST("lostpassrenew", { email: $("#tbUsername").val() });
+        $("#lSuccess").fadeIn(1000);
+        $("#lSuccess").fadeOut(2000);
         return true;
     };
     return LostPass;

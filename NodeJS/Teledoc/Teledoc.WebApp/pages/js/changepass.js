@@ -23,6 +23,8 @@ var ChangePass = (function (_super) {
         if (error)
             return false;
         Comm.POST("changepass", { password: $("#tbPass").val() });
+        $("#lSuccess").fadeIn(1000);
+        $("#lSuccess").fadeOut(2000);
         return true;
     };
     return ChangePass;

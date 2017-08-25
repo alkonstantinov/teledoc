@@ -69,7 +69,13 @@ var BasePage = (function () {
             if (parent.location.hash == "") {
                 switch (level.LevelId) {
                     case 1:
-                        page = Comm.GET("/getuserlistpage");
+                        page = Comm.GET("/getdashboardpage");
+                        break;
+                    case 2:
+                        page = Comm.GET("/getexpertmain");
+                        break;
+                    case 3:
+                        page = Comm.GET("/getexpertmain");
                         break;
                     case 4:
                         page = page = Comm.GET("/getissuetargetpage");
@@ -114,6 +120,8 @@ var BasePage = (function () {
                 page = Comm.GET("/getpreviewissue");
             if (parent.location.hash.search("changepass") > -1)
                 page = Comm.GET("/getchangepasspage");
+            if (parent.location.hash.search("dashboard") > -1)
+                page = Comm.GET("/getdashboardpage");
         }
         $("#dContent").html(page);
         window.scrollTo(0, 0);

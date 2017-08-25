@@ -185,37 +185,37 @@ begin
     Paid  
   )
   values 
-  (_IssueData->>'PatientUserId',
-  _IssueData->>'ReqExpertLevelId',
+  (_IssueData->>'patientuserid',
+  _IssueData->>'reqexpertlevelid',
   null,
-  _IssueData->>'WhoId',
-  _IssueData->>'GenderId',
-  _IssueData->>'SinceId',
-  _IssueData->>'BirthMonth',
-  _IssueData->>'BirthYear',
-  _IssueData->>'Description',
-  _IssueData->>'LevelId'
+  _IssueData->>'whoid',
+  _IssueData->>'genderid',
+  _IssueData->>'sinceid',
+  _IssueData->>'birthmonth',
+  _IssueData->>'birthyear',
+  _IssueData->>'description',
+  _IssueData->>'levelid'
   )
   returning IssueId into _IssueId;
 
-  FOR _i IN select * from json_array_elements((_IssueData->'Chronic')::json) LOOP
+  FOR _i IN select * from json_array_elements((_IssueData->'chronic')::json) LOOP
         insert into Issue2Chronic (ChronicId, IssueId, ChronicFree)
-        values (_i->'ChronicId', _IssueId, _i->'ChronicFree');
+        values (_i->'chronicid', _IssueId, _i->'chronicfree');
   END LOOP;
 
-  FOR _i IN select * from json_array_elements((_IssueData->'Allergy')::json) LOOP
+  FOR _i IN select * from json_array_elements((_IssueData->'allergy')::json) LOOP
         insert into Issue2Allergy (IssueId, Allergy)
-        values (_IssueId, _i->'Allergy');
+        values (_IssueId, _i->'allergy');
   END LOOP;
 
-  FOR _i IN select * from json_array_elements((_IssueData->'Symptom')::json) LOOP
+  FOR _i IN select * from json_array_elements((_IssueData->'symptom')::json) LOOP
         insert into Issue2Symptom (SymptomId, IssueId)
-        values (_i->'SymptomId', _IssueId);
+        values (_i->'symptomid', _IssueId);
   END LOOP;
 
-  FOR _i IN select * from json_array_elements((_IssueData->'Medication')::json) LOOP
+  FOR _i IN select * from json_array_elements((_IssueData->'medication')::json) LOOP
         insert into Issue2Medication (SinceId, IssueId, Medication)
-        values (_i->'SinceId', _IssueId, _i->'Medication');
+        values (_i->'sinceid', _IssueId, _i->'medication');
   END LOOP;
 
   
@@ -424,4 +424,26 @@ returns table (IssueId int, OnDate timestamp, Description text)
     i.Description
   from Issue i
   where i.ReqExpertLevelId = _LevelId and i.IssueStatusId =1;
+$$ LANGUAGE sql; 
+
+--Дашборд
+--select * from pDashBoard () 
+create or replace function pDashBoard () 
+returns table (regpatientscount bigint, regdoctorscount bigint, regpharmacistscount bigint, openissuescount bigint, takenissuescount bigint, closedissuesforweekcount bigint)
+ as $$
+
+  select
+    (select count(1) from "User" where active='t' and levelid = 4),
+    (select count(1) from "User" where active='t' and levelid = 2),
+    (select count(1) from "User" where active='t' and levelid = 3),
+    (select count(1) from issue where issuestatusid=1),
+    (select count(1) from issue where issuestatusid=2),
+    (
+      select count(1) 
+      from issue i
+      join issueevent ie on ie.issueid = i.issueid
+      left join issueevent ie2 on ie2.issueid = i.issueid and ie2.issueeventid>ie.issueeventid
+      where i.issuestatusid=3 and ie2.issueeventid is null and ie.ondate>(now()::date-7)::date
+
+    );
 $$ LANGUAGE sql; 

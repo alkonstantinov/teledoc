@@ -52,6 +52,7 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
+    <Content Include="pages\dashboard.html" />
     <Content Include="pages\lostpass.html" />
     <Content Include="pages\changepass.html" />
     <Content Include="pages\previewissue.html" />
@@ -96,6 +97,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="pages\js\basepage.ts" />
+    <TypeScriptCompile Include="pages\js\dashboard.ts" />
     <TypeScriptCompile Include="pages\js\lostpass.ts" />
     <TypeScriptCompile Include="pages\js\comm.ts">
       <SubType>Code</SubType>

@@ -549,6 +549,31 @@ app.post("/lostpassrenew", function (req, res) {
 })
 
 
+app.get('/getdashboardpage', function (req, res) {
+    SendPage("pages/dashboard.html", req, res);
+});
+
+app.post("/dashboard", function (req, res) {
+    dl.DashBoard(Pool, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+app.post("/getlastissue", function (req, res) {
+    var locale = GetLocale(req);
+    dl.GetLastIssue(Pool, req.session.userid, req.body.whoId, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+
+
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
     //res.send("-1");

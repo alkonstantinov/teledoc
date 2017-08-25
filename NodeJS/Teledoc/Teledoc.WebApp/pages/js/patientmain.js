@@ -27,6 +27,10 @@ var PatientMain = (function (_super) {
             $("#tIssues").append(row);
         }
     };
+    PatientMain.prototype.NewIssue = function () {
+        parent.location.hash = "issuetarget";
+        BasePage.LoadCurrentPage();
+    };
     return PatientMain;
 }(BasePage));
 //# sourceMappingURL=patientmain.js.map

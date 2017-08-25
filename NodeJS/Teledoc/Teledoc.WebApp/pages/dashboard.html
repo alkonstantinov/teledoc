@@ -1,0 +1,57 @@
+﻿<div class="jumbotron">
+    <div class="panel panel-info">
+        <div class="panel-heading">#dashboard#</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    #parametername#
+                                </th>
+                                <th>
+                                    #count#
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#regpatientscount#</td>
+                                <td><label class="control-label" id="lregpatientscount"></label></td>
+                            </tr>
+                            <tr>
+                                <td>#regdoctorscount#</td>
+                                <td><label class="control-label" id="lregdoctorscount"></label></td>
+                            </tr>
+                            <tr>
+                                <td>#regpharmacistscount#</td>
+                                <td><label class="control-label" id="lregpharmacistscount"></label></td>
+                            </tr>
+                            <tr>
+                                <td>#openissuescount#</td>
+                                <td><label class="control-label" id="lopenissuescount"></label></td>
+                            </tr>
+                            <tr>
+                                <td>#takenissuescount#</td>
+                                <td><label class="control-label" id="ltakenissuescount"></label></td>
+                            </tr>
+                            <tr>
+                                <td>#closedissuesforweekcount#</td>
+                                <td><label class="control-label" id="lclosedissuesforweekcount"></label></td>
+                            </tr>
+                        </tbody>
+                    </table>                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        dashboard = new Dashboard();
+        dashboard.LoadMeters();
+        BasePage.HideErrors();
+    })
+</script>

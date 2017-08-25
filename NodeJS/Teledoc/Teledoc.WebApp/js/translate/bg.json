@@ -197,5 +197,16 @@
   "since": "от",
   "takeissue": "Поемам случая",
   "save": "Запис",
-  "Send": "Изпрати"
+  "Send": "Изпрати",
+  "parametername": "Показател",
+  "count": "Брой",
+  "regpatientscount": "Регистрирани пациенти",
+  "regdoctorscount": "Регистрирани лекари",
+  "regpharmacistscount": "Регистрирани фармацевти",
+  "openissuescount": "Чакащи заявки",
+  "takenissuescount": "Обслужвани заявки",
+  "closedissuesforweekcount": "Обслужени заявки за последните 7 дни",
+  "dashboard": "Основни показатели",
+  "Successfulchange": "Паролата е променена успешно",
+  "Successfulpasswordemail": "Паролата е променена успешно и Ви е изпратена на електронна поща"
 }

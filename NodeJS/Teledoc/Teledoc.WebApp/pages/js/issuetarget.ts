@@ -35,6 +35,22 @@ class IssueTarget extends BasePage {
             issue.reqexpertlevelid = 2;
         else
             issue.reqexpertlevelid = 3;
+
+        var oldIssue = Comm.POST("/getlastissue", { whoId: issue.whoid });
+        if (oldIssue != null) {
+            issue.allergy = oldIssue.allergies;
+            issue.answertypeid = oldIssue.answertypeid;
+            issue.additionalinfo = oldIssue.additionalinfo;
+            issue.chronic = oldIssue.chronics;
+            issue.description = oldIssue.description;
+            issue.medication = oldIssue.medications;
+            issue.sexid = oldIssue.sexid;
+            issue.birthmonth = oldIssue.birthmonth;
+            issue.birthyear = oldIssue.birthyear;
+        }
+
+
+
         BasePage.SaveIssue(issue);
         BasePage.NavigateTo("issuedescription");
 

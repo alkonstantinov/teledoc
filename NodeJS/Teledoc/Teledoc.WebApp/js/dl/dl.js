@@ -136,4 +136,14 @@ exports.ChangeLostPass = function (pool, userId, password, callback) {
         callback(null);
     });
 };
+exports.DashBoard = function (pool, callback) {
+    pool.query("select * from pDashBoard();", function (err, result) {
+        callback(result.rows[0]);
+    });
+};
+exports.GetLastIssue = function (pool, userId, whoId, callback) {
+    pool.query("select * from pIssueLastGet(" + userId + ", " + whoId + ");", function (err, result) {
+        exports.GetIssue(pool, result.rows[0].issueid, callback);
+    });
+};
 //# sourceMappingURL=dl.js.map

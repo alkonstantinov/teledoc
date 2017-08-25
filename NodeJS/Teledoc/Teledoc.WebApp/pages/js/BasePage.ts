@@ -93,7 +93,10 @@ class BasePage {
             else {
                 if (parent.location.hash == "") {
                     switch (level.LevelId) {
-                        case 1: page = Comm.GET("/getuserlistpage"); break;
+                        case 1: page = Comm.GET("/getdashboardpage"); break;
+                        case 2: page = Comm.GET("/getexpertmain"); break;
+                        case 3: page = Comm.GET("/getexpertmain"); break;
+
                         case 4: page = page = Comm.GET("/getissuetargetpage"); break;
 
                     }
@@ -136,6 +139,8 @@ class BasePage {
                     page = Comm.GET("/getpreviewissue");
                 if (parent.location.hash.search("changepass") > -1)
                     page = Comm.GET("/getchangepasspage");
+                if (parent.location.hash.search("dashboard") > -1)
+                    page = Comm.GET("/getdashboardpage");
             }
 
         $("#dContent").html(page);

@@ -16,7 +16,10 @@ class LostPass extends BasePage {
             return false;
 
 
-        Comm.POST("lostpassrenew", { email: $("#tbUsername").val()})
+        Comm.POST("lostpassrenew", { email: $("#tbUsername").val() });
+        $("#lSuccess").fadeIn(1000);
+        $("#lSuccess").fadeOut(2000);
+
         return true;
     }
     

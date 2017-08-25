@@ -16,7 +16,9 @@ class ChangePass extends BasePage {
             return false;
 
 
-        Comm.POST("changepass", { password: $("#tbPass").val()})
+        Comm.POST("changepass", { password: $("#tbPass").val() })
+        $("#lSuccess").fadeIn(1000);
+        $("#lSuccess").fadeOut(2000);
         return true;
     }
     

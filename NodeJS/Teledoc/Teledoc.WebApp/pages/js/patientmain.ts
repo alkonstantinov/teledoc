@@ -19,7 +19,10 @@ class PatientMain extends BasePage {
 
     }
 
-
+    public NewIssue() {
+        parent.location.hash = "issuetarget";
+        BasePage.LoadCurrentPage();
+    }
     constructor() {
 
         super();
