@@ -204,3 +204,9 @@ exports.GetLastIssue = function (pool, userId, whoId, callback) {
         exports.GetIssue(pool, result.rows[0].issueid, callback);
     });
 };
+
+exports.SetIssue = function (pool, json, callback) {
+    pool.query("select * from pIssueSet('" + json + "');", function (err, result) {
+        callback(result);
+    });
+};

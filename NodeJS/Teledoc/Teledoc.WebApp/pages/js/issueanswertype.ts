@@ -8,8 +8,7 @@ class IssueAnswerType extends BasePage {
         if (issue == null)
             issue = {};
         if (issue.answertypeid != null) {
-            switch (issue.answertypeid)
-            {
+            switch (issue.answertypeid) {
                 case 1: $("#rbChat").prop("checked", true); break;
                 case 2: $("#rbeMail").prop("checked", true); $("#tbEmail").val(issue.additionalinfo); break;
                 case 3: $("#rbCall").prop("checked", true); $("#tbPhone").val(issue.additionalinfo); break;
@@ -24,7 +23,7 @@ class IssueAnswerType extends BasePage {
             error = true;
             $("#lErrtbEmail").show();
         }
-        if ($("#rbCall").prop("checked") && $("#tbPhone").val()=="") {
+        if ($("#rbCall").prop("checked") && $("#tbPhone").val() == "") {
             error = true;
             $("#lErrtbPhone").show();
         }
@@ -36,8 +35,7 @@ class IssueAnswerType extends BasePage {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
-        if ($("#rbeMail").prop("checked"))
-        {
+        if ($("#rbeMail").prop("checked")) {
 
             issue.answertypeid = 2;
             issue.additionalinfo = $("#tbEmail").val();
@@ -50,15 +48,18 @@ class IssueAnswerType extends BasePage {
         if ($("#rbChat").prop("checked")) {
 
             issue.answertypeid = 1;
-        }            
+        }
 
         BasePage.SaveIssue(issue);
         return true;
     }
-    public Next() {
-        if (this.Save())
-            BasePage.NavigateTo("issueanswertype");
 
+    public Next() {
+        if (this.Save()) {
+            var issue = BasePage.LoadIssue();
+
+            Comm.POST("/setissue", { issue: JSON.stringify(issue) });
+        }
     }
 
     public Prev() {

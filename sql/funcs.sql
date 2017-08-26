@@ -176,46 +176,53 @@ begin
     PatientUserId,
     ReqExpertLevelId,
     ExpertUserId,
+    IssueStatusId,
     WhoId,
     GenderId,
     SinceId,
     BirthMonth,
     BirthYear,
     Description,
-    Paid  
+    AnswerTypeId,
+    AdditionalInfo,
+    Paid
   )
   values 
-  (_IssueData->>'patientuserid',
-  _IssueData->>'reqexpertlevelid',
-  null,
-  _IssueData->>'whoid',
-  _IssueData->>'genderid',
-  _IssueData->>'sinceid',
-  _IssueData->>'birthmonth',
-  _IssueData->>'birthyear',
-  _IssueData->>'description',
-  _IssueData->>'levelid'
+  (
+    (_IssueData->>'patientuserid')::int,
+    (_IssueData->>'reqexpertlevelid')::int,
+    null,
+    1,
+    (_IssueData->>'whoid')::int,
+    _IssueData->>'sexid',
+    (_IssueData->>'sinceid')::int,
+    (_IssueData->>'birthmonth')::int,
+    (_IssueData->>'birthyear')::int,
+    _IssueData->>'description',
+    (_IssueData->>'answertypeid')::int,
+    _IssueData->>'additionalinfo',
+    false
   )
   returning IssueId into _IssueId;
 
   FOR _i IN select * from json_array_elements((_IssueData->'chronic')::json) LOOP
         insert into Issue2Chronic (ChronicId, IssueId, ChronicFree)
-        values (_i->'chronicid', _IssueId, _i->'chronicfree');
+        values ((_i->>'chronicid')::int, _IssueId, _i->>'chronicfree');
   END LOOP;
 
   FOR _i IN select * from json_array_elements((_IssueData->'allergy')::json) LOOP
         insert into Issue2Allergy (IssueId, Allergy)
-        values (_IssueId, _i->'allergy');
+        values (_IssueId, _i->>'allergy');
   END LOOP;
 
   FOR _i IN select * from json_array_elements((_IssueData->'symptom')::json) LOOP
         insert into Issue2Symptom (SymptomId, IssueId)
-        values (_i->'symptomid', _IssueId);
+        values ((_i->>'symptomid')::int, _IssueId);
   END LOOP;
 
   FOR _i IN select * from json_array_elements((_IssueData->'medication')::json) LOOP
         insert into Issue2Medication (SinceId, IssueId, Medication)
-        values (_i->'sinceid', _IssueId, _i->'medication');
+        values ((_i->>'sinceid')::int, _IssueId, _i->>'medication');
   END LOOP;
 
   

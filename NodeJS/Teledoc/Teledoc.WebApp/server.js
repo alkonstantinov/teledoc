@@ -572,6 +572,18 @@ app.post("/getlastissue", function (req, res) {
 
 })
 
+app.post("/setissue", function (req, res) {
+    var json = JSON.parse(req.body.issue);
+    json.patientuserid = req.session.userid;
+
+
+    dl.SetIssue(Pool, JSON.stringify(json), function (result) {
+        res.send("OK");
+        res.end();
+    });
+
+
+})
 
 
 //--------------------------------------------------------------

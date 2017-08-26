@@ -64,8 +64,10 @@ var IssueAnswerType = (function (_super) {
         return true;
     };
     IssueAnswerType.prototype.Next = function () {
-        if (this.Save())
-            BasePage.NavigateTo("issueanswertype");
+        if (this.Save()) {
+            var issue = BasePage.LoadIssue();
+            Comm.POST("/setissue", { issue: JSON.stringify(issue) });
+        }
     };
     IssueAnswerType.prototype.Prev = function () {
         if (this.Save())
