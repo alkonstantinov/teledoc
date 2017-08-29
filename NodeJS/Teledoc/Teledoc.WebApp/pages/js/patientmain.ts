@@ -9,10 +9,10 @@ class PatientMain extends BasePage {
         if (issues == null)
             return;
         for (var issue of issues) {
-            
+
             var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
             if (issue.statusid == 2)
-                row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick=''></span>";
+                row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='patientMain.OpenChat(" + issue.issueid + ")'></span>";
             row += "</td></tr>";
             $("#tIssues").append(row);
         }
@@ -21,6 +21,11 @@ class PatientMain extends BasePage {
 
     public NewIssue() {
         parent.location.hash = "issuetarget";
+        BasePage.LoadCurrentPage();
+    }
+
+    public OpenChat(issueId) {
+        parent.location.hash = "chat|" + issueId;
         BasePage.LoadCurrentPage();
     }
     constructor() {

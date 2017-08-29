@@ -14,6 +14,7 @@ const translate = require('./js/translate/translate');
 const dl = require('./js/dl/dl');
 
 
+
 var transporter = nodemailer.createTransport({
     host: 'hopkins.host.bg',
     secureConnection: true,
@@ -179,7 +180,7 @@ app.post('/login', function (req, res) {
     dl.Login(Pool, req.body.Username, md5(req.body.Password), function (jsonResult) {
         req.session.levelid = (jsonResult == null ? -1 : jsonResult.levelid);
         req.session.userid = (jsonResult == null ? -1 : jsonResult.userid);
-        res.send({ LevelId: (jsonResult == null ? -1 : jsonResult.levelid) });
+        res.send({ LevelId: req.session.levelid, UserId: req.session.userid, Name: (jsonResult == null ? "" : jsonResult.name) });
         res.end();
     });
 
@@ -493,7 +494,7 @@ app.post("/getissue", function (req, res) {
         if (result.symptoms != null)
             for (var item of result.symptoms)
                 item.symptomname = translate.Translate(locale, item.symptomname, fileSystem);
-        
+
         res.send(result);
         res.end();
     });
@@ -516,7 +517,7 @@ app.get('/getchangepasspage', function (req, res) {
     SendPage("pages/changepass.html", req, res);
 });
 
-app.post("/changepass", function (req, res) {    
+app.post("/changepass", function (req, res) {
     dl.ChangePass(Pool, req.session.userid, md5(req.body.password), function (result) {
         res.send("OK");
         res.end();
@@ -532,7 +533,7 @@ app.get('/getlostpasspage', function (req, res) {
 app.post("/lostpassrenew", function (req, res) {
     var newPass = Math.floor((1 + Math.random()) * 10000);
     dl.ChangeLostPass(Pool, req.body.email, md5(newPass), function (result) {
-        
+
     });
 
     var mailOptions = {
@@ -572,6 +573,32 @@ app.post("/getlastissue", function (req, res) {
 
 })
 
+
+app.post("/getchat", function (req, res) {
+    var locale = GetLocale(req);
+    dl.GetChat(Pool, req.body.issueId, function (result) {
+        var msgs = [];
+        for (var item of result) {
+            var d = new Date(item.ondate)
+            var time = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
+
+            
+            msgs.push(
+                {
+                    message: item.said,
+                    userid: item.userid,
+                    name: item.name,
+                    ontime: time
+                }
+            );
+        }
+        res.send(msgs);
+        res.end();
+    });
+
+
+})
+
 app.post("/setissue", function (req, res) {
     var json = JSON.parse(req.body.issue);
     json.patientuserid = req.session.userid;
@@ -585,6 +612,9 @@ app.post("/setissue", function (req, res) {
 
 })
 
+app.get('/getchatpage', function (req, res) {
+    SendPage("pages/chat.html", req, res);
+});
 
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
@@ -595,7 +625,26 @@ app.get('*', function (req, res) {
 
 //var fs = require('fs');
 
-app.listen(port, function () {
+var io = require('socket.io').listen(
 
-    console.log('Example app listening on port 3000!')
-})
+    app.listen(port, function () {
+
+        console.log('Example app listening on port 3000!')
+    })
+
+);
+
+io.sockets.on('connection', function (socket) {
+    socket.on('room', function (room) {
+        socket.join(room);
+    });
+    socket.on('send', function (data) {
+        var d = new Date();
+        var time = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
+
+        data.ontime = time;
+        dl.ChatNewItem(Pool, data.issueId, data.userid, data.message, 0, null, null, function (result) { });
+        io.sockets.in(data.room).emit('message', data);
+
+    });
+});

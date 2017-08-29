@@ -19,6 +19,7 @@ var Login = (function (_super) {
             Username: $("#tbUsername").val(),
             Password: $("#tbPassword").val()
         });
+        BasePage.SaveLogin(result);
         switch (result.LevelId) {
             case -1:
                 $("#lErrUser").show();

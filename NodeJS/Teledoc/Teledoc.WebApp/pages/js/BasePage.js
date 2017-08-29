@@ -41,7 +41,7 @@ var BasePage = (function () {
         $("#dContent").load("app/pages/" + fnm + "?" + d.getUTCMilliseconds());
     };
     BasePage.PostgreTimestamp = function (dt) {
-        var date = new Date(dt.replace(' ', 'T'));
+        var date = new Date(dt);
         return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
     };
     BasePage.Logout = function () {
@@ -122,6 +122,8 @@ var BasePage = (function () {
                 page = Comm.GET("/getchangepasspage");
             if (parent.location.hash.search("dashboard") > -1)
                 page = Comm.GET("/getdashboardpage");
+            if (parent.location.hash.search("chat") > -1)
+                page = Comm.GET("/getchatpage");
         }
         $("#dContent").html(page);
         window.scrollTo(0, 0);
@@ -173,6 +175,16 @@ var BasePage = (function () {
             return null;
         else
             return JSON.parse(issueText);
+    };
+    BasePage.SaveLogin = function (loginResult) {
+        localStorage.setItem("Login", JSON.stringify(loginResult));
+    };
+    BasePage.LoadLogin = function () {
+        var loginResult = localStorage.getItem("Login");
+        if (loginResult == null)
+            return null;
+        else
+            return JSON.parse(loginResult);
     };
     return BasePage;
 }());

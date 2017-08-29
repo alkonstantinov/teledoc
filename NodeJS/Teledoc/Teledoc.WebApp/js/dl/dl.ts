@@ -210,3 +210,17 @@ exports.SetIssue = function (pool, json, callback) {
         callback(result);
     });
 };
+
+
+exports.ChatNewItem = function (pool, issueId, userId, said, objTypeId, objData, objPreviewData, callback) {
+    var qry = "select * from pChatNewItem(" + issueId + ", " + userId + ", '" + said + "', " + objTypeId + "," + (objData == null ? 'null' : objData) + "," + (objPreviewData == null ? 'null' : objPreviewData) + ");";
+    pool.query(qry, function (err, result) {
+        callback(null);
+    });
+};
+
+exports.GetChat = function (pool, issueId, callback) {
+    pool.query("select * from pChatGet(" + issueId+");", function (err, result) {
+        callback(result.rows);
+    });
+};

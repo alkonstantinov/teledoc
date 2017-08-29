@@ -31,6 +31,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="js\socket.io\socket.io.js" />
     <Compile Include="server.js" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\site.css">
@@ -52,6 +53,7 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="pages\activation.html" />
+    <Content Include="pages\chat.html" />
     <Content Include="pages\dashboard.html" />
     <Content Include="pages\lostpass.html" />
     <Content Include="pages\changepass.html" />
@@ -82,6 +84,7 @@
     <Folder Include="fonts\" />
     <Folder Include="js\" />
     <Folder Include="js\dl\" />
+    <Folder Include="js\socket.io\" />
     <Folder Include="js\translate\" />
     <Folder Include="css\" />
     <Folder Include="img\" />
@@ -97,6 +100,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="pages\js\basepage.ts" />
+    <TypeScriptCompile Include="pages\js\chat.ts" />
     <TypeScriptCompile Include="pages\js\dashboard.ts" />
     <TypeScriptCompile Include="pages\js\lostpass.ts" />
     <TypeScriptCompile Include="pages\js\comm.ts">

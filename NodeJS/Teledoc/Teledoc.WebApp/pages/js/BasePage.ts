@@ -59,7 +59,7 @@ class BasePage {
 
     static PostgreTimestamp(dt: any)
     {
-        var date = new Date(dt.replace(' ', 'T'));
+        var date = new Date(dt);
         return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();  
 
     }
@@ -141,6 +141,8 @@ class BasePage {
                     page = Comm.GET("/getchangepasspage");
                 if (parent.location.hash.search("dashboard") > -1)
                     page = Comm.GET("/getdashboardpage");
+                if (parent.location.hash.search("chat") > -1)
+                    page = Comm.GET("/getchatpage");
             }
 
         $("#dContent").html(page);
@@ -197,6 +199,18 @@ class BasePage {
             return null;
         else
             return JSON.parse(issueText);
+    }
+
+    static SaveLogin(loginResult: any) {
+        localStorage.setItem("Login", JSON.stringify(loginResult));
+    }
+
+    static LoadLogin(): any {
+        var loginResult = localStorage.getItem("Login");
+        if (loginResult == null)
+            return null;
+        else
+            return JSON.parse(loginResult);
     }
 
 }

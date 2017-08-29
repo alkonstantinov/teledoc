@@ -22,13 +22,17 @@ var PatientMain = (function (_super) {
             var issue = issues_1[_i];
             var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
             if (issue.statusid == 2)
-                row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick=''></span>";
+                row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='patientMain.OpenChat(" + issue.issueid + ")'></span>";
             row += "</td></tr>";
             $("#tIssues").append(row);
         }
     };
     PatientMain.prototype.NewIssue = function () {
         parent.location.hash = "issuetarget";
+        BasePage.LoadCurrentPage();
+    };
+    PatientMain.prototype.OpenChat = function (issueId) {
+        parent.location.hash = "chat|" + issueId;
         BasePage.LoadCurrentPage();
     };
     return PatientMain;

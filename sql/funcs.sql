@@ -308,30 +308,33 @@ $$ LANGUAGE sql;
 -- ---------------------
 
 -- извличане на чат
+--drop function pChatGet (_IssueId int) 
 create or replace function pChatGet (_IssueId int) 
-returns table (ChatId int, PatientSaid boolean, OnDate timestamp, Said text, ObjId int)
+returns table (ChatId int, UserId int, OnDate timestamp, Said text, ObjId int, Name text)
  as $$
-  select ChatId, PatientSaid, OnDate, Said, ObjId
-  from Chat
+  select c.ChatId, c.UserId, c.OnDate, c.Said, c.ObjId, u.Name
+  from Chat c
+  join "User" u on c.UserId = u.UserId
   where IssueId = _IssueId
   order by OnDate;
 $$ LANGUAGE sql; 
 
 
 -- добавяне на елемент в чат
-create or replace function pChatNewItem (_ChatId int, _PatientSaid boolean, _Said text, _ObjTypeId int, _ObjData bytea, _ObjPreviewData bytea) 
+--drop function pChatNewItem (_ChatId int, _UserId int, _Said text, _ObjTypeId int, _ObjData bytea, _ObjPreviewData bytea)  
+create or replace function pChatNewItem (_IssueId int, _UserId int, _Said text, _ObjTypeId int, _ObjData bytea, _ObjPreviewData bytea) 
 returns integer
  as $$
 declare _ObjId integer;
 begin
   _ObjId := null;
-  if ObjData is not null then
+  if _ObjData is not null then
     insert into Obj(ObjTypeId, ObjData, ObjPreviewData)
     values (_ObjTypeId, _ObjData, _ObjPreviewData)
     returning ObjId into _ObjId;
   end if;
-  insert into Chat (ChatId, PatientSaid, Said, ObjId, OnDate)
-  values (_ChatId, _PatientSaid, _Said, _ObjId, now());
+  insert into Chat (IssueId, UserId, Said, ObjId, OnDate)
+  values (_IssueId, _UserId, _Said, _ObjId, now());
   return _ObjId; 
 end  
 $$ LANGUAGE plpgsql; 

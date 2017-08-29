@@ -201,7 +201,7 @@ create table Chat
 (
   ChatId SERIAL not null primary key,
   IssueId int not null references Issue(IssueId),
-  PatientSaid boolean not null,
+  UserId int not null references "User"(UserId),
   OnDate timestamp,
   Said text not null,
   ObjId int references Obj(ObjId)

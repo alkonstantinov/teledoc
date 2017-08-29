@@ -10,3 +10,7 @@
 a {
     cursor: pointer;
 }
+
+.row {
+    margin-bottom: 2px;
+}
