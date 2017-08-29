@@ -18,6 +18,8 @@ var Chat = (function (_super) {
         return _this;
     }
     Chat.prototype.Send = function () {
+        if ($("#tbMsg").val() == "" || $("#tbMsg").val() == null)
+            return;
         var parts = parent.location.hash.split("|");
         if (parts.length < 2)
             return;
@@ -33,7 +35,11 @@ var Chat = (function (_super) {
         this.socket.emit('room', 'issue_' + issueId);
     };
     Chat.prototype.AddMsg = function (data) {
-        var msg = "<p align='right' style='font-size:12px'><b>" + data.ontime + "</b><br/>" + data.name + "</br>" + data.message + "</p>";
+        var msg = "";
+        if (!data.hasimg)
+            msg = "<p align='right' style='font-size:12px'><b>" + data.ontime + "</b><br/>" + data.name + "</br>" + data.message + "</p>";
+        else
+            msg = "<p align='right' style='font-size:12px'><b>" + data.ontime + "</b><br/>" + data.name + "</p><img src='/getchatimage?ChatId=" + data.chatid + "' onload='BasePage.ShapeImage(this, 150);chat.ScrollDown();' onclick='chat.ShowLarge(" + data.chatid + ")'/>";
         var row = $("<div class='row' />");
         if (data.userid == this.loginResult.UserId) {
             $(row).append("<div class='col-md-6'/><div class='col-md-6' style='background-color: #d9edf7'>" + msg + "</div>");
@@ -42,6 +48,9 @@ var Chat = (function (_super) {
             $(row).append("<div class='col-md-6'>" + msg + "</div><div class='col-md-6'/>");
         }
         $("#dChat").append(row);
+        this.ScrollDown();
+    };
+    Chat.prototype.ScrollDown = function () {
         var d = $('#dChat');
         d.scrollTop(d.prop("scrollHeight"));
     };
@@ -55,6 +64,34 @@ var Chat = (function (_super) {
             var item = msgs_1[_i];
             this.AddMsg(item);
         }
+    };
+    Chat.prototype.ShowLarge = function (chatid) {
+        $("#iLargeImg").prop("src", "getchatimage?ChatId=" + chatid);
+        $("#modalLargeImage").modal("show");
+    };
+    Chat.prototype.CancelLargeImage = function () {
+        $("#modalLargeImage").modal("hide");
+    };
+    Chat.prototype.UploadImage = function () {
+        var imageId = Comm.POSTImage("/uploadimage", "fImg");
+        $("#hFnm").val(imageId);
+        $("#iImg").prop("src", "/gettempimage?fnm=" + imageId);
+        $("#modalBrowseImage").modal("hide");
+    };
+    Chat.prototype.CancelImage = function () {
+        $("#modalBrowseImage").modal("hide");
+    };
+    Chat.prototype.SendImageToChat = function () {
+        if ($("#hFnm").val() == "" || $("#hFnm").val() == null)
+            return;
+        var parts = parent.location.hash.split("|");
+        if (parts.length < 2)
+            return;
+        var issueId = parts[1];
+        this.socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
+    };
+    Chat.prototype.ShowImageDialog = function () {
+        $("#modalBrowseImage").modal("show");
     };
     return Chat;
 }(BasePage));

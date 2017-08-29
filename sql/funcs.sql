@@ -309,10 +309,11 @@ $$ LANGUAGE sql;
 
 -- извличане на чат
 --drop function pChatGet (_IssueId int) 
+--select * from pChatGet (6)
 create or replace function pChatGet (_IssueId int) 
-returns table (ChatId int, UserId int, OnDate timestamp, Said text, ObjId int, Name text)
+returns table (ChatId int, UserId int, OnDate timestamp, Said text, HasImg boolean, Name text)
  as $$
-  select c.ChatId, c.UserId, c.OnDate, c.Said, c.ObjId, u.Name
+  select c.ChatId, c.UserId, c.OnDate, c.Said, c.Img is not null, u.Name
   from Chat c
   join "User" u on c.UserId = u.UserId
   where IssueId = _IssueId
@@ -321,35 +322,32 @@ $$ LANGUAGE sql;
 
 
 -- добавяне на елемент в чат
---drop function pChatNewItem (_ChatId int, _UserId int, _Said text, _ObjTypeId int, _ObjData bytea, _ObjPreviewData bytea)  
-create or replace function pChatNewItem (_IssueId int, _UserId int, _Said text, _ObjTypeId int, _ObjData bytea, _ObjPreviewData bytea) 
-returns integer
+--drop function pChatNewItem (_IssueId int, _UserId int, _Said text, _img citext) 
+create or replace function pChatNewItem (_IssueId int, _UserId int, _Said text, _img citext) 
+returns int
  as $$
-declare _ObjId integer;
+ declare _ChatId integer;
 begin
-  _ObjId := null;
-  if _ObjData is not null then
-    insert into Obj(ObjTypeId, ObjData, ObjPreviewData)
-    values (_ObjTypeId, _ObjData, _ObjPreviewData)
-    returning ObjId into _ObjId;
-  end if;
-  insert into Chat (IssueId, UserId, Said, ObjId, OnDate)
-  values (_IssueId, _UserId, _Said, _ObjId, now());
-  return _ObjId; 
+  insert into Chat (IssueId, UserId, Said, Img, OnDate)
+  values (_IssueId, _UserId, _Said, _Img::bytea, now())
+  returning ChatId into _ChatId;
+
+  return _ChatId;
+  
 end  
 $$ LANGUAGE plpgsql; 
 
 
 -- извличане на обект
-
-create or replace function pObjGet (_ObjId int)
-returns table (ObjTypeId int, ObjData bytea, ObjPreviewData bytea)
-as $$
-  select ObjTypeId, ObjData, ObjPreviewData
-  from Obj
-  where ObjId = _ObjId;
-$$ LANGUAGE sql;
-
+-- drop function pObjGet (_ObjId int)
+-- create or replace function pObjGet (_ObjId int)
+-- returns table (ObjTypeId int, ObjData bytea, ObjPreviewData bytea)
+-- as $$
+--   select ObjTypeId, ObjData, ObjPreviewData
+--   from Obj
+--   where ObjId = _ObjId;
+-- $$ LANGUAGE sql;
+-- 
 
 
 -- Извличане на данни за ишу
@@ -457,3 +455,12 @@ returns table (regpatientscount bigint, regdoctorscount bigint, regpharmacistsco
 
     );
 $$ LANGUAGE sql; 
+
+
+create or replace function pChatImageGet (_chatId int)
+returns table (img bytea)
+as $$
+  select c.img
+  from Chat c
+  where c.ChatId = _chatId;
+$$ LANGUAGE sql;

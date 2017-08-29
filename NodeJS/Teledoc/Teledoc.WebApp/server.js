@@ -582,13 +582,15 @@ app.post("/getchat", function (req, res) {
             var d = new Date(item.ondate)
             var time = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
 
-            
+
             msgs.push(
                 {
                     message: item.said,
                     userid: item.userid,
                     name: item.name,
-                    ontime: time
+                    ontime: time,
+                    chatid: item.chatid,
+                    hasimg: item.hasimg
                 }
             );
         }
@@ -615,6 +617,15 @@ app.post("/setissue", function (req, res) {
 app.get('/getchatpage', function (req, res) {
     SendPage("pages/chat.html", req, res);
 });
+
+app.get("/getchatimage", function (req, res) {
+    dl.GetChatImage(Pool, req.query.ChatId, function (result) {
+        res.end(result, 'binary');
+    });
+
+
+})
+
 
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
@@ -643,8 +654,22 @@ io.sockets.on('connection', function (socket) {
         var time = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
 
         data.ontime = time;
-        dl.ChatNewItem(Pool, data.issueId, data.userid, data.message, 0, null, null, function (result) { });
+        dl.ChatNewItem(Pool, data.issueId, data.userid, data.message, null, function (result) { data.chatid = result; });
         io.sockets.in(data.room).emit('message', data);
+
+    });
+    socket.on('sendimage', function (data) {
+        var d = new Date();
+        var time = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
+
+        data.ontime = time;
+        var img = '\\x' + fileSystem.readFileSync(__dirname + "/files/" + data.fnm, 'hex');
+        dl.ChatNewItem(Pool, data.issueId, data.userid, '', img, function (result) {
+            data.chatid = result;
+            data.hasimg = true;
+            io.sockets.in(data.room).emit('messageimage', data);
+        });
+        
 
     });
 });

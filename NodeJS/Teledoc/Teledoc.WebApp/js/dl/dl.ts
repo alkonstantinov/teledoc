@@ -212,15 +212,24 @@ exports.SetIssue = function (pool, json, callback) {
 };
 
 
-exports.ChatNewItem = function (pool, issueId, userId, said, objTypeId, objData, objPreviewData, callback) {
-    var qry = "select * from pChatNewItem(" + issueId + ", " + userId + ", '" + said + "', " + objTypeId + "," + (objData == null ? 'null' : objData) + "," + (objPreviewData == null ? 'null' : objPreviewData) + ");";
+exports.ChatNewItem = function (pool, issueId, userId, said, img, callback) {
+    var qry = "select * from pChatNewItem(" + issueId + ", " + userId + ", '" + said + "', " + (img == null ? 'null' : "'" + img + "'") + ");";
     pool.query(qry, function (err, result) {
-        callback(null);
+        callback(result.rows[0].pchatnewitem);
     });
 };
 
 exports.GetChat = function (pool, issueId, callback) {
-    pool.query("select * from pChatGet(" + issueId+");", function (err, result) {
+    pool.query("select * from pChatGet(" + issueId + ");", function (err, result) {
         callback(result.rows);
+    });
+};
+
+exports.GetChatImage = function (pool, chatid, callback) {
+    pool.query("select * from pChatImageGet (" + chatid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows[0].img);
     });
 };

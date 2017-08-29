@@ -3,32 +3,82 @@
         <div class="panel-heading">#chat#</div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-11">
                     <div id="dChat" style="overflow-y:scroll; min-height:500px;max-height:500px">
 
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <input type="text" id="tbMsg" class="form-control" autocomplete="off" />
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-primary" id="bSend" onclick="chat.Send()">#send#</button>
                 </div>
                 <div class="col-md-1">
-
+                    <button type="button" class="btn btn-warning" id="bImage" onclick="chat.ShowImageDialog()">#image#</button>
                 </div>
-                <div class="col-md-1">
-
-                </div>
-                <div class="col-md-1">
-
-                </div>
+               
             </div>
         </div>
     </div>
 </div>
+
+<div id="modalBrowseImage" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">#selectimage#</h4>
+            </div>
+            <div class="modal-body">
+                <form id="fImg" enctype="multipart/form-data" method="post" action="/uploadimage">
+                    <input type="file" class="form-control" id="fuImg" onchange="chat.UploadImage()" name="dafile"  accept="image/*" capture />
+
+                </form>
+                <input type="hidden" id="hFnm" name="hFnm" />
+                <img id="iImg" src="" onload="BasePage.ShapeImage(this, 150)" />
+                <input type="hidden" id="hFnm" />                
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-1 pull-right">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true" onclick="chat.SendImageToChat()"></span>
+                </div>
+                <div class="col-md-1 pull-right">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="chat.CancelImage()"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="modalLargeImage" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">#image#</h4>
+            </div>
+            <div class="modal-body" style="overflow:scroll;max-height:600px;max-width:600px">
+                <img id="iLargeImg"/>
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-1 pull-right">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="chat.CancelLargeImage()"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script src="js/socket.io/socket.io.js"></script>
 <script type="text/javascript">
     
@@ -46,8 +96,14 @@
             chat.AddMsg(data)
         });
 
+        chat.socket.on('messageimage', function (data) {
+            chat.AddMsg(data)
+        });
+
         chat.socket.on('disconnect', function () {
 
         });
     })
 </script>
+
+

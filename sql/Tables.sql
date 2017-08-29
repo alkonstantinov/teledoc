@@ -186,14 +186,6 @@ create table ObjType
 insert into ObjType (ObjTypeId, ObjTypeName)
 values (1, 'Image'),(2, 'Video'),(3, 'Audio');
 
-drop table if exists Obj CASCADE;
-create table Obj
-(
-  ObjId SERIAL not null primary key,
-  ObjTypeId int not null references ObjType(ObjTypeId),
-  ObjData bytea not null,
-  ObjPreviewData bytea not null
-);
 
 
 drop table if exists Chat CASCADE;
@@ -204,8 +196,9 @@ create table Chat
   UserId int not null references "User"(UserId),
   OnDate timestamp,
   Said text not null,
-  ObjId int references Obj(ObjId)
+  Img bytea null
 );
+
 
 
 drop table if exists Issue2Medication CASCADE;
