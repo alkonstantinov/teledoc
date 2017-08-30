@@ -20,11 +20,45 @@ var ExpertMain = (function (_super) {
             return;
         for (var _i = 0, issues_1 = issues; _i < issues_1.length; _i++) {
             var issue = issues_1[_i];
-            var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
+            var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>";
             row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='expertMain.Preview(" + issue.issueid + ")'></span>";
             row += "</td></tr>";
             $("#tIssues").append(row);
         }
+    };
+    ExpertMain.prototype.LoadTakenIssues = function () {
+        var issues = Comm.POST("/gettakenissues", {});
+        $("#tTakenIssues").empty();
+        if (issues == null)
+            return;
+        for (var _i = 0, issues_2 = issues; _i < issues_2.length; _i++) {
+            var issue = issues_2[_i];
+            var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
+            row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='expertMain.Preview(" + issue.issueid + ")'></span>";
+            row += "</td><td>";
+            switch (issue.answertypeid) {
+                case 1:
+                    row += "<span class='glyphicon glyphicon-align-right pull-right' aria-hidden='true' onclick='expertMain.OpenChat(" + issue.issueid + ")'></span>";
+                    break;
+                case 2:
+                    row += "<span class='glyphicon glyphicon-envelope pull-right' aria-hidden='true'></span>";
+                    break;
+                case 3:
+                    row += "<span class='glyphicon glyphicon-earphone pull-right' aria-hidden='true'></span>";
+                    break;
+            }
+            row += "</td><td><span class='glyphicon glyphicon-ok pull-right' aria-hidden='true' onclick='expertMain.CaseClosed(" + issue.issueid + ")'></span></td></tr>";
+            $("#tTakenIssues").append(row);
+        }
+    };
+    ExpertMain.prototype.CaseClosed = function (issueId) {
+        Comm.POST("/caseclosed", { issueId: issueId });
+        parent.location.hash = "";
+        BasePage.LoadCurrentPage();
+    };
+    ExpertMain.prototype.OpenChat = function (issueId) {
+        parent.location.hash = "chat|" + issueId;
+        BasePage.LoadCurrentPage();
     };
     ExpertMain.prototype.Preview = function (issueId) {
         parent.location.hash = "previewissue|" + issueId;

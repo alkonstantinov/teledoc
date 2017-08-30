@@ -12,7 +12,13 @@ class PatientMain extends BasePage {
 
             var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
             if (issue.statusid == 2)
-                row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='patientMain.OpenChat(" + issue.issueid + ")'></span>";
+            {
+                switch (issue.answertypeid) {
+                    case 1: row += "<span class='glyphicon glyphicon-align-right pull-right' aria-hidden='true' onclick='patientMain.OpenChat(" + issue.issueid + ")'></span>"; break;
+                    case 2: row += "<span class='glyphicon glyphicon-envelope pull-right' aria-hidden='true'></span>"; break;
+                    case 3: row += "<span class='glyphicon glyphicon-earphone pull-right' aria-hidden='true'></span>"; break;
+                }
+            }
             row += "</td></tr>";
             $("#tIssues").append(row);
         }

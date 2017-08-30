@@ -78,7 +78,7 @@ var BasePage = (function () {
                         page = Comm.GET("/getexpertmain");
                         break;
                     case 4:
-                        page = page = Comm.GET("/getissuetargetpage");
+                        page = Comm.GET("/getpatientmain");
                         break;
                 }
             }

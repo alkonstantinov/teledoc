@@ -97,7 +97,7 @@ class BasePage {
                         case 2: page = Comm.GET("/getexpertmain"); break;
                         case 3: page = Comm.GET("/getexpertmain"); break;
 
-                        case 4: page = page = Comm.GET("/getissuetargetpage"); break;
+                        case 4: page = Comm.GET("/getpatientmain"); break;
 
                     }
                 }

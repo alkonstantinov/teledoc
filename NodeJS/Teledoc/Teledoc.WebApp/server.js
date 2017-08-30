@@ -459,6 +459,22 @@ app.post("/getissuesnotclosed", function (req, res) {
 
 })
 
+app.post("/gettakenissues", function (req, res) {
+    var locale = GetLocale(req);
+    dl.GetIssuesTaken(Pool, req.session.userid, function (result) {
+        if (result != null) {
+            for (var r of result) {
+                r.statusname = translate.Translate(locale, r.statusname, fileSystem);
+
+            }
+
+        }
+        res.send(result);
+        res.end();        
+    });
+
+
+})
 
 app.get('/getexpertmain', function (req, res) {
     SendPage("pages/expertmain.html", req, res);
@@ -466,6 +482,15 @@ app.get('/getexpertmain', function (req, res) {
 
 app.post("/getissuesbyexpert", function (req, res) {
     dl.GetIssuesByExpert(Pool, req.session.levelid, function (result) {
+        var locale = GetLocale(req);
+
+        if (result != null) {
+            for (var r of result) {
+                r.statusname = translate.Translate(locale, r.statusname, fileSystem);
+
+            }
+
+        }
         res.send(result);
         res.end();
     });
@@ -483,6 +508,7 @@ app.post("/getissue", function (req, res) {
         result.whoname = translate.Translate(locale, result.whoname, fileSystem);
         result.gendername = translate.Translate(locale, result.gendername, fileSystem);
         result.sincename = translate.Translate(locale, result.sincename, fileSystem);
+        result.answertypename = translate.Translate(locale, result.answertypename, fileSystem);
         if (result.chronics != null)
             for (var item of result.chronics)
                 item.chronicname = translate.Translate(locale, item.chronicname, fileSystem);
@@ -614,6 +640,13 @@ app.post("/setissue", function (req, res) {
 
 })
 
+app.post("/caseclosed", function (req, res) {
+    dl.SetIssueStatus(Pool, req.body.issueId, 3, function (result) { res.end(); });
+})
+
+
+
+
 app.get('/getchatpage', function (req, res) {
     SendPage("pages/chat.html", req, res);
 });
@@ -657,6 +690,11 @@ io.sockets.on('connection', function (socket) {
         dl.ChatNewItem(Pool, data.issueId, data.userid, data.message, null, function (result) { data.chatid = result; });
         io.sockets.in(data.room).emit('message', data);
 
+    });
+    socket.on('endchat', function (data) {
+        io.sockets.in(data.room).emit('endchat', data);
+        dl.SetIssueStatus(Pool, data.issueId, 3, function (result) { });
+        //???? ?? ???????
     });
     socket.on('sendimage', function (data) {
         var d = new Date();

@@ -105,6 +105,14 @@ exports.GetIssuesNotClosed = function (pool, userid, callback) {
             callback(result.rows);
     });
 };
+exports.GetIssuesTaken = function (pool, userid, callback) {
+    pool.query("select * from pIssueGetTaken (" + userid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows);
+    });
+};
 exports.GetIssuesByExpert = function (pool, levelid, callback) {
     pool.query("select * from pIssueGetByExpert (" + levelid + ")", function (err, result) {
         if (result == null)
@@ -168,6 +176,11 @@ exports.GetChatImage = function (pool, chatid, callback) {
             callback(null);
         else
             callback(result.rows[0].img);
+    });
+};
+exports.SetIssueStatus = function (pool, issueId, statusId, callback) {
+    pool.query("select * from pIssueSetStatus(" + issueId + ", " + statusId + ");", function (err, result) {
+        callback(result);
     });
 };
 //# sourceMappingURL=dl.js.map

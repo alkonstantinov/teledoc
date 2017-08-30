@@ -7,6 +7,9 @@
                     <h3>#MainData#</h3>
                     <ul>
                         <li>
+                            #answertype#:<label class="control-label" id="lAnswerType"></label>
+                        </li>
+                        <li>
                             #consultationfor#:<label class="control-label" id="lWhoName"></label>
                         </li>
                         <li>
@@ -41,7 +44,8 @@
 
                         </tbody>
                     </table>
-                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" onclick="previewIssue.Take()">#takeissue#</span>
+                    <input type="hidden" id="hAnswerTypeId" />
+                    <span id="bTake" class="glyphicon glyphicon-thumbs-up  btn btn-primary" aria-hidden="true" onclick="previewIssue.Take()">#takeissue#</span>
                 </div>
             </div>
 

@@ -104,6 +104,7 @@ exports.StoreDoctor = function (pool, json, callback) {
 };
 
 
+
 exports.SearchUsers = function (pool, ss, pos, pagesize, callback) {
     pool.query("select * from pusersearch ('" + ss + "'," + pos + "," + pagesize + ")", function (err, result) {
         if (result == null)
@@ -152,6 +153,16 @@ exports.GetIssuesNotClosed = function (pool, userid, callback) {
             callback(result.rows);
     });
 };
+
+exports.GetIssuesTaken = function (pool, userid, callback) {
+    pool.query("select * from pIssueGetTaken (" + userid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows);
+    });
+};
+
 
 exports.GetIssuesByExpert = function (pool, levelid, callback) {
     pool.query("select * from pIssueGetByExpert (" + levelid + ")", function (err, result) {
@@ -232,4 +243,13 @@ exports.GetChatImage = function (pool, chatid, callback) {
         else
             callback(result.rows[0].img);
     });
+};
+
+exports.SetIssueStatus = function (pool, issueId, statusId, callback) {
+    pool.query("select * from pIssueSetStatus(" + issueId + ", " + statusId + ");", function (err, result) {
+        callback(result);
+    });
+
+
+
 };

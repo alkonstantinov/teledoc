@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <input type="text" id="tbMsg" class="form-control" autocomplete="off" />
                 </div>
                 <div class="col-md-1">
@@ -19,7 +19,10 @@
                 <div class="col-md-1">
                     <button type="button" class="btn btn-warning" id="bImage" onclick="chat.ShowImageDialog()">#image#</button>
                 </div>
-               
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-info" id="bEndChat" onclick="chat.EndChat()">#endchat#</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -98,6 +101,11 @@
 
         chat.socket.on('messageimage', function (data) {
             chat.AddMsg(data)
+        });
+
+        chat.socket.on('endchat', function (data) {
+            parent.location.hash = "";
+            BasePage.LoadCurrentPage();
         });
 
         chat.socket.on('disconnect', function () {

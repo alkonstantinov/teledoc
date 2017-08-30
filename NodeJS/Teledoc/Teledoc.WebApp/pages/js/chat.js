@@ -90,6 +90,13 @@ var Chat = (function (_super) {
         var issueId = parts[1];
         this.socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
     };
+    Chat.prototype.EndChat = function () {
+        var parts = parent.location.hash.split("|");
+        if (parts.length < 2)
+            return;
+        var issueId = parts[1];
+        this.socket.emit('endchat', { room: 'issue_' + issueId, issueId: issueId });
+    };
     Chat.prototype.ShowImageDialog = function () {
         $("#modalBrowseImage").modal("show");
     };

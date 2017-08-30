@@ -61,8 +61,7 @@ class Chat extends BasePage {
         $("#modalLargeImage").modal("show");
     }
 
-    public CancelLargeImage()
-    {
+    public CancelLargeImage() {
         $("#modalLargeImage").modal("hide");
     }
 
@@ -88,6 +87,14 @@ class Chat extends BasePage {
         var issueId = parts[1];
 
         this.socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
+    }
+
+    public EndChat() {
+        var parts = parent.location.hash.split("|");
+        if (parts.length < 2)
+            return;
+        var issueId = parts[1];
+        this.socket.emit('endchat', { room: 'issue_' + issueId, issueId: issueId });
     }
 
     public ShowImageDialog() {

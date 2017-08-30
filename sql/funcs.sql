@@ -405,7 +405,7 @@ $$ LANGUAGE sql;
 -- извличане на отворени и непоети ишута по пациент
 --drop function pIssueGetNotClosed (_PatientUserId int) 
 create or replace function pIssueGetNotClosed (_PatientUserId int) 
-returns table (IssueId int, OnDate timestamp, Description text, StatusId int, StatusName varchar(50))
+returns table (IssueId int, OnDate timestamp, Description text, StatusId int, StatusName varchar(50), answertypeid int)
  as $$
 
   select
@@ -413,7 +413,8 @@ returns table (IssueId int, OnDate timestamp, Description text, StatusId int, St
     (select min(ondate) from IssueEvent where IssueId = i.IssueId) OnDate,
     i.Description,
     st.IssueStatusId,
-    st.IssueStatusName
+    st.IssueStatusName,
+    i.answertypeid
   from Issue i
   join IssueStatus st on st.IssueStatusId = i.IssueStatusId
   where i.PatientUserId = _PatientUserId and i.IssueStatusId in (1,2);
@@ -433,6 +434,25 @@ returns table (IssueId int, OnDate timestamp, Description text)
   from Issue i
   where i.ReqExpertLevelId = _LevelId and i.IssueStatusId =1;
 $$ LANGUAGE sql; 
+
+-- извличане на отворени и поети ишута по експерт
+--drop function pIssueGetNotClosed (_PatientUserId int) 
+create or replace function pIssueGetTaken (_ExpertUserId int) 
+returns table (IssueId int, OnDate timestamp, Description text, StatusId int, StatusName varchar(50), answertypeid int)
+ as $$
+
+  select
+    i.IssueId,
+    (select min(ondate) from IssueEvent where IssueId = i.IssueId) OnDate,
+    i.Description,
+    st.IssueStatusId,
+    st.IssueStatusName,
+    i.answertypeid
+  from Issue i
+  join IssueStatus st on st.IssueStatusId = i.IssueStatusId
+  where i.ExpertUserId = _ExpertUserId and i.IssueStatusId = 2;
+$$ LANGUAGE sql; 
+
 
 --Дашборд
 --select * from pDashBoard () 

@@ -18,7 +18,11 @@ var PreviewIssue = (function (_super) {
         if (parts.length < 2)
             return;
         var json = Comm.POST("/getissue", { issueId: parts[1] });
+        if (json.issuestatusid == 2)
+            $("#bTake").hide();
+        $("#hAnswerTypeId").text(json.answertypeid);
         $("#lWhoName").text(json.whoname);
+        $("#lAnswerType").text(json.answertypename + " " + (json.additionalinfo == null ? "" : json.additionalinfo));
         $("#lGenderName").text(json.gendername);
         $("#lBornOn").text(json.birthmonth + "/" + json.birthyear);
         $("#lDescription").text(json.description);
@@ -53,6 +57,16 @@ var PreviewIssue = (function (_super) {
         if (parts.length < 2)
             return;
         Comm.POST("/takeissue", { issueId: parts[1] });
+        if ($("#hAnswerTypeId").val() == "1") {
+            var parts = parent.location.hash.split("|");
+            if (parts.length < 2)
+                return;
+            parent.location.hash = "chat|" + parts[1];
+        }
+        else {
+            parent.location.hash = "";
+        }
+        BasePage.LoadCurrentPage();
     };
     return PreviewIssue;
 }(BasePage));
