@@ -9,6 +9,9 @@ class IssueSince extends BasePage {
             issue = {};
 
         var sinces = Comm.GET("/getsinces");
+        if (sinces == null)
+            return;
+
         for (var since of sinces) {
             $("#dSince").append("<div class='row'><div class='col-md-12'><div class='radio'><label><input type='radio' class='form-control' name='since' sinceid='" + since.sinceid + "'>" + since.sincename + "</label></div></div>");
         }

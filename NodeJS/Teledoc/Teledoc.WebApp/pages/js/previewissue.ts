@@ -8,6 +8,9 @@ class PreviewIssue extends BasePage {
         if (parts.length < 2)
             return;
         var json = Comm.POST("/getissue", { issueId: parts[1] });
+        if (json == null)
+            return;
+
         if (json.issuestatusid == 2)
             $("#bTake").hide();
         $("#hAnswerTypeId").text(json.answertypeid);

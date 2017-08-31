@@ -9,6 +9,8 @@ class IssueSymptoms extends BasePage {
             issue = {};
 
         var symptoms = Comm.GET("/getsymptoms");
+        if (symptoms == null)
+            return;
         for (var group of symptoms) {
             $("#dSymptoms").append("<div class='row'><div class='col-md-12'><div class='label-info'>" + group.Name + "</div></div></div>");
             for (var sym of group.Symptoms) {

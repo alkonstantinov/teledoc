@@ -51,6 +51,8 @@ class Chat extends BasePage {
             return;
         var issueId = parts[1];
         var msgs = Comm.POST("/getchat", { issueId: issueId });
+        if (msgs == null)
+            return;
         for (var item of msgs)
             this.AddMsg(item);
 
@@ -67,6 +69,8 @@ class Chat extends BasePage {
 
     public UploadImage() {
         var imageId = Comm.POSTImage("/uploadimage", "fImg");
+        if (imageId == null)
+            return;
         $("#hFnm").val(imageId);
         $("#iImg").prop("src", "/gettempimage?fnm=" + imageId);
         $("#modalBrowseImage").modal("hide");

@@ -54,6 +54,8 @@ var RegisterDoctor = (function (_super) {
     };
     RegisterDoctor.prototype.UploadImage = function () {
         var imageId = Comm.POSTImage("/uploadimage", "fImg");
+        if (imageId == null)
+            return;
         $("#hFnm").val(imageId);
         $("#iImg").prop("src", "/gettempimage?fnm=" + imageId);
     };
@@ -62,6 +64,8 @@ var RegisterDoctor = (function (_super) {
         if (parts.length < 2)
             return;
         var json = Comm.POST("/getdoctor", { UserId: parts[1] });
+        if (json == null)
+            return;
         $("#hUserId").val(parts[1]);
         $("#tbRegEmail").val(json.username);
         $("#tbRegEmail").prop("disabled", true);

@@ -60,6 +60,8 @@ var Chat = (function (_super) {
             return;
         var issueId = parts[1];
         var msgs = Comm.POST("/getchat", { issueId: issueId });
+        if (msgs == null)
+            return;
         for (var _i = 0, msgs_1 = msgs; _i < msgs_1.length; _i++) {
             var item = msgs_1[_i];
             this.AddMsg(item);
@@ -74,6 +76,8 @@ var Chat = (function (_super) {
     };
     Chat.prototype.UploadImage = function () {
         var imageId = Comm.POSTImage("/uploadimage", "fImg");
+        if (imageId == null)
+            return;
         $("#hFnm").val(imageId);
         $("#iImg").prop("src", "/gettempimage?fnm=" + imageId);
         $("#modalBrowseImage").modal("hide");

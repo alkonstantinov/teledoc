@@ -15,6 +15,8 @@ var Dashboard = (function (_super) {
     }
     Dashboard.prototype.LoadMeters = function () {
         var meters = Comm.POST("/dashboard", {});
+        if (meters == null)
+            return;
         $("#lregpatientscount").text(meters.regpatientscount);
         $("#lregdoctorscount").text(meters.regdoctorscount);
         $("#lregpharmacistscount").text(meters.regpharmacistscount);

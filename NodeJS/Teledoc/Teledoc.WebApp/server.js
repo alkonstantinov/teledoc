@@ -39,7 +39,7 @@ var Pool = new pool(pgConfig);
 
 
 
-var port = process.env.PORT || 1337;
+var port = 80;//process.env.PORT || 80;
 
 app.use(express.static(path.join(__dirname, '/')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -290,7 +290,8 @@ app.get('/getregisteruserpage', function (req, res) {
 });
 
 app.post('/userexists', function (req, res) {
-
+    if (!RequireLevel(1, req, res))
+        return;
     res.setHeader('Content-Type', 'application/json');
 
     dl.UserExists(Pool, req.body.email, function (jsonResult) {
@@ -338,6 +339,9 @@ app.get('/getregisterdoctorpage', function (req, res) {
 });
 
 app.post('/uploadimage', function (req, res) {
+    if (!RequireLevel(4, req, res) && !RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(1, req, res))
+        return;
+
     var guid = Guid();
 
 
@@ -362,6 +366,8 @@ app.get("/gettempimage", function (req, res) {
 })
 
 app.post("/registerdoctor", function (req, res) {
+    if (!RequireLevel(1, req, res))
+        return;
     var json = JSON.parse(req.body.json);
     json.Password = md5(json.Password);
     if (json.Fnm != "")
@@ -382,6 +388,8 @@ app.get('/getuserlistpage', function (req, res) {
 });
 
 app.post("/searchusers", function (req, res) {
+    if (!RequireLevel(1, req, res))
+        return;
     var locale = GetLocale(req);
     dl.SearchUsers(Pool, req.body.SS, req.body.Pos, req.body.PageSize, function (result) {
         if (result != null) {
@@ -399,6 +407,8 @@ app.post("/searchusers", function (req, res) {
 })
 
 app.post("/changeactiveuser", function (req, res) {
+    if (!RequireLevel(1, req, res))
+        return;
     dl.ChangeActiveUser(Pool, req.body.UserId, function () {
 
         res.end();
@@ -409,6 +419,8 @@ app.post("/changeactiveuser", function (req, res) {
 
 
 app.post("/getdoctor", function (req, res) {
+    if (!RequireLevel(1, req, res))
+        return;
     dl.GetDoctor(Pool, req.body.UserId, function (result) {
         res.send(result);
         res.end();
@@ -418,6 +430,8 @@ app.post("/getdoctor", function (req, res) {
 })
 
 app.get("/getdoctorimage", function (req, res) {
+    if (!RequireLevel(1, req, res))
+        return;
     dl.GetDoctorImage(Pool, req.query.UserId, function (result) {
         res.end(result, 'binary');
     });
@@ -443,6 +457,8 @@ app.get('/getpatientmain', function (req, res) {
 });
 
 app.post("/getissuesnotclosed", function (req, res) {
+    if (!RequireLevel(4, req, res))
+        return;
     var locale = GetLocale(req);
     dl.GetIssuesNotClosed(Pool, req.session.userid, function (result) {
         if (result != null) {
@@ -460,6 +476,8 @@ app.post("/getissuesnotclosed", function (req, res) {
 })
 
 app.post("/gettakenissues", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res))
+        return;
     var locale = GetLocale(req);
     dl.GetIssuesTaken(Pool, req.session.userid, function (result) {
         if (result != null) {
@@ -470,7 +488,7 @@ app.post("/gettakenissues", function (req, res) {
 
         }
         res.send(result);
-        res.end();        
+        res.end();
     });
 
 
@@ -481,6 +499,8 @@ app.get('/getexpertmain', function (req, res) {
 });
 
 app.post("/getissuesbyexpert", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res))
+        return;
     dl.GetIssuesByExpert(Pool, req.session.levelid, function (result) {
         var locale = GetLocale(req);
 
@@ -503,6 +523,8 @@ app.get('/getpreviewissue', function (req, res) {
 });
 
 app.post("/getissue", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res))
+        return;
     var locale = GetLocale(req);
     dl.GetIssue(Pool, req.body.issueId, function (result) {
         result.whoname = translate.Translate(locale, result.whoname, fileSystem);
@@ -530,6 +552,8 @@ app.post("/getissue", function (req, res) {
 
 
 app.post("/takeissue", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res))
+        return;
     dl.AssignIssue(Pool, req.session.userid, req.body.issueId, function (result) {
         res.send(result);
         res.end();
@@ -558,18 +582,18 @@ app.get('/getlostpasspage', function (req, res) {
 
 app.post("/lostpassrenew", function (req, res) {
     var newPass = Math.floor((1 + Math.random()) * 10000);
+    var locale = GetLocale(req);
     dl.ChangeLostPass(Pool, req.body.email, md5(newPass), function (result) {
 
     });
-
-    var mailOptions = {
+     var mailOptions = {
         from: 'contact@birex43.com',
         to: req.body.email,
         subject: translate.Translate(locale, "newPassEmailSubject", fileSystem),
         html: translate.Translate(locale, "newPassEmailText", fileSystem).replace("{pass}", newPass)
     };
     transporter.sendMail(mailOptions, function (error, info) {
-
+        var q = 3;
     });
     res.send("OK");
     res.end();
@@ -581,6 +605,8 @@ app.get('/getdashboardpage', function (req, res) {
 });
 
 app.post("/dashboard", function (req, res) {
+    if (!RequireLevel(1, req, res))
+        return;
     dl.DashBoard(Pool, function (result) {
         res.send(result);
         res.end();
@@ -590,6 +616,8 @@ app.post("/dashboard", function (req, res) {
 })
 
 app.post("/getlastissue", function (req, res) {
+    if (!RequireLevel(4, req, res))
+        return;
     var locale = GetLocale(req);
     dl.GetLastIssue(Pool, req.session.userid, req.body.whoId, function (result) {
         res.send(result);
@@ -601,6 +629,9 @@ app.post("/getlastissue", function (req, res) {
 
 
 app.post("/getchat", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
+        return;
+
     var locale = GetLocale(req);
     dl.GetChat(Pool, req.body.issueId, function (result) {
         var msgs = [];
@@ -628,6 +659,8 @@ app.post("/getchat", function (req, res) {
 })
 
 app.post("/setissue", function (req, res) {
+    if (!RequireLevel(4, req, res))
+        return;
     var json = JSON.parse(req.body.issue);
     json.patientuserid = req.session.userid;
 
@@ -641,6 +674,8 @@ app.post("/setissue", function (req, res) {
 })
 
 app.post("/caseclosed", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
+        return;
     dl.SetIssueStatus(Pool, req.body.issueId, 3, function (result) { res.end(); });
 })
 
@@ -652,6 +687,8 @@ app.get('/getchatpage', function (req, res) {
 });
 
 app.get("/getchatimage", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
+        return;
     dl.GetChatImage(Pool, req.query.ChatId, function (result) {
         res.end(result, 'binary');
     });
@@ -671,9 +708,9 @@ app.get('*', function (req, res) {
 
 var io = require('socket.io').listen(
 
-    app.listen(port, function () {
+    app.listen(port,"0.0.0.0", function () {
 
-        console.log('Example app listening on port 3000!')
+        console.log('Example app listening on ' + port + '!')
     })
 
 );
@@ -687,14 +724,17 @@ io.sockets.on('connection', function (socket) {
         var time = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
 
         data.ontime = time;
-        dl.ChatNewItem(Pool, data.issueId, data.userid, data.message, null, function (result) { data.chatid = result; });
-        io.sockets.in(data.room).emit('message', data);
+        dl.ChatNewItem(Pool, data.issueId, data.userid, data.message, null, function (result) {
+            data.chatid = result;
+            io.sockets.in(data.room).emit('message', data);
+        });
+
 
     });
     socket.on('endchat', function (data) {
         io.sockets.in(data.room).emit('endchat', data);
         dl.SetIssueStatus(Pool, data.issueId, 3, function (result) { });
-        //???? ?? ???????
+
     });
     socket.on('sendimage', function (data) {
         var d = new Date();
@@ -707,7 +747,7 @@ io.sockets.on('connection', function (socket) {
             data.hasimg = true;
             io.sockets.in(data.room).emit('messageimage', data);
         });
-        
+
 
     });
 });

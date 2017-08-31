@@ -5,6 +5,8 @@ class ExpertMain extends BasePage {
 
     public LoadPendingIssues() {
         var issues = Comm.POST("/getissuesbyexpert", {});
+        if (issues == null)
+            return;
         $("#tIssues").empty();
         if (issues == null)
             return;

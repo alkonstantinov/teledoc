@@ -177,14 +177,14 @@ create table Issue2Symptom
   IssueId int not null references Issue(IssueId)
 );
 
-drop table if exists ObjType CASCADE;
-create table ObjType
-(
-  ObjTypeId int not null primary key,
-  ObjTypeName varchar(50)
-);
-insert into ObjType (ObjTypeId, ObjTypeName)
-values (1, 'Image'),(2, 'Video'),(3, 'Audio');
+-- drop table if exists ObjType CASCADE;
+-- create table ObjType
+-- (
+--   ObjTypeId int not null primary key,
+--   ObjTypeName varchar(50)
+-- );
+-- insert into ObjType (ObjTypeId, ObjTypeName)
+-- values (1, 'Image'),(2, 'Video'),(3, 'Audio');
 
 
 

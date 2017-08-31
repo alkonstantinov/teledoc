@@ -15,6 +15,8 @@ var PatientMain = (function (_super) {
     }
     PatientMain.prototype.LoadPendingIssues = function () {
         var issues = Comm.POST("/getissuesnotclosed", {});
+        if (issues == null)
+            return;
         $("#tIssues").empty();
         if (issues == null)
             return;

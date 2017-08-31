@@ -5,6 +5,9 @@ class Dashboard extends BasePage {
 
     public LoadMeters() {
         var meters = Comm.POST("/dashboard", {});
+        if (meters == null)
+            return;
+
         $("#lregpatientscount").text(meters.regpatientscount);
         $("#lregdoctorscount").text(meters.regdoctorscount);
         $("#lregpharmacistscount").text(meters.regpharmacistscount);

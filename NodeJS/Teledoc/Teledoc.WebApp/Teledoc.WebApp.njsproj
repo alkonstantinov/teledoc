@@ -7,6 +7,7 @@
     <EnableTypeScript>true</EnableTypeScript>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <NameOfLastUsedPublishProfile>publ</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -31,9 +32,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="js\jquery\jquery.js" />
     <Compile Include="js\socket.io\socket.io.js" />
     <Compile Include="server.js" />
     <Content Include="css\bootstrap.css" />
+    <Content Include="img\page-loader.gif" />
     <Content Include="css\site.css">
       <SubType>Code</SubType>
     </Content>
@@ -78,12 +81,14 @@
     <Content Include="pages\login.html">
       <SubType>Code</SubType>
     </Content>
+    <None Include="publ.pubxml" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="fonts\" />
     <Folder Include="js\" />
     <Folder Include="js\dl\" />
+    <Folder Include="js\jquery\" />
     <Folder Include="js\socket.io\" />
     <Folder Include="js\translate\" />
     <Folder Include="css\" />

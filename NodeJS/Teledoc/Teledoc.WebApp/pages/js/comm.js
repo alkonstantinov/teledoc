@@ -1,6 +1,12 @@
 var Comm = (function () {
     function Comm() {
     }
+    Comm.ShowLoader = function () {
+        $("#dLoader").show();
+    };
+    Comm.HideLoader = function () {
+        $("#dLoader").hide();
+    };
     Comm.GET = function (url) {
         var result;
         $.ajax({
@@ -23,6 +29,7 @@ var Comm = (function () {
         return result;
     };
     Comm.POST = function (url, data) {
+        Comm.ShowLoader();
         var result;
         $.ajax({
             cache: false,
@@ -36,7 +43,7 @@ var Comm = (function () {
                 if (res.errorCode == -1) {
                     parent.location.hash = "loginpage";
                     BasePage.LoadCurrentPage();
-                    return;
+                    throw new Error("No access");
                 }
                 result = res;
             },
@@ -45,11 +52,13 @@ var Comm = (function () {
             }
         });
         //if (result == -1)
-        //    BasePage.LoadLogin();
+        //    BasePage.LoadLogin();        
+        Comm.HideLoader();
         return result;
     };
     Comm.POSTImage = function (url, formId) {
         //$("#" + formId).submit();
+        Comm.ShowLoader();
         var result;
         var formData = new FormData($("#" + formId)[0]);
         $.ajax({
@@ -68,6 +77,7 @@ var Comm = (function () {
                 console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
+        Comm.HideLoader();
         return result;
     };
     return Comm;

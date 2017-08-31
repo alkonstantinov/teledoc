@@ -15,6 +15,8 @@ var ExpertMain = (function (_super) {
     }
     ExpertMain.prototype.LoadPendingIssues = function () {
         var issues = Comm.POST("/getissuesbyexpert", {});
+        if (issues == null)
+            return;
         $("#tIssues").empty();
         if (issues == null)
             return;

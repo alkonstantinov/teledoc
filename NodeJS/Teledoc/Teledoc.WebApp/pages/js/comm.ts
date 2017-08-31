@@ -2,6 +2,18 @@
 
 class Comm {
 
+    static ShowLoader() {
+
+        $("#dLoader").show();
+    }
+
+    static HideLoader() {
+
+        $("#dLoader").hide();
+    }
+
+   
+
     static GET(url: string): any {
         var result: any;
         $.ajax({
@@ -15,6 +27,7 @@ class Comm {
                 {                    
                     parent.location.hash = "loginpage";
                     BasePage.LoadCurrentPage();
+                    
                     return;
                 }
                 result = res;
@@ -31,6 +44,7 @@ class Comm {
 
 
     static POST(url: string, data: any): any {
+        Comm.ShowLoader();
         var result: any;
 
         $.ajax({
@@ -45,8 +59,9 @@ class Comm {
                 if (res.errorCode == -1) {
                     parent.location.hash = "loginpage";
                     BasePage.LoadCurrentPage();
-                    return;
-                }
+                    
+                    throw new Error("No access");                    
+                }                
                 result = res;
             },
             error: function (a, b, c) {
@@ -54,14 +69,15 @@ class Comm {
             }
         });
         //if (result == -1)
-        //    BasePage.LoadLogin();
+        //    BasePage.LoadLogin();        
+        Comm.HideLoader();
         return result;
     }
 
     static POSTImage(url, formId): any {
         
         //$("#" + formId).submit();
-
+        Comm.ShowLoader();
         var result: any;
 
         var formData = new FormData($("#" + formId)[0]);
@@ -83,6 +99,7 @@ class Comm {
                 console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });
+        Comm.HideLoader();
         return result;
     }
 }

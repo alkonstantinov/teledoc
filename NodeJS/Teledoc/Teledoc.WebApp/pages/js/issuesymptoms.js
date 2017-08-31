@@ -18,6 +18,8 @@ var IssueSymptoms = (function (_super) {
         if (issue == null)
             issue = {};
         var symptoms = Comm.GET("/getsymptoms");
+        if (symptoms == null)
+            return;
         for (var _i = 0, symptoms_1 = symptoms; _i < symptoms_1.length; _i++) {
             var group = symptoms_1[_i];
             $("#dSymptoms").append("<div class='row'><div class='col-md-12'><div class='label-info'>" + group.Name + "</div></div></div>");

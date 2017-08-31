@@ -5,6 +5,9 @@ class PatientMain extends BasePage {
 
     public LoadPendingIssues() {
         var issues = Comm.POST("/getissuesnotclosed", {});
+        if (issues == null)
+            return;
+
         $("#tIssues").empty();
         if (issues == null)
             return;

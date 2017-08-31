@@ -18,6 +18,8 @@ var IssueSince = (function (_super) {
         if (issue == null)
             issue = {};
         var sinces = Comm.GET("/getsinces");
+        if (sinces == null)
+            return;
         for (var _i = 0, sinces_1 = sinces; _i < sinces_1.length; _i++) {
             var since = sinces_1[_i];
             $("#dSince").append("<div class='row'><div class='col-md-12'><div class='radio'><label><input type='radio' class='form-control' name='since' sinceid='" + since.sinceid + "'>" + since.sincename + "</label></div></div>");
