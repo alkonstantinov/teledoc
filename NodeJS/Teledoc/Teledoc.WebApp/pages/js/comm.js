@@ -17,8 +17,7 @@ var Comm = (function () {
             async: false,
             success: function (res) {
                 if (res.errorCode == -1) {
-                    parent.location.hash = "loginpage";
-                    BasePage.LoadCurrentPage();
+                    BasePage.GotoPage("loginpage");
                     return;
                 }
                 result = res;
@@ -40,14 +39,15 @@ var Comm = (function () {
             data: JSON.stringify(data),
             async: false,
             success: function (res) {
+                Comm.HideLoader();
                 if (res.errorCode == -1) {
-                    parent.location.hash = "loginpage";
-                    BasePage.LoadCurrentPage();
+                    BasePage.GotoPage("loginpage");
                     throw new Error("No access");
                 }
                 result = res;
             },
             error: function (a, b, c) {
+                Comm.HideLoader();
                 //BasePage.LoadError(a, b, c);
             }
         });
@@ -71,9 +71,11 @@ var Comm = (function () {
             beforeSend: function () {
             },
             success: function (data) {
+                Comm.HideLoader();
                 result = data.imageId;
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                Comm.HideLoader();
                 console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
             }
         });

@@ -29,13 +29,13 @@ class PatientMain extends BasePage {
     }
 
     public NewIssue() {
-        parent.location.hash = "issuetarget";
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("issuetarget");
+        
     }
 
     public OpenChat(issueId) {
-        parent.location.hash = "chat|" + issueId;
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("chat|" + issueId);
+        
     }
     constructor() {
 

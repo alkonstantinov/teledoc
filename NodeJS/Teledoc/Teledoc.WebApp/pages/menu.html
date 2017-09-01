@@ -1,4 +1,4 @@
-﻿<li id="miNewIssue"><a onclick="parent.location.hash='issuetarget';BasePage.LoadCurrentPage();">#newissue#</a></li>
-<li id="miUserList"><a onclick="parent.location.hash='userlist';BasePage.LoadCurrentPage();">#users#</a></li>
-<li id="miChangePass"><a onclick="parent.location.hash='changepass';BasePage.LoadCurrentPage();">#changepass#</a></li>
-<li id="miLogoff"><a onclick="Comm.GET('/logoff');parent.location.hash='/';BasePage.LoadCurrentPage();">#logoff#</a></li>
+﻿<li id="miNewIssue"><a onclick="BasePage.GotoPage('issuetarget');">#newissue#</a></li>
+<li id="miUserList"><a onclick="BasePage.GotoPage('userlist');">#users#</a></li>
+<li id="miChangePass"><a onclick="BasePage.GotoPage('changepass');">#changepass#</a></li>
+<li id="miLogoff"><a onclick="Comm.GET('/logoff');BasePage.GotoPage('');">#logoff#</a></li>

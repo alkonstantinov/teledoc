@@ -17,8 +17,9 @@ var RegisterDoctor = (function (_super) {
         BasePage.HideErrors();
         var error = false;
         var isNew = ($("#hUserId").val() == "");
-        if (isNew && !/^\w + ([\.-]?\ w +)*@\w + ([\.-]?\ w +)*(\.\w{2, 3 })+$ /.test($("#tbRegEmail").val())) {
+        if (isNew && !/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/.test($("#tbRegEmail").val())) {
             error = true;
+            alert(1);
             $("#lErrtbRegEmail").show();
         }
         if (isNew && $("#tbRegEmail").val() != "" && $("#hUserId").val() != "" &&

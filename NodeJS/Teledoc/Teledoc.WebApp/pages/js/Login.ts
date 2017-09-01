@@ -14,19 +14,16 @@ class Login extends BasePage {
             case -1:
                 $("#lErrUser").show(); break;
             case 1:
-                parent.location.hash = "dashboard";
-                BasePage.LoadCurrentPage();
+                BasePage.GotoPage("dashboard");
                 break;
             case 2:
-                parent.location.hash = "expertmain";
-                BasePage.LoadCurrentPage();
+                BasePage.GotoPage("expertmain");
                 break;
-            case 3: parent.location.hash = "expertmain";
-                BasePage.LoadCurrentPage();
+            case 3:
+                BasePage.GotoPage("expertmain");
                 break;
             case 4:
-                parent.location.hash = "patientmain";
-                BasePage.LoadCurrentPage();
+                BasePage.GotoPage("patientmain");
                 break;
         }
     }

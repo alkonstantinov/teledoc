@@ -11,9 +11,8 @@ class IssueSince extends BasePage {
         var sinces = Comm.GET("/getsinces");
         if (sinces == null)
             return;
-
         for (var since of sinces) {
-            $("#dSince").append("<div class='row'><div class='col-md-12'><div class='radio'><label><input type='radio' class='form-control' name='since' sinceid='" + since.sinceid + "'>" + since.sincename + "</label></div></div>");
+            $("#dSince").append("<div class='row'><div class='col-md-12'><div class='form-check form-check-inline'><label class='form-check-label'><input type='radio' class='form-check-input' name='since' sinceid='" + since.sinceid + "'> " + since.sincename + "</label></div></div>");
         }
         $("input[type='radio']").first().prop("checked", true);
 

@@ -26,6 +26,7 @@ var Chat = (function (_super) {
         var issueId = parts[1];
         var text = $("#tbMsg").val();
         this.socket.emit('send', { message: text, room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId });
+        $("#tbMsg").val("");
     };
     Chat.prototype.JoinRoom = function () {
         var parts = parent.location.hash.split("|");
@@ -45,7 +46,7 @@ var Chat = (function (_super) {
             $(row).append("<div class='col-md-6'/><div class='col-md-6' style='background-color: #d9edf7'>" + msg + "</div>");
         }
         else {
-            $(row).append("<div class='col-md-6'>" + msg + "</div><div class='col-md-6'/>");
+            $(row).append("<div class='col-md-6'>" + msg.replace("align='right'", "") + "</div><div class='col-md-6'/>");
         }
         $("#dChat").append(row);
         this.ScrollDown();
@@ -68,8 +69,8 @@ var Chat = (function (_super) {
         }
     };
     Chat.prototype.ShowLarge = function (chatid) {
-        $("#iLargeImg").prop("src", "getchatimage?ChatId=" + chatid);
         $("#modalLargeImage").modal("show");
+        $("#iLargeImg").prop("src", "getchatimage?ChatId=" + chatid);
     };
     Chat.prototype.CancelLargeImage = function () {
         $("#modalLargeImage").modal("hide");
@@ -80,7 +81,6 @@ var Chat = (function (_super) {
             return;
         $("#hFnm").val(imageId);
         $("#iImg").prop("src", "/gettempimage?fnm=" + imageId);
-        $("#modalBrowseImage").modal("hide");
     };
     Chat.prototype.CancelImage = function () {
         $("#modalBrowseImage").modal("hide");
@@ -93,6 +93,7 @@ var Chat = (function (_super) {
             return;
         var issueId = parts[1];
         this.socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
+        $("#modalBrowseImage").modal("hide");
     };
     Chat.prototype.EndChat = function () {
         var parts = parent.location.hash.split("|");

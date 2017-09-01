@@ -44,7 +44,7 @@ class IssueMedicines extends BasePage {
             issue = {};
         var filled = $("input[type='text']").filter(function () { return this.value.length > 0 });
         if (filled.length == 0) {
-            issue.medication = null;
+            issue.medication = [];
         }
         else {
             issue.medication = [];

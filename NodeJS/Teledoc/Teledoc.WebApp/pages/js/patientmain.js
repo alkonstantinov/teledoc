@@ -41,12 +41,10 @@ var PatientMain = (function (_super) {
         }
     };
     PatientMain.prototype.NewIssue = function () {
-        parent.location.hash = "issuetarget";
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("issuetarget");
     };
     PatientMain.prototype.OpenChat = function (issueId) {
-        parent.location.hash = "chat|" + issueId;
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("chat|" + issueId);
     };
     return PatientMain;
 }(BasePage));

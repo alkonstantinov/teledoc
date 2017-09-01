@@ -55,16 +55,13 @@ var ExpertMain = (function (_super) {
     };
     ExpertMain.prototype.CaseClosed = function (issueId) {
         Comm.POST("/caseclosed", { issueId: issueId });
-        parent.location.hash = "";
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("");
     };
     ExpertMain.prototype.OpenChat = function (issueId) {
-        parent.location.hash = "chat|" + issueId;
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("chat|" + issueId);
     };
     ExpertMain.prototype.Preview = function (issueId) {
-        parent.location.hash = "previewissue|" + issueId;
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("previewissue|" + issueId);
     };
     return ExpertMain;
 }(BasePage));

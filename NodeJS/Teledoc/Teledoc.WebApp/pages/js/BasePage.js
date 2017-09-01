@@ -1,6 +1,6 @@
 var BasePage = (function () {
     function BasePage() {
-        this.pageSize = 2;
+        this.pageSize = 20;
     }
     BasePage.ShapeImage = function (img, maxSize) {
         var width = img.clientWidth;
@@ -55,12 +55,16 @@ var BasePage = (function () {
         parent.location.hash = hash;
         BasePage.LoadCurrentPage();
     };
+    BasePage.GotoPage = function (hash) {
+        parent.location.hash = hash;
+        BasePage.LoadCurrentPage();
+    };
     BasePage.LoadCurrentPage = function () {
         var level = Comm.GET("/getlevel");
         var page = null;
         if (parent.location.hash.search("registeruser") > -1)
             page = Comm.GET("/getregisteruserpage");
-        if (parent.location.hash.search("lostpass") > -1)
+        else if (parent.location.hash.search("lostpass") > -1)
             page = Comm.GET("/getlostpasspage");
         else if (level.LevelId === -1) {
             page = Comm.GET("/getloginpage");
@@ -175,6 +179,9 @@ var BasePage = (function () {
             return null;
         else
             return JSON.parse(issueText);
+    };
+    BasePage.RemoveIssue = function () {
+        localStorage.removeItem("Issue");
     };
     BasePage.SaveLogin = function (loginResult) {
         localStorage.setItem("Login", JSON.stringify(loginResult));

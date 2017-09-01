@@ -68,7 +68,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">#image#</h4>
             </div>
-            <div class="modal-body" style="overflow:scroll;max-height:600px;max-width:600px">
+            <div class="modal-body" style="overflow:scroll;max-height:600px;max-width:600px" id="dLargeImage"> 
                 <img id="iLargeImg"/>
                 
             </div>
@@ -104,8 +104,7 @@
         });
 
         chat.socket.on('endchat', function (data) {
-            parent.location.hash = "";
-            BasePage.LoadCurrentPage();
+            BasePage.GotoPage("");
         });
 
         chat.socket.on('disconnect', function () {

@@ -22,7 +22,7 @@ var IssueChronics = (function (_super) {
         for (var _i = 0, chronics_1 = chronics; _i < chronics_1.length; _i++) {
             var c = chronics_1[_i];
             if (c.chronicid > -1)
-                $("#dChronic").append("<div class='row'><div class='col-md-12'><div class='checkbox'><label><input type='checkbox' class='form-control' chronicid='" + c.chronicid + "'>" + c.chronicname + "</label></div></div>");
+                $("#dChronic").append("<div class='row'><div class='col-md-12'><div class='form-check form-check-inline'><label class='form-check-label'><input type='checkbox' class='form-check-input' chronicid='" + c.chronicid + "'> " + c.chronicname + "</label></div></div>");
             else
                 $("#dChronic").append("<div class='row'><div class='col-md-12'>" + c.chronicname + "</div></div>");
         }

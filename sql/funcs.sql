@@ -205,6 +205,9 @@ begin
   )
   returning IssueId into _IssueId;
 
+  insert into IssueEvent(IssueId, IssueStatusId, OnDate)
+  values(_IssueId,1,now());
+
   FOR _i IN select * from json_array_elements((_IssueData->'chronic')::json) LOOP
         insert into Issue2Chronic (ChronicId, IssueId, ChronicFree)
         values ((_i->>'chronicid')::int, _IssueId, _i->>'chronicfree');
@@ -224,6 +227,9 @@ begin
         insert into Issue2Medication (SinceId, IssueId, Medication)
         values ((_i->>'sinceid')::int, _IssueId, _i->>'medication');
   END LOOP;
+
+
+
 
   
   return _IssueId; 
@@ -292,6 +298,7 @@ returns void
 $$ LANGUAGE sql; 
 
 -- извличане на отворени ишута по специалист
+--select * from pIssueGetOpened(2)
 create or replace function pIssueGetOpened (_ReqExpertLevelId int) 
 returns table (IssueId int, OnDate timestamp, PatientName text)
  as $$
@@ -484,3 +491,5 @@ as $$
   from Chat c
   where c.ChatId = _chatId;
 $$ LANGUAGE sql;
+
+

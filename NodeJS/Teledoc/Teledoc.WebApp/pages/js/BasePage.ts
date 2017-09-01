@@ -6,7 +6,7 @@ class BasePage {
     static LastErrorB: String;
     static LastErrorC: String;
     static Issue: any;
-    protected pageSize = 2;
+    protected pageSize = 20;
     static ShapeImage(img, maxSize) {
         var width = img.clientWidth;
         var height = img.clientHeight;
@@ -57,10 +57,9 @@ class BasePage {
         $("#dContent").load("app/pages/" + fnm + "?" + d.getUTCMilliseconds());
     }
 
-    static PostgreTimestamp(dt: any)
-    {
+    static PostgreTimestamp(dt: any) {
         var date = new Date(dt);
-        return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();  
+        return date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
 
     }
 
@@ -79,71 +78,78 @@ class BasePage {
         BasePage.LoadCurrentPage();
     }
 
+    static GotoPage(hash)
+    {
+        parent.location.hash = hash;
+        BasePage.LoadCurrentPage();
+    }
+
     static LoadCurrentPage() {
         var level = Comm.GET("/getlevel");
         var page = null;
         if (parent.location.hash.search("registeruser") > -1)
             page = Comm.GET("/getregisteruserpage");
-        if (parent.location.hash.search("lostpass") > -1)
-            page = Comm.GET("/getlostpasspage");
         else
-            if (level.LevelId === -1) {
-                page = Comm.GET("/getloginpage");
-            }
-            else {
-                if (parent.location.hash == "") {
-                    switch (level.LevelId) {
-                        case 1: page = Comm.GET("/getdashboardpage"); break;
-                        case 2: page = Comm.GET("/getexpertmain"); break;
-                        case 3: page = Comm.GET("/getexpertmain"); break;
-
-                        case 4: page = Comm.GET("/getpatientmain"); break;
-
-                    }
-                }
-                if (parent.location.hash.search("loginpage") > -1)
+            if (parent.location.hash.search("lostpass") > -1)
+                page = Comm.GET("/getlostpasspage");
+            else
+                if (level.LevelId === -1) {
                     page = Comm.GET("/getloginpage");
-                if (parent.location.hash.search("issuetarget") > -1)
-                    page = Comm.GET("/getissuetargetpage");
-                if (parent.location.hash.search("issuedescription") > -1)
-                    page = Comm.GET("/getissuedescriptionpage");
-                if (parent.location.hash.search("issuesexyears") > -1) {
-                    page = Comm.GET("/getissuesexyearspage");
                 }
-                if (parent.location.hash.search("issuesymptoms") > -1)
-                    page = Comm.GET("/getissuesymptomspage");
-                if (parent.location.hash.search("issuesince") > -1) {
-                    page = Comm.GET("/getissuesincepage");
+                else {
+                    if (parent.location.hash == "") {
+                        switch (level.LevelId) {
+                            case 1: page = Comm.GET("/getdashboardpage"); break;
+                            case 2: page = Comm.GET("/getexpertmain"); break;
+                            case 3: page = Comm.GET("/getexpertmain"); break;
+
+                            case 4: page = Comm.GET("/getpatientmain"); break;
+
+                        }
+                    }
+                    if (parent.location.hash.search("loginpage") > -1)
+                        page = Comm.GET("/getloginpage");
+                    if (parent.location.hash.search("issuetarget") > -1)
+                        page = Comm.GET("/getissuetargetpage");
+                    if (parent.location.hash.search("issuedescription") > -1)
+                        page = Comm.GET("/getissuedescriptionpage");
+                    if (parent.location.hash.search("issuesexyears") > -1) {
+                        page = Comm.GET("/getissuesexyearspage");
+                    }
+                    if (parent.location.hash.search("issuesymptoms") > -1)
+                        page = Comm.GET("/getissuesymptomspage");
+                    if (parent.location.hash.search("issuesince") > -1) {
+                        page = Comm.GET("/getissuesincepage");
+                    }
+                    if (parent.location.hash.search("issueallergies") > -1) {
+                        page = Comm.GET("/getissueallergiespage");
+                    }
+                    if (parent.location.hash.search("issuechronics") > -1) {
+                        page = Comm.GET("/getissuechronicspage");
+                    }
+                    if (parent.location.hash.search("issuemedicines") > -1) {
+                        page = Comm.GET("/getissuemedicinespage");
+                    }
+                    if (parent.location.hash.search("issueanswertype") > -1) {
+                        page = Comm.GET("/getissueanswertypepage");
+                    }
+                    if (parent.location.hash.search("registerdoctor") > -1)
+                        page = Comm.GET("/getregisterdoctorpage");
+                    if (parent.location.hash.search("userlist") > -1)
+                        page = Comm.GET("/getuserlistpage");
+                    if (parent.location.hash.search("patientmain") > -1)
+                        page = Comm.GET("/getpatientmain");
+                    if (parent.location.hash.search("expertmain") > -1)
+                        page = Comm.GET("/getexpertmain");
+                    if (parent.location.hash.search("previewissue") > -1)
+                        page = Comm.GET("/getpreviewissue");
+                    if (parent.location.hash.search("changepass") > -1)
+                        page = Comm.GET("/getchangepasspage");
+                    if (parent.location.hash.search("dashboard") > -1)
+                        page = Comm.GET("/getdashboardpage");
+                    if (parent.location.hash.search("chat") > -1)
+                        page = Comm.GET("/getchatpage");
                 }
-                if (parent.location.hash.search("issueallergies") > -1) {
-                    page = Comm.GET("/getissueallergiespage");
-                }
-                if (parent.location.hash.search("issuechronics") > -1) {
-                    page = Comm.GET("/getissuechronicspage");
-                }
-                if (parent.location.hash.search("issuemedicines") > -1) {
-                    page = Comm.GET("/getissuemedicinespage");
-                }
-                if (parent.location.hash.search("issueanswertype") > -1) {
-                    page = Comm.GET("/getissueanswertypepage");
-                }
-                if (parent.location.hash.search("registerdoctor") > -1)
-                    page = Comm.GET("/getregisterdoctorpage");
-                if (parent.location.hash.search("userlist") > -1)
-                    page = Comm.GET("/getuserlistpage");
-                if (parent.location.hash.search("patientmain") > -1)
-                    page = Comm.GET("/getpatientmain");
-                if (parent.location.hash.search("expertmain") > -1)
-                    page = Comm.GET("/getexpertmain");
-                if (parent.location.hash.search("previewissue") > -1)
-                    page = Comm.GET("/getpreviewissue");
-                if (parent.location.hash.search("changepass") > -1)
-                    page = Comm.GET("/getchangepasspage");
-                if (parent.location.hash.search("dashboard") > -1)
-                    page = Comm.GET("/getdashboardpage");
-                if (parent.location.hash.search("chat") > -1)
-                    page = Comm.GET("/getchatpage");
-            }
 
         $("#dContent").html(page);
         window.scrollTo(0, 0);
@@ -199,6 +205,11 @@ class BasePage {
             return null;
         else
             return JSON.parse(issueText);
+    }
+
+    static RemoveIssue() {
+        localStorage.removeItem("Issue");
+        
     }
 
     static SaveLogin(loginResult: any) {

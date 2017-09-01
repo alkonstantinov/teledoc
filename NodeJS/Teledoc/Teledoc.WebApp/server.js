@@ -103,7 +103,6 @@ function ThrowNoAccess(res) {
 
 function RequireLevel(level, req, res) {
     if (GetLevelId(req) != level) {
-        ThrowNoAccess(res);
         return false;
     }
     return true;
@@ -290,8 +289,6 @@ app.get('/getregisteruserpage', function (req, res) {
 });
 
 app.post('/userexists', function (req, res) {
-    if (!RequireLevel(1, req, res))
-        return;
     res.setHeader('Content-Type', 'application/json');
 
     dl.UserExists(Pool, req.body.email, function (jsonResult) {
@@ -350,13 +347,16 @@ app.post('/uploadimage', function (req, res) {
     busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
         guid += "." + getExtension(filename);
         var fstream = fileSystem.createWriteStream(__dirname + "/files/" + guid);
-        file.pipe(fstream);
+        file.pipe(fstream);  
         file.on('end', function () {
-            fstream.close();
+            
             res.send({ imageId: guid });
             res.end();
+            fstream.close();
         });
     });
+    
+    
 
 });
 
@@ -581,12 +581,12 @@ app.get('/getlostpasspage', function (req, res) {
 });
 
 app.post("/lostpassrenew", function (req, res) {
-    var newPass = Math.floor((1 + Math.random()) * 10000);
+    var newPass = Math.floor((1 + Math.random()) * 10000) + "";
     var locale = GetLocale(req);
     dl.ChangeLostPass(Pool, req.body.email, md5(newPass), function (result) {
 
     });
-     var mailOptions = {
+    var mailOptions = {
         from: 'contact@birex43.com',
         to: req.body.email,
         subject: translate.Translate(locale, "newPassEmailSubject", fileSystem),
@@ -708,7 +708,7 @@ app.get('*', function (req, res) {
 
 var io = require('socket.io').listen(
 
-    app.listen(port,"0.0.0.0", function () {
+    app.listen(port, "0.0.0.0", function () {
 
         console.log('Example app listening on ' + port + '!')
     })
@@ -747,7 +747,5 @@ io.sockets.on('connection', function (socket) {
             data.hasimg = true;
             io.sockets.in(data.room).emit('messageimage', data);
         });
-
-
     });
 });

@@ -74,7 +74,7 @@ create table Who
   WhoName varchar(50)
 );
 insert into Who (WhoId, WhoName)
-values (1, 'Me'),(2, 'Mychild'),(3, 'Someoneelse');
+values (1, 'Me'),(2, 'Mychild');
 
 drop table if exists IssueStatus CASCADE;
 create table IssueStatus

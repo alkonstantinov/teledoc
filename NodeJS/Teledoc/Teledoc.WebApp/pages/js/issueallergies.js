@@ -35,7 +35,7 @@ var IssueAllergies = (function (_super) {
             issue = {};
         var filled = $("input[type='text']").filter(function () { return this.value.length > 0; });
         if (filled.length == 0) {
-            issue.allergy = null;
+            issue.allergy = [];
         }
         else {
             issue.allergy = [];

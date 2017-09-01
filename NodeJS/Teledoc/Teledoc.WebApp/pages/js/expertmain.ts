@@ -44,18 +44,16 @@ class ExpertMain extends BasePage {
     }
     public CaseClosed(issueId) {
         Comm.POST("/caseclosed", { issueId: issueId });
-        parent.location.hash = "";
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("");
     }
 
     public OpenChat(issueId) {
-        parent.location.hash = "chat|" + issueId;
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("chat|" + issueId);        
     }
 
     public Preview(issueId) {
-        parent.location.hash = "previewissue|" + issueId;
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("previewissue|" + issueId);
+        
     }
 
 

@@ -46,8 +46,8 @@ class UserList extends BasePage {
     }
 
     public EditUser(userId) {
-        parent.location.hash = "registerdoctor" + (userId != null ? "|" + userId : "");
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("registerdoctor" + (userId != null ? "|" + userId : ""));
+        
     }
     constructor() {
 

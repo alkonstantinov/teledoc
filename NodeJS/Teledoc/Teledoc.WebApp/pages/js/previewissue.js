@@ -63,12 +63,11 @@ var PreviewIssue = (function (_super) {
             var parts = parent.location.hash.split("|");
             if (parts.length < 2)
                 return;
-            parent.location.hash = "chat|" + parts[1];
+            BasePage.GotoPage("chat|" + parts[1]);
         }
         else {
-            parent.location.hash = "";
+            BasePage.GotoPage("");
         }
-        BasePage.LoadCurrentPage();
     };
     return PreviewIssue;
 }(BasePage));

@@ -8,7 +8,7 @@
   "consultationfor": "Консултация за",
   "me": "Мен",
   "Me": "Мен",
-  "mychild": "Моето дете",
+  "Mychild": "Моето дете",
   "consultationfrom": "Консултация от",
   "doctor": "Лекар",
   "pharmacist": "Фармацевт",
@@ -158,7 +158,7 @@
   "entercorrectvalue": "Моля, въведете коректна стойност",
   "activation": "Активация",
   "activationEmailSubject": "Активационен линк Teledoc",
-  "activationEmailText": "Моля, кликнете <a href='http://www.teledoc.bg/guid={guid}'>тук</a>",
+  "activationEmailText": "Моля, кликнете <a href='http://www.teledoc.bg/activateuser?guid={guid}'>тук</a>",
   "newPassEmailSubject": "Сменена Teledoc",
   "newPassEmailText": "Новата Ви парола е {pass}",
   "profileactivation": "Вашият профил е активиран",
@@ -215,5 +215,6 @@
   "selectimage": "Избор на снимка",
   "openissues": "Търсене на консултация",
   "takenissues": "Поети случаи",
-  "endchat": "Край на чата"
+  "endchat": "\"Край на чата\"."
+  
 }

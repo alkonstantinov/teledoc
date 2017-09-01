@@ -53,8 +53,7 @@ var UserList = (function (_super) {
         this.Search($("#hCurrentPage").val());
     };
     UserList.prototype.EditUser = function (userId) {
-        parent.location.hash = "registerdoctor" + (userId != null ? "|" + userId : "");
-        BasePage.LoadCurrentPage();
+        BasePage.GotoPage("registerdoctor" + (userId != null ? "|" + userId : ""));
     };
     return UserList;
 }(BasePage));

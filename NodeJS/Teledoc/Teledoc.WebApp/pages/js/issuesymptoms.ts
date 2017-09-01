@@ -14,9 +14,10 @@ class IssueSymptoms extends BasePage {
         for (var group of symptoms) {
             $("#dSymptoms").append("<div class='row'><div class='col-md-12'><div class='label-info'>" + group.Name + "</div></div></div>");
             for (var sym of group.Symptoms) {
-                $("#dSymptoms").append("<div class='row'><div class='col-md-12'><div class='checkbox'><label><input type='checkbox' class='form-control' symptomid='" + sym.Id + "'>" + sym.Name + "</label></div></div>");
+                $("#dSymptoms").append("<div class='row'><div class='col-md-12'><div class='form-check form-check-inline'><label class='form-check-label'><input type='checkbox' class='form-check-input' symptomid='" + sym.Id + "'> " + sym.Name + "</label></div></div>");
             }
         }
+        
 
         if (issue.symptom != null)
         {

@@ -13,7 +13,7 @@ class IssueChronics extends BasePage {
         var chronics = Comm.GET("/getchronics");
         for (var c of chronics) {
             if (c.chronicid > -1)
-                $("#dChronic").append("<div class='row'><div class='col-md-12'><div class='checkbox'><label><input type='checkbox' class='form-control' chronicid='" + c.chronicid + "'>" + c.chronicname + "</label></div></div>");
+                $("#dChronic").append("<div class='row'><div class='col-md-12'><div class='form-check form-check-inline'><label class='form-check-label'><input type='checkbox' class='form-check-input' chronicid='" + c.chronicid + "'> " + c.chronicname + "</label></div></div>");
             else
                 $("#dChronic").append("<div class='row'><div class='col-md-12'>" + c.chronicname + "</div></div>");
         }

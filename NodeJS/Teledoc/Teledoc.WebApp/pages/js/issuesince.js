@@ -22,7 +22,7 @@ var IssueSince = (function (_super) {
             return;
         for (var _i = 0, sinces_1 = sinces; _i < sinces_1.length; _i++) {
             var since = sinces_1[_i];
-            $("#dSince").append("<div class='row'><div class='col-md-12'><div class='radio'><label><input type='radio' class='form-control' name='since' sinceid='" + since.sinceid + "'>" + since.sincename + "</label></div></div>");
+            $("#dSince").append("<div class='row'><div class='col-md-12'><div class='form-check form-check-inline'><label class='form-check-label'><input type='radio' class='form-check-input' name='since' sinceid='" + since.sinceid + "'> " + since.sincename + "</label></div></div>");
         }
         $("input[type='radio']").first().prop("checked", true);
         if (issue.sinceid != null) {
