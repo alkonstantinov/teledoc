@@ -29,6 +29,10 @@ var RegisterUser = (function (_super) {
             error = true;
             $("#lErrtbRegPassword").show();
         }
+        if (!$("#cbTermsAndConditions").prop("checked")) {
+            error = true;
+            $("#lErrTAC").show();
+        }
         if (error)
             return;
         Comm.POST("/registeruser", {
@@ -37,6 +41,9 @@ var RegisterUser = (function (_super) {
             name: $("#tbName").val()
         });
         $("#dOK").show();
+    };
+    RegisterUser.prototype.Showtac = function () {
+        $("#modalTAC").modal("show");
     };
     return RegisterUser;
 }(BasePage));

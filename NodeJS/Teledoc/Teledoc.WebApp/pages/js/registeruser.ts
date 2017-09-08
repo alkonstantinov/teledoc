@@ -20,6 +20,11 @@ class RegisterUser extends BasePage {
             error = true;
             $("#lErrtbRegPassword").show();
         }
+        if (!$("#cbTermsAndConditions").prop("checked")) {
+            error = true;
+            $("#lErrTAC").show();
+        }
+
         if (error)
             return;
         Comm.POST("/registeruser", {
@@ -30,6 +35,12 @@ class RegisterUser extends BasePage {
         $("#dOK").show();
 
     }
+
+    public Showtac() {
+        $("#modalTAC").modal("show");
+    }
+
+
     constructor() {
 
         super();

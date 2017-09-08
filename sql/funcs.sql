@@ -3,7 +3,10 @@
 create or replace function Login (_Username citext, _Password citext) 
 returns table (UserId int, Name varchar(100), LevelId int)
  as $$
-  select u.UserId, u.Name, u.LevelId from "User" u where u.Username = _Username and u.Password = _Password and u.Active = true and IsFB = false;
+  select u.UserId, u.Name, u.LevelId 
+  from "User" u 
+  left join Doctor d on d.UserId = u.UserId
+  where (u.Username = _Username or d.UIN=_UserName) and u.Password = _Password and u.Active = true and IsFB = false;
 $$ LANGUAGE sql; 
 
 
@@ -295,6 +298,9 @@ returns void
   update Issue
   set IssueStatusId = _IssueStatusId
   where IssueId = _IssueId;
+  
+  insert into IssueEvent(issueid, issuestatusid, ondate)
+  values (_IssueId, _IssueStatusId, now());
 $$ LANGUAGE sql; 
 
 -- извличане на отворени ишута по специалист
@@ -492,4 +498,31 @@ as $$
   where c.ChatId = _chatId;
 $$ LANGUAGE sql;
 
+--drop function pIssueGetClosed (_UserId int) 
+create or replace function pIssueGetClosed (_UserId int) 
+returns table (IssueId int, OnDate timestamp, Description text, AnswerTypeId int)
+ as $$
+  select 
+    i.IssueId,
+    (select min(ondate) from IssueEvent where IssueId = i.IssueId) OnDate,
+    i.Description,
+    i.AnswerTypeid
+  from Issue i  
+  where (i.PatientUserId = _UserId  or i.ExpertUserId = _UserId) and i.IssueStatusId =3
+  LIMIT  10;
+$$ LANGUAGE sql; 
 
+
+
+create or replace function pIssueCanChat (_IssueId int) 
+returns boolean
+ as $$
+begin
+  if exists(select 1 from chat c join issue i on i.issueid=c.issueid where c.issueid=_IssueId and i.Issuestatusid = 2) then 
+    return true;
+  else
+    return false;
+  end if;
+
+end  
+$$ LANGUAGE plpgsql; 

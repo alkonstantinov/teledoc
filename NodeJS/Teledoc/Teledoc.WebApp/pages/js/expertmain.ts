@@ -42,8 +42,41 @@ class ExpertMain extends BasePage {
         }
 
     }
+
+
+    public LoadClosedIssues() {
+        var issues = Comm.POST("/getclosedissues", {});
+
+        $("#tClosedIssues").empty();
+        if (issues == null)
+            return;
+
+        for (var issue of issues) {
+
+            var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>";
+            row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='expertMain.Preview(" + issue.issueid + ")'></span>";
+
+            switch (issue.answertypeid) {
+                case 1: row += "<span class='glyphicon glyphicon-align-right pull-right' aria-hidden='true' onclick='expertMain.OpenChat(" + issue.issueid + ")'></span>" +
+                    "<span class='glyphicon glyphicon-refresh pull-right' aria-hidden='true' onclick='expertMain.RestartChat(" + issue.issueid + ")'></span>"; break;
+                case 2: row += "<span class='glyphicon glyphicon-envelope pull-right' aria-hidden='true'></span>"; break;
+                case 3: row += "<span class='glyphicon glyphicon-earphone pull-right' aria-hidden='true'></span>"; break;
+            }
+
+            row += "</td></tr>";
+            $("#tClosedIssues").append(row);
+        }
+
+    }
+
     public CaseClosed(issueId) {
         Comm.POST("/caseclosed", { issueId: issueId });
+        BasePage.GotoPage("");
+    }
+
+
+    public RestartChat(issueId) {
+        Comm.POST("/restartchat", { issueId: issueId });
         BasePage.GotoPage("");
     }
 

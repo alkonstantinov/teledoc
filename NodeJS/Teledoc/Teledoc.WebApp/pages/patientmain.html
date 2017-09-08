@@ -4,7 +4,10 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
+                    <h3>#openissues#</h3>
                     <table id="tIssues" class="table table-striped"></table>
+                    <h3>#closedissues#</h3>
+                    <table id="tClosedIssues" class="table table-striped"></table>
 
                 </div>
             </div>
@@ -21,6 +24,7 @@
     $(document).ready(function () {
         patientMain = new PatientMain();
         patientMain.LoadPendingIssues();
+        patientMain.LoadClosedIssues();        
         BasePage.HideErrors();
     })
 </script>

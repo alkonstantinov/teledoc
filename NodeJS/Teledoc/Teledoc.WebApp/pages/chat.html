@@ -9,7 +9,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="dChatControls">
                 <div class="col-md-8">
                     <input type="text" id="tbMsg" class="form-control" autocomplete="off" />
                 </div>
@@ -88,6 +88,13 @@
     $(document).ready(function () {
         chat = new Chat();
         chat.LoadInitialChat();
+
+        $("#tbMsg").on('keyup', function (e) {
+            if (e.keyCode == 13) {
+
+                chat.Send()
+            }
+        });
         BasePage.HideErrors();
         chat.socket = io('/');
         chat.socket.on('connect', function () {

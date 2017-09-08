@@ -53,8 +53,37 @@ var ExpertMain = (function (_super) {
             $("#tTakenIssues").append(row);
         }
     };
+    ExpertMain.prototype.LoadClosedIssues = function () {
+        var issues = Comm.POST("/getclosedissues", {});
+        $("#tClosedIssues").empty();
+        if (issues == null)
+            return;
+        for (var _i = 0, issues_3 = issues; _i < issues_3.length; _i++) {
+            var issue = issues_3[_i];
+            var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>";
+            row += "<span class='glyphicon glyphicon-search pull-right' aria-hidden='true' onclick='expertMain.Preview(" + issue.issueid + ")'></span>";
+            switch (issue.answertypeid) {
+                case 1:
+                    row += "<span class='glyphicon glyphicon-align-right pull-right' aria-hidden='true' onclick='expertMain.OpenChat(" + issue.issueid + ")'></span>" +
+                        "<span class='glyphicon glyphicon-refresh pull-right' aria-hidden='true' onclick='expertMain.RestartChat(" + issue.issueid + ")'></span>";
+                    break;
+                case 2:
+                    row += "<span class='glyphicon glyphicon-envelope pull-right' aria-hidden='true'></span>";
+                    break;
+                case 3:
+                    row += "<span class='glyphicon glyphicon-earphone pull-right' aria-hidden='true'></span>";
+                    break;
+            }
+            row += "</td></tr>";
+            $("#tClosedIssues").append(row);
+        }
+    };
     ExpertMain.prototype.CaseClosed = function (issueId) {
         Comm.POST("/caseclosed", { issueId: issueId });
+        BasePage.GotoPage("");
+    };
+    ExpertMain.prototype.RestartChat = function (issueId) {
+        Comm.POST("/restartchat", { issueId: issueId });
         BasePage.GotoPage("");
     };
     ExpertMain.prototype.OpenChat = function (issueId) {

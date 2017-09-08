@@ -41,6 +41,19 @@ var IssueSexYears = (function (_super) {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
+        var error = false;
+        BasePage.HideErrors();
+        if (issue.whoid == 1 || issue.whoid == null) {
+            issue.birthmonth = $("#ddlMonth").val();
+            issue.birthyear = $("#ddlYear").val();
+            var yrs = moment().diff($("#ddlYear").val() + "-" + $("#ddlMonth").val() + "-01", 'years');
+            if (yrs < 18) {
+                error = true;
+                $("#lErrAge").show();
+            }
+        }
+        if (error)
+            return false;
         if ($("#rbMale").prop("checked"))
             issue.sexid = "m";
         if ($("#rbFemale").prop("checked"))
@@ -50,13 +63,16 @@ var IssueSexYears = (function (_super) {
         issue.birthmonth = $("#ddlMonth").val();
         issue.birthyear = $("#ddlYear").val();
         BasePage.SaveIssue(issue);
+        return true;
     };
     IssueSexYears.prototype.Next = function () {
-        this.Save();
+        if (!this.Save())
+            return;
         BasePage.NavigateTo("issuesymptoms");
     };
     IssueSexYears.prototype.Prev = function () {
-        this.Save();
+        if (!this.Save())
+            return;
         BasePage.NavigateTo("issuedescription");
     };
     ;

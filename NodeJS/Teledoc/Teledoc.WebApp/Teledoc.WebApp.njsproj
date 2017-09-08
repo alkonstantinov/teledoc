@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="js\jquery\jquery.js" />
+    <Compile Include="js\moment\moment.min.js" />
     <Compile Include="js\socket.io\socket.io.js" />
     <Compile Include="server.js" />
     <Content Include="css\bootstrap.css" />
@@ -89,6 +90,7 @@
     <Folder Include="js\" />
     <Folder Include="js\dl\" />
     <Folder Include="js\jquery\" />
+    <Folder Include="js\moment\" />
     <Folder Include="js\socket.io\" />
     <Folder Include="js\translate\" />
     <Folder Include="css\" />

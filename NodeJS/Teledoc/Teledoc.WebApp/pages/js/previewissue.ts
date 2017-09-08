@@ -3,6 +3,11 @@ declare var previewIssue: PreviewIssue;
 
 class PreviewIssue extends BasePage {
 
+    public Back()
+    {
+        BasePage.GotoPage("expertmain");
+    }
+
     public ShowIssue() {
         var parts = parent.location.hash.split("|");
         if (parts.length < 2)
@@ -11,7 +16,7 @@ class PreviewIssue extends BasePage {
         if (json == null)
             return;
 
-        if (json.issuestatusid == 2)
+        if (json.issuestatusid > 1)
             $("#bTake").hide();
         $("#hAnswerTypeId").text(json.answertypeid);
         $("#lWhoName").text(json.whoname);

@@ -1,4 +1,5 @@
 ﻿declare var $: any;
+declare var moment: any;
 declare var issueSexYears: IssueSexYears;
 
 class IssueSexYears extends BasePage {
@@ -12,7 +13,7 @@ class IssueSexYears extends BasePage {
                 case "m": $("#rbMale").prop("checked", true); break;
                 case "f": $("#rbFemale").prop("checked", true); break;
                 case "b": $("#rbOther").prop("checked", true); break;
-            }            
+            }
         }
 
         if (issue.birthmonth != null) {
@@ -23,11 +24,27 @@ class IssueSexYears extends BasePage {
         }
     }
 
-    public Save()
-    {
+    public Save() {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
+
+        var error = false;
+        BasePage.HideErrors();
+        if (issue.whoid == 1 || issue.whoid == null) {
+            issue.birthmonth = $("#ddlMonth").val();
+            issue.birthyear = $("#ddlYear").val();
+
+            var yrs = moment().diff($("#ddlYear").val() + "-" + $("#ddlMonth").val() + "-01", 'years');
+            if (yrs < 18) {
+                error = true;
+                $("#lErrAge").show();
+            }
+        }
+
+        if (error)
+            return false;
+
 
         if ($("#rbMale").prop("checked"))
             issue.sexid = "m";
@@ -40,18 +57,20 @@ class IssueSexYears extends BasePage {
 
 
         BasePage.SaveIssue(issue);
-
+        return true;
     }
     public Next() {
 
-        this.Save();
+        if (!this.Save())
+            return;
 
         BasePage.NavigateTo("issuesymptoms");
 
     }
 
     public Prev() {
-        this.Save();
+        if (!this.Save())
+            return;
         BasePage.NavigateTo("issuedescription");
     };
 

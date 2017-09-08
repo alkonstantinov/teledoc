@@ -8,7 +8,8 @@
                     <table id="tIssues" class="table table-striped"></table>
                     <h3>#takenissues#</h3>
                     <table id="tTakenIssues" class="table table-striped"></table>
-
+                    <h3>#closedissues#</h3>
+                    <table id="tClosedIssues" class="table table-striped"></table>
                 </div>
             </div>
 
@@ -20,6 +21,7 @@
         expertMain = new ExpertMain();
         expertMain.LoadPendingIssues();
         expertMain.LoadTakenIssues();
+        expertMain.LoadClosedIssues();
         BasePage.HideErrors();
     })
 </script>

@@ -13,6 +13,9 @@ var PreviewIssue = (function (_super) {
     function PreviewIssue() {
         return _super.call(this) || this;
     }
+    PreviewIssue.prototype.Back = function () {
+        BasePage.GotoPage("expertmain");
+    };
     PreviewIssue.prototype.ShowIssue = function () {
         var parts = parent.location.hash.split("|");
         if (parts.length < 2)
@@ -20,7 +23,7 @@ var PreviewIssue = (function (_super) {
         var json = Comm.POST("/getissue", { issueId: parts[1] });
         if (json == null)
             return;
-        if (json.issuestatusid == 2)
+        if (json.issuestatusid > 1)
             $("#bTake").hide();
         $("#hAnswerTypeId").text(json.answertypeid);
         $("#lWhoName").text(json.whoname);

@@ -43,7 +43,7 @@ class IssueTarget extends BasePage {
             issue.additionalinfo = oldIssue.additionalinfo;
             issue.chronic = oldIssue.chronics;
             issue.description = oldIssue.description;
-            issue.medication = oldIssue.medications;
+            //issue.medication = oldIssue.medications;
             issue.sexid = oldIssue.sexid;
             issue.birthmonth = oldIssue.birthmonth;
             issue.birthyear = oldIssue.birthyear;

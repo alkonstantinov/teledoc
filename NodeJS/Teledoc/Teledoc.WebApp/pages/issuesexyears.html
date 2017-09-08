@@ -1,7 +1,7 @@
 ﻿<div class="jumbotron">
     <div class="row">
         <div class="col-md-1"><span class="glyphicon glyphicon-backward pull-left" aria-hidden="true" onclick="issueSexYears.Prev()"></span></div>
-        <div class="col-md-10"></div>
+        <div class="col-md-10"><div id="lErrAge" class="label-danger">#mustbe18#</div></div>
         <div class="col-md-1"><span class="glyphicon glyphicon-forward pull-right" aria-hidden="true" onclick="issueSexYears.Next()"></span></div>
     </div>
     <div class="panel panel-info">
@@ -50,6 +50,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
+        BasePage.HideErrors();
         var year = (new Date()).getFullYear();
         for (var i = year; i > year - 100; i--)
             $("#ddlYear").append("<option value='" + i + "'>" + i + "</option>");

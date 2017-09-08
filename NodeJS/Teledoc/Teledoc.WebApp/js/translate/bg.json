@@ -215,6 +215,13 @@
   "selectimage": "Избор на снимка",
   "openissues": "Търсене на консултация",
   "takenissues": "Поети случаи",
-  "endchat": "\"Край на чата\"."
-  
+  "endchat": "\"Край на чата\".",
+  "mustbe18": "Трябва да имате 18 навършени години",
+  "termsandconditions": "Общи условия",
+  "termsandconditionscontent": "Общи условия",
+  "thetermsandconditions": "общите условия",
+  "iaccept": "Приемам",
+  "TACNotAccepted": "Моля, приемете общите условия за да продължите",
+  "back": "Назад",
+  "closedissues": "Приключени консултации"
 }

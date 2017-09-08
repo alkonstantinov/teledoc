@@ -67,6 +67,13 @@ var Chat = (function (_super) {
             var item = msgs_1[_i];
             this.AddMsg(item);
         }
+        var result = Comm.POST("/issuecanchat", { issueId: issueId });
+        if (result) {
+            $("#dChatControls").show();
+        }
+        else {
+            $("#dChatControls").hide();
+        }
     };
     Chat.prototype.ShowLarge = function (chatid) {
         $("#modalLargeImage").modal("show");

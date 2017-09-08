@@ -57,6 +57,14 @@ class Chat extends BasePage {
         for (var item of msgs)
             this.AddMsg(item);
 
+        var result = Comm.POST("/issuecanchat", { issueId: issueId });
+        if (result) {
+            $("#dChatControls").show();
+        }
+        else
+        {
+            $("#dChatControls").hide();
+        }
     }
 
     public ShowLarge(chatid) {

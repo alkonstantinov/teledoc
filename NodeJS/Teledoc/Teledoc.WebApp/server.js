@@ -697,12 +697,50 @@ app.get("/getchatimage", function (req, res) {
 })
 
 
+app.post("/getclosedissues", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
+        return;
+    dl.GetClosedIssues(Pool, req.session.userid, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+
+app.post("/issuecanchat", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
+        return;
+    dl.IssueCanChat(Pool, req.body.issueId, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+app.post("/restartchat", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
+        return;
+    dl.SetIssueStatus(Pool, req.body.issueId, 2, function (result) {
+        res.send(result);
+        res.end();
+    });
+
+
+})
+
+
+
 //--------------------------------------------------------------
 app.get('*', function (req, res) {
     //res.send("-1");
     res.send(translate.Translate('bg', 'login', fileSystem));
     res.end();
 });
+
+
 
 //var fs = require('fs');
 
@@ -716,9 +754,11 @@ var io = require('socket.io').listen(
 );
 
 io.sockets.on('connection', function (socket) {
+
     socket.on('room', function (room) {
         socket.join(room);
     });
+
     socket.on('send', function (data) {
         var d = new Date();
         var time = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear() + " " + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
@@ -749,3 +789,11 @@ io.sockets.on('connection', function (socket) {
         });
     });
 });
+
+process.on('uncaughtException', (err) => {
+    console.log('=================================\n');
+    console.log(err);
+    console.log('=================================\n');
+
+});
+

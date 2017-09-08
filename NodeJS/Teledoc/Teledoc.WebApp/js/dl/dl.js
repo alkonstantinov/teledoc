@@ -183,4 +183,17 @@ exports.SetIssueStatus = function (pool, issueId, statusId, callback) {
         callback(result);
     });
 };
+exports.GetClosedIssues = function (pool, userid, callback) {
+    pool.query("select * from pIssueGetClosed (" + userid + ")", function (err, result) {
+        if (result == null)
+            callback(null);
+        else
+            callback(result.rows);
+    });
+};
+exports.IssueCanChat = function (pool, issueid, callback) {
+    pool.query("select * from pIssueCanChat(" + issueid + ");", function (err, result) {
+        callback(result.rows[0].pissuecanchat);
+    });
+};
 //# sourceMappingURL=dl.js.map
