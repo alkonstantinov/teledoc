@@ -10,6 +10,7 @@ class Login extends BasePage {
             Password: $("#tbPassword").val()
         });
         BasePage.SaveLogin(result);
+        BasePage.Socket.emit("iam", result.UserId);
         switch (result.LevelId) {
             case -1:
                 $("#lErrUser").show(); break;

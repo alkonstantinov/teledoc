@@ -2,7 +2,6 @@
 declare var chat: Chat;
 
 class Chat extends BasePage {
-    public socket = null;
     private loginResult = null;
     public Send() {
         if ($("#tbMsg").val() == "" || $("#tbMsg").val() == null)
@@ -12,7 +11,7 @@ class Chat extends BasePage {
             return;
         var issueId = parts[1];
         var text = $("#tbMsg").val();
-        this.socket.emit('send', { message: text, room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId });
+        BasePage.Socket.emit('send', { message: text, room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId });
         $("#tbMsg").val("");
     }
 
@@ -21,7 +20,8 @@ class Chat extends BasePage {
         if (parts.length < 2)
             return;
         var issueId = parts[1];
-        this.socket.emit('room', 'issue_' + issueId);
+        BasePage.Socket.emit('room', 'issue_' + issueId);
+
     }
 
     public AddMsg(data) {
@@ -102,7 +102,7 @@ class Chat extends BasePage {
             return;
         var issueId = parts[1];
 
-        this.socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
+        BasePage.Socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
         $("#modalBrowseImage").modal("hide");
 
     }
@@ -112,7 +112,11 @@ class Chat extends BasePage {
         if (parts.length < 2)
             return;
         var issueId = parts[1];
-        this.socket.emit('endchat', { room: 'issue_' + issueId, issueId: issueId });
+        BasePage.Socket.emit('endchat', { room: 'issue_' + issueId, issueId: issueId });
+    }
+
+    public CloseChat() {
+        $("#dChatControls").hide();
     }
 
     public ShowImageDialog() {

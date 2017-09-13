@@ -18,10 +18,11 @@ var UserList = (function (_super) {
         var pos = (page - 1) * this.pageSize;
         var result = Comm.POST("/searchusers", {
             SS: $("#tbSS").val(),
+            LevelId: parseInt($("#ddlLevel").val()),
             Pos: pos,
             PageSize: this.pageSize
         });
-        if (result == null) {
+        if (result == null || result.length == 0) {
             $("#tUsers").hide();
             $("#dNoRecords").show();
         }

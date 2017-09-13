@@ -82,13 +82,13 @@
     </div>
 </div>
 
-<script src="js/socket.io/socket.io.js"></script>
+
 <script type="text/javascript">
     
     $(document).ready(function () {
         chat = new Chat();
         chat.LoadInitialChat();
-
+        chat.JoinRoom();
         $("#tbMsg").on('keyup', function (e) {
             if (e.keyCode == 13) {
 
@@ -96,27 +96,7 @@
             }
         });
         BasePage.HideErrors();
-        chat.socket = io('/');
-        chat.socket.on('connect', function () {
-            chat.JoinRoom();
-            
-        });
         
-        chat.socket.on('message', function (data) {
-            chat.AddMsg(data)
-        });
-
-        chat.socket.on('messageimage', function (data) {
-            chat.AddMsg(data)
-        });
-
-        chat.socket.on('endchat', function (data) {
-            BasePage.GotoPage("");
-        });
-
-        chat.socket.on('disconnect', function () {
-
-        });
     })
 </script>
 

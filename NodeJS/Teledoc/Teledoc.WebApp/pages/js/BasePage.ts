@@ -2,6 +2,7 @@
 declare var $: any;
 
 class BasePage {
+    static Socket: any;
     static LastErrorA: String;
     static LastErrorB: String;
     static LastErrorC: String;

@@ -3,6 +3,17 @@
 create or replace function Login (_Username citext, _Password citext) 
 returns table (UserId int, Name varchar(100), LevelId int)
  as $$
+  update "User"
+  set LoginCount = LoginCount + 1
+  where UserId in
+  (
+    select u.UserId
+    from "User" u 
+    left join Doctor d on d.UserId = u.UserId
+    where (u.Username = _Username or d.UIN=_UserName) and u.Password = _Password and u.Active = true and u.IsFB = false
+  );
+  
+  
   select u.UserId, u.Name, u.LevelId 
   from "User" u 
   left join Doctor d on d.UserId = u.UserId
@@ -117,18 +128,18 @@ begin
   end if;
   return _UserId;
 end $$ LANGUAGE plpgsql; 
- 
+ update "User" set levelid = 1 where userid =1
 -- drop function pUserSearch (_ss text, _pos integer, _pageSize integer)
 -- Извличане на всички потребители
-create or replace function pUserSearch (_ss text, _pos integer, _pageSize integer)
+create or replace function pUserSearch (_ss text, _levelId int, _pos integer, _pageSize integer)
 returns table(UserId integer, Username citext, LevelId int, LevelName varchar(50), Name text, Active boolean, total bigint)
  as $$
   select u.UserId, u.Username, l.LevelId, l.LevelName, u.Name, u.Active, count(1) over() as total
   from "User" u
   join Level l  on l.LevelId = u.LevelId
-  where (_ss is null or u.username like '%' || _ss || '%' or u.name like '%' || _ss || '%')
-  ORDER  BY u.UserName
-  LIMIT  _PageSize
+  where (_ss is null or u.username like '%' || _ss || '%' or u.name like '%' || _ss || '%') and(_levelId=-1 or u.levelid = _levelId)
+  ORDER BY u.LoginCount
+  LIMIT _PageSize
   OFFSET _pos;
 $$ LANGUAGE sql; 
 
@@ -526,3 +537,12 @@ begin
 
 end  
 $$ LANGUAGE plpgsql; 
+
+--select * from pIssueGetChatUsers (6);
+create or replace function pIssueGetChatUsers (_IssueId int) 
+returns table (User1Id int, User2Id int)
+ as $$
+  select PatientUserId, ExpertUserId
+  from issue 
+  where IssueId = _IssueId;
+$$ LANGUAGE sql; 

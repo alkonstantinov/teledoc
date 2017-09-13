@@ -68,8 +68,8 @@ exports.StoreDoctor = function (pool, json, callback) {
         callback(result);
     });
 };
-exports.SearchUsers = function (pool, ss, pos, pagesize, callback) {
-    pool.query("select * from pusersearch ('" + ss + "'," + pos + "," + pagesize + ")", function (err, result) {
+exports.SearchUsers = function (pool, ss, levelid, pos, pagesize, callback) {
+    pool.query("select * from pusersearch ('" + ss + "'," + levelid + "," + pos + "," + pagesize + ")", function (err, result) {
         if (result == null)
             callback(null);
         else
@@ -194,6 +194,11 @@ exports.GetClosedIssues = function (pool, userid, callback) {
 exports.IssueCanChat = function (pool, issueid, callback) {
     pool.query("select * from pIssueCanChat(" + issueid + ");", function (err, result) {
         callback(result.rows[0].pissuecanchat);
+    });
+};
+exports.IssueGetChatUsers = function (pool, issueid, callback) {
+    pool.query("select * from pIssueGetChatUsers(" + issueid + ");", function (err, result) {
+        callback(result.rows[0]);
     });
 };
 //# sourceMappingURL=dl.js.map

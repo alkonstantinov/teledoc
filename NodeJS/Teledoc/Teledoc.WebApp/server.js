@@ -13,7 +13,11 @@ const Busboy = require('busboy');
 const translate = require('./js/translate/translate');
 const dl = require('./js/dl/dl');
 
-
+var ChatInfo = {
+    User2Socket: {},
+    Socket2User: {},
+    Room2Users: {}
+};
 
 var transporter = nodemailer.createTransport({
     host: 'hopkins.host.bg',
@@ -347,16 +351,16 @@ app.post('/uploadimage', function (req, res) {
     busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
         guid += "." + getExtension(filename);
         var fstream = fileSystem.createWriteStream(__dirname + "/files/" + guid);
-        file.pipe(fstream);  
+        file.pipe(fstream);
         file.on('end', function () {
-            
+
             res.send({ imageId: guid });
             res.end();
             fstream.close();
         });
     });
-    
-    
+
+
 
 });
 
@@ -391,7 +395,7 @@ app.post("/searchusers", function (req, res) {
     if (!RequireLevel(1, req, res))
         return;
     var locale = GetLocale(req);
-    dl.SearchUsers(Pool, req.body.SS, req.body.Pos, req.body.PageSize, function (result) {
+    dl.SearchUsers(Pool, req.body.SS, req.body.LevelId, req.body.Pos, req.body.PageSize, function (result) {
         if (result != null) {
             for (var r of result) {
                 r.levelname = translate.Translate(locale, r.levelname, fileSystem);
@@ -731,6 +735,22 @@ app.post("/restartchat", function (req, res) {
 
 })
 
+app.get("/whoami", function (req, res) {
+    res.send({ userid: req.session.userid });
+    res.end();
+
+})
+
+app.get("/messagetranslations", function (req, res) {
+    var locale = GetLocale(req);
+
+    res.send({
+        NewMessage: translate.Translate(locale, "NewMessage", fileSystem),
+        CloseChatMessage: translate.Translate(locale, "CloseChatMessage", fileSystem)
+    });
+    res.end();
+
+})
 
 
 //--------------------------------------------------------------
@@ -757,7 +777,34 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('room', function (room) {
         socket.join(room);
+        var roomId = parseInt(room.substring(6));
+        if (ChatInfo.Room2Users[room] == null) {
+            var users = dl.IssueGetChatUsers(Pool, roomId, function (result) {
+                ChatInfo.Room2Users[room] = {
+                    User1: result.user1id,
+                    User2: result.user2id
+                };
+
+            });
+        }
+
     });
+
+
+
+    //var ChatInfo = {
+    //    User2Socket: {},
+    //    Socket2User: {},
+    //    Room2Users: {}
+    //};
+
+    socket.on('iam', function (userId) {
+        if (userId != null) {
+            ChatInfo.Socket2User[socket.id] = userId;
+            ChatInfo.User2Socket["u" + userId] = socket;
+        }
+    });
+
 
     socket.on('send', function (data) {
         var d = new Date();
@@ -766,7 +813,20 @@ io.sockets.on('connection', function (socket) {
         data.ontime = time;
         dl.ChatNewItem(Pool, data.issueId, data.userid, data.message, null, function (result) {
             data.chatid = result;
-            io.sockets.in(data.room).emit('message', data);
+            //io.sockets.in(data.room).emit('message', data);
+            var u1 = ChatInfo.Room2Users[data.room].User1;
+            if (u1 != null) {
+                var socket = ChatInfo.User2Socket["u" + u1];
+                if (socket != null)
+                    socket.emit('message', data);
+            }
+            var u2 = ChatInfo.Room2Users[data.room].User2;
+            if (u2 != null) {
+                var socket = ChatInfo.User2Socket["u" + u2];
+                if (socket != null)
+                    socket.emit('message', data);
+            }
+
         });
 
 
@@ -785,7 +845,18 @@ io.sockets.on('connection', function (socket) {
         dl.ChatNewItem(Pool, data.issueId, data.userid, '', img, function (result) {
             data.chatid = result;
             data.hasimg = true;
-            io.sockets.in(data.room).emit('messageimage', data);
+            var u1 = ChatInfo.Room2Users[data.room].User1;
+            if (u1 != null) {
+                var socket = ChatInfo.User2Socket["u" + u1];
+                if (socket != null)
+                    socket.emit('messageimage', data);
+            }
+            var u2 = ChatInfo.Room2Users[data.room].User2;
+            if (u2 != null) {
+                var socket = ChatInfo.User2Socket["u" + u2];
+                if (socket != null)
+                    socket.emit('messageimage', data);
+            }
         });
     });
 });
@@ -794,6 +865,5 @@ process.on('uncaughtException', (err) => {
     console.log('=================================\n');
     console.log(err);
     console.log('=================================\n');
-
 });
 

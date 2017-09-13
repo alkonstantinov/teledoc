@@ -12,7 +12,6 @@ var Chat = (function (_super) {
     __extends(Chat, _super);
     function Chat() {
         var _this = _super.call(this) || this;
-        _this.socket = null;
         _this.loginResult = null;
         _this.loginResult = BasePage.LoadLogin();
         return _this;
@@ -25,7 +24,7 @@ var Chat = (function (_super) {
             return;
         var issueId = parts[1];
         var text = $("#tbMsg").val();
-        this.socket.emit('send', { message: text, room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId });
+        BasePage.Socket.emit('send', { message: text, room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId });
         $("#tbMsg").val("");
     };
     Chat.prototype.JoinRoom = function () {
@@ -33,7 +32,7 @@ var Chat = (function (_super) {
         if (parts.length < 2)
             return;
         var issueId = parts[1];
-        this.socket.emit('room', 'issue_' + issueId);
+        BasePage.Socket.emit('room', 'issue_' + issueId);
     };
     Chat.prototype.AddMsg = function (data) {
         var msg = "";
@@ -99,7 +98,7 @@ var Chat = (function (_super) {
         if (parts.length < 2)
             return;
         var issueId = parts[1];
-        this.socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
+        BasePage.Socket.emit('sendimage', { room: 'issue_' + issueId, userid: this.loginResult.UserId, name: this.loginResult.Name, issueId: issueId, fnm: $("#hFnm").val() });
         $("#modalBrowseImage").modal("hide");
     };
     Chat.prototype.EndChat = function () {
@@ -107,7 +106,10 @@ var Chat = (function (_super) {
         if (parts.length < 2)
             return;
         var issueId = parts[1];
-        this.socket.emit('endchat', { room: 'issue_' + issueId, issueId: issueId });
+        BasePage.Socket.emit('endchat', { room: 'issue_' + issueId, issueId: issueId });
+    };
+    Chat.prototype.CloseChat = function () {
+        $("#dChatControls").hide();
     };
     Chat.prototype.ShowImageDialog = function () {
         $("#modalBrowseImage").modal("show");

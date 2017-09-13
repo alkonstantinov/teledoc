@@ -37,6 +37,7 @@
     <script src="js/jquery/jquery.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="js/moment/moment.min.js"></script>
+    <script src="js/socket.io/socket.io.js"></script>
     <script src="pages/js/comm.js"></script>
     <script src="pages/js/basepage.js"></script>
     <script src="pages/js/login.js"></script>
@@ -61,6 +62,11 @@
     <script src="pages/js/dashboard.js"></script>
     <script src="pages/js/chat.js"></script>
     <script type="text/javascript">
+        
+        var NewMessage = "";
+        var CloseChatMessage = "";
+
+
         function TranslateStatic(locale) {
             if (locale === "bg") {
                 $("#iLogo").prop("src", "img/logobg.png");
@@ -82,10 +88,91 @@
         }
 
         $(document).ready(function () {
+            var trans = Comm.GET("/messagetranslations");
+            var NewMessage = trans.NewMessage;
+            var CloseChatMessage = trans.CloseChatMessage;
+
             var locale = Comm.GET("/getlocale");
             TranslateStatic(locale);
 
             BasePage.LoadCurrentPage();
+            
+            BasePage.Socket = io('/');
+            var userid = Comm.GET("/whoami").userid;
+            if (userid != null)
+                BasePage.Socket.emit("iam", userid);
+
+
+            BasePage.Socket.on('connect', function () {
+                //chat.JoinRoom();
+                
+
+            });
+
+            BasePage.Socket.on('message', function (data) {
+                var hash = window.location.hash;
+                var showMsg = false;
+                if (hash.indexOf("chat") > -1) {
+                    var parts = hash.split('|');
+                    if (parts.length != 2)
+                        return;
+                    if (data.issueId == parts[1])
+                        chat.AddMsg(data);
+                    else
+                        showMsg = true;
+                }
+                else
+                    showMsg = true;
+
+                if (showMsg)
+                    alert(NewMessage);
+            });
+
+            BasePage.Socket.on('messageimage', function (data) {
+                alert("in");
+                var hash = window.location.hash;
+                var showMsg = false;
+                if (hash.indexOf("chat") > -1) {
+                    var parts = hash.split('|');
+                    if (parts.length != 2)
+                        return;
+                    if (data.issueId == parts[1])
+                        chat.AddMsg(data);
+                    else
+                        showMsg = true;
+                }
+                else
+                    showMsg = true;
+
+                if (showMsg)
+                    alert(NewMessage);
+            });
+
+            BasePage.Socket.on('endchat', function (data) {
+                var hash = window.location.hash;
+                var showMsg = false;
+                if (hash.indexOf("chat") > -1) {
+                    var parts = hash.split('|');
+                    if (parts.length != 2)
+                        return;
+                    if (data.issueId == parts[1])
+                        chat.CloseChat();
+                    else
+                        showMsg = true;
+                }
+                else
+                    showMsg = true;
+
+                if (showMsg)
+                    alert(CloseChatMessage);
+
+                
+            });
+
+            BasePage.Socket.on('disconnect', function () {
+
+            });
+
 
 
         });
