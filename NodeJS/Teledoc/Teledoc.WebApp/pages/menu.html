@@ -1,4 +1,4 @@
 ﻿<li id="miNewIssue"><a onclick="BasePage.GotoPage('issuetarget');">#newissue#</a></li>
 <li id="miUserList"><a onclick="BasePage.GotoPage('userlist');">#users#</a></li>
 <li id="miChangePass"><a onclick="BasePage.GotoPage('changepass');">#changepass#</a></li>
-<li id="miLogoff"><a onclick="Comm.GET('/logoff');BasePage.GotoPage('');">#logoff#</a></li>
+<li id="miLogoff"><a onclick="Comm.POST('/logoff', {});BasePage.GotoPage('');">#logoff#</a></li>

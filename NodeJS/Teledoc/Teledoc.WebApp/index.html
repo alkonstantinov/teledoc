@@ -84,13 +84,17 @@
         function ChangeLocale(locale) {
             Comm.POST("/changelocale", { locale: locale });
             TranslateStatic(locale);
+            var trans = Comm.GET("/messagetranslations");
+            NewMessage = trans.NewMessage;
+            CloseChatMessage = trans.CloseChatMessage;
+
             BasePage.LoadCurrentPage();
         }
 
         $(document).ready(function () {
             var trans = Comm.GET("/messagetranslations");
-            var NewMessage = trans.NewMessage;
-            var CloseChatMessage = trans.CloseChatMessage;
+            NewMessage = trans.NewMessage;
+            CloseChatMessage = trans.CloseChatMessage;
 
             var locale = Comm.GET("/getlocale");
             TranslateStatic(locale);

@@ -13,6 +13,10 @@ var Login = (function (_super) {
     function Login() {
         return _super.call(this) || this;
     }
+    Login.prototype.StoreSessionId = function () {
+        var result = Comm.GET("/getsessionid");
+        localStorage.setItem("sessionId", result.sessionId);
+    };
     Login.prototype.DoLogin = function () {
         BasePage.HideErrors();
         var result = Comm.POST("/login", {

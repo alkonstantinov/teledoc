@@ -80,13 +80,13 @@ class BasePage {
     }
 
     static GotoPage(hash)
-    {
+    {        
         parent.location.hash = hash;
         BasePage.LoadCurrentPage();
     }
 
     static LoadCurrentPage() {
-        var level = Comm.GET("/getlevel");
+        var level = Comm.POST("/getlevel", {});
         var page = null;
         if (parent.location.hash.search("registeruser") > -1)
             page = Comm.GET("/getregisteruserpage");

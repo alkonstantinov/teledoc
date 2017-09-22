@@ -45,7 +45,7 @@ class Comm {
     static POST(url: string, data: any): any {
         Comm.ShowLoader();
         var result: any;
-
+        data.sessionId = localStorage.getItem("sessionId");        
         $.ajax({
             cache: false,
             url: url,

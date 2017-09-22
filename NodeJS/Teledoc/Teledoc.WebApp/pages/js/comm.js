@@ -30,6 +30,7 @@ var Comm = (function () {
     Comm.POST = function (url, data) {
         Comm.ShowLoader();
         var result;
+        data.sessionId = localStorage.getItem("sessionId");
         $.ajax({
             cache: false,
             url: url,

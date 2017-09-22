@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express')
 const fileSystem = require('fs');
-const session = require('express-session');
+//const session = require('express-session');
 const url = require('url');
 const pool = require('pg').Pool;
 const path = require('path');
@@ -18,6 +18,53 @@ var ChatInfo = {
     Socket2User: {},
     Room2Users: {}
 };
+
+var Sessions = [];
+
+function GetSession(sessionId) {
+    for (var s of Sessions)
+        if (s.sessionId === sessionId)
+            return s;
+    return AddSession(sessionId);
+}
+
+function AddSession(sessionId) {
+    var s = {
+        at: new Date().getTime(),
+        sessionId: sessionId,
+        locale: "bg",
+        levelid: -1
+    };
+    Sessions.push(s);
+    return s;
+}
+
+function SetSessionProperty(sessionId, property, value) {
+    var s = GetSession(sessionId);
+    s[property] = value;
+    s.at = new Date().getTime();
+}
+
+function GetSessionProperty(sessionId, property) {
+    var s = GetSession(sessionId);
+    s.at = new Date().getTime();
+    return s[property];
+}
+
+
+function RemoveSession(sessionId) {
+    var id = -1;
+    for (var i = 0; i < Sessions.length; i++)
+        if (Sessions[i].sessionId == sessionId) {
+            id = i;
+            break;
+        }
+    if (id != -1)
+        Sessions.splice(id, 1);
+}
+
+
+//---------------------------------------------------------------------
 
 var transporter = nodemailer.createTransport({
     host: 'hopkins.host.bg',
@@ -48,7 +95,7 @@ var port = 80;//process.env.PORT || 80;
 app.use(express.static(path.join(__dirname, '/')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session({ secret: 'VerySpecific', resave: true, saveUninitialized: true }));
+//app.use(session({ secret: 'VerySpecific', resave: true, saveUninitialized: true }));
 
 //-------------------------------functions
 function getExtension(filename) {
@@ -66,7 +113,9 @@ function Guid() {
 
 
 function GetLocale(req) {
-    var sess = req.session;
+    var sess = GetSession(req.body.sessionId);
+    if (sess == null)
+        sess = AddSession("S" + Guid());
     if (sess.locale == undefined)
         sess.locale = "bg";
     return sess.locale;
@@ -74,7 +123,9 @@ function GetLocale(req) {
 }
 
 function GetLevelId(req) {
-    var sess = req.session;
+    var sess = GetSession(req.body.sessionId);
+    if (sess == null)
+        sess = AddSession("S" + Guid());
     if (sess.levelid == undefined)
         sess.levelid = -1;
     return sess.levelid;
@@ -135,8 +186,7 @@ app.get('/getlocale', function (req, res) {
 });
 
 app.post('/changelocale', function (req, res) {
-
-    req.session.locale = req.body.locale;
+    SetSessionProperty(req.body.sessionId, "locale", req.body.locale)
 
     res.end();
 });
@@ -163,12 +213,22 @@ app.post('/changelocale', function (req, res) {
 
 //});
 
+
+
 app.get('/getloginpage', function (req, res) {
     SendPage("pages/login.html", req, res);
 });
 
+app.get('/getsessionid', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send({ sessionId: AddSession("S" + Guid()).sessionId });
+    res.end();
 
-app.get('/getlevel', function (req, res) {
+
+});
+
+
+app.post('/getlevel', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     var levelId = GetLevelId(req);
     res.send({ LevelId: levelId });
@@ -181,9 +241,14 @@ app.post('/login', function (req, res) {
 
     res.setHeader('Content-Type', 'application/json');
     dl.Login(Pool, req.body.Username, md5(req.body.Password), function (jsonResult) {
-        req.session.levelid = (jsonResult == null ? -1 : jsonResult.levelid);
-        req.session.userid = (jsonResult == null ? -1 : jsonResult.userid);
-        res.send({ LevelId: req.session.levelid, UserId: req.session.userid, Name: (jsonResult == null ? "" : jsonResult.name) });
+
+
+        var levelid = (jsonResult == null ? -1 : jsonResult.levelid);
+        var userid = (jsonResult == null ? -1 : jsonResult.userid);
+        SetSessionProperty(req.body.sessionId, "levelid", levelid);
+        SetSessionProperty(req.body.sessionId, "userid", userid);
+
+        res.send({ LevelId: levelid, UserId: userid, Name: (jsonResult == null ? "" : jsonResult.name) });
         res.end();
     });
 
@@ -449,9 +514,8 @@ app.get("/getmenu", function (req, res) {
 
 })
 
-app.get("/logoff", function (req, res) {
-    var sess = req.session;
-    sess.levelid = -1;
+app.post("/logoff", function (req, res) {
+    RemoveSession(req.body.sessionId);
     res.end();
 })
 
@@ -464,7 +528,7 @@ app.post("/getissuesnotclosed", function (req, res) {
     if (!RequireLevel(4, req, res))
         return;
     var locale = GetLocale(req);
-    dl.GetIssuesNotClosed(Pool, req.session.userid, function (result) {
+    dl.GetIssuesNotClosed(Pool, GetSessionProperty(req.body.sessionId, "userid"), function (result) {
         if (result != null) {
             for (var r of result) {
                 r.statusname = translate.Translate(locale, r.statusname, fileSystem);
@@ -483,7 +547,7 @@ app.post("/gettakenissues", function (req, res) {
     if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res))
         return;
     var locale = GetLocale(req);
-    dl.GetIssuesTaken(Pool, req.session.userid, function (result) {
+    dl.GetIssuesTaken(Pool, GetSessionProperty(req.body.sessionId, "userid"), function (result) {
         if (result != null) {
             for (var r of result) {
                 r.statusname = translate.Translate(locale, r.statusname, fileSystem);
@@ -505,7 +569,7 @@ app.get('/getexpertmain', function (req, res) {
 app.post("/getissuesbyexpert", function (req, res) {
     if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res))
         return;
-    dl.GetIssuesByExpert(Pool, req.session.levelid, function (result) {
+    dl.GetIssuesByExpert(Pool, GetSessionProperty(req.body.sessionId, "levelid"), function (result) {
         var locale = GetLocale(req);
 
         if (result != null) {
@@ -558,7 +622,7 @@ app.post("/getissue", function (req, res) {
 app.post("/takeissue", function (req, res) {
     if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res))
         return;
-    dl.AssignIssue(Pool, req.session.userid, req.body.issueId, function (result) {
+    dl.AssignIssue(Pool, GetSessionProperty(req.body.sessionId, "userid"), req.body.issueId, function (result) {
         res.send(result);
         res.end();
     });
@@ -572,7 +636,7 @@ app.get('/getchangepasspage', function (req, res) {
 });
 
 app.post("/changepass", function (req, res) {
-    dl.ChangePass(Pool, req.session.userid, md5(req.body.password), function (result) {
+    dl.ChangePass(Pool, GetSessionProperty(req.body.sessionId, "userid"), md5(req.body.password), function (result) {
         res.send("OK");
         res.end();
     });
@@ -623,7 +687,7 @@ app.post("/getlastissue", function (req, res) {
     if (!RequireLevel(4, req, res))
         return;
     var locale = GetLocale(req);
-    dl.GetLastIssue(Pool, req.session.userid, req.body.whoId, function (result) {
+    dl.GetLastIssue(Pool, GetSessionProperty(req.body.sessionId, "userid"), req.body.whoId, function (result) {
         res.send(result);
         res.end();
     });
@@ -666,7 +730,7 @@ app.post("/setissue", function (req, res) {
     if (!RequireLevel(4, req, res))
         return;
     var json = JSON.parse(req.body.issue);
-    json.patientuserid = req.session.userid;
+    json.patientuserid = GetSessionProperty(req.body.sessionId, "userid");
 
 
     dl.SetIssue(Pool, JSON.stringify(json), function (result) {
@@ -704,7 +768,7 @@ app.get("/getchatimage", function (req, res) {
 app.post("/getclosedissues", function (req, res) {
     if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
         return;
-    dl.GetClosedIssues(Pool, req.session.userid, function (result) {
+    dl.GetClosedIssues(Pool, GetSessionProperty(req.body.sessionId, "userid"), function (result) {
         res.send(result);
         res.end();
     });
@@ -736,7 +800,7 @@ app.post("/restartchat", function (req, res) {
 })
 
 app.get("/whoami", function (req, res) {
-    res.send({ userid: req.session.userid });
+    res.send({ userid: GetSessionProperty(req.body.sessionId, "userid") });
     res.end();
 
 })

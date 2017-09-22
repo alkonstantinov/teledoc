@@ -3,6 +3,11 @@ declare var login: Login;
 
 class Login extends BasePage {
 
+    public StoreSessionId() {
+        var result = Comm.GET("/getsessionid");
+        localStorage.setItem("sessionId", result.sessionId);
+    }
+
     public DoLogin() {
         BasePage.HideErrors();
         let result = Comm.POST("/login", {
@@ -14,8 +19,8 @@ class Login extends BasePage {
         switch (result.LevelId) {
             case -1:
                 $("#lErrUser").show(); break;
-            case 1:
-                BasePage.GotoPage("dashboard");
+            case 1:                
+                BasePage.GotoPage("dashboard");                
                 break;
             case 2:
                 BasePage.GotoPage("expertmain");
