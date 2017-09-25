@@ -30,7 +30,8 @@ function GetSession(sessionId) {
 
 function AddSession(sessionId) {
     var s = {
-        at: new Date().getTime(),
+        at: new
+            Date().getTime(),
         sessionId: sessionId,
         locale: "bg",
         levelid: -1
