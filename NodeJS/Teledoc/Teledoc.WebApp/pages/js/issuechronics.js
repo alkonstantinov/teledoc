@@ -18,7 +18,7 @@ var IssueChronics = (function (_super) {
         if (issue == null)
             issue = {};
         this.placeHolderText = Comm.POST("/translatestring", { word: "enterchronic" }).Translate;
-        var chronics = Comm.GET("/getchronics");
+        var chronics = Comm.POST("/getchronics", {});
         for (var _i = 0, chronics_1 = chronics; _i < chronics_1.length; _i++) {
             var c = chronics_1[_i];
             if (c.chronicid > -1)

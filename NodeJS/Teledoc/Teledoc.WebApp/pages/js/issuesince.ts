@@ -8,7 +8,7 @@ class IssueSince extends BasePage {
         if (issue == null)
             issue = {};
 
-        var sinces = Comm.GET("/getsinces");
+        var sinces = Comm.POST("/getsinces", {});
         if (sinces == null)
             return;
         for (var since of sinces) {

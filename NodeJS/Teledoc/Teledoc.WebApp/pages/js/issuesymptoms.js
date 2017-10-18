@@ -17,7 +17,7 @@ var IssueSymptoms = (function (_super) {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
-        var symptoms = Comm.GET("/getsymptoms");
+        var symptoms = Comm.POST("/getsymptoms", {});
         if (symptoms == null)
             return;
         for (var _i = 0, symptoms_1 = symptoms; _i < symptoms_1.length; _i++) {

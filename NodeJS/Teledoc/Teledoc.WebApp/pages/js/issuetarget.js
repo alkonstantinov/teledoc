@@ -48,9 +48,9 @@ var IssueTarget = (function (_super) {
             issue.answertypeid = oldIssue.answertypeid;
             issue.additionalinfo = oldIssue.additionalinfo;
             issue.chronic = oldIssue.chronics;
-            issue.description = oldIssue.description;
+            //issue.description = oldIssue.description;
             //issue.medication = oldIssue.medications;
-            issue.sexid = oldIssue.sexid;
+            issue.sexid = oldIssue.genderid;
             issue.birthmonth = oldIssue.birthmonth;
             issue.birthyear = oldIssue.birthyear;
         }

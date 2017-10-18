@@ -22,7 +22,6 @@ var PatientMain = (function (_super) {
             return;
         for (var _i = 0, issues_1 = issues; _i < issues_1.length; _i++) {
             var issue = issues_1[_i];
-            alert(issue.answertypeid);
             var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
             if (issue.statusid == 2) {
                 switch (issue.answertypeid) {

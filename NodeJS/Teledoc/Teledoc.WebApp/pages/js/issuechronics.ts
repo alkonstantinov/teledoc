@@ -10,7 +10,7 @@ class IssueChronics extends BasePage {
         if (issue == null)
             issue = {};
         this.placeHolderText = Comm.POST("/translatestring", { word: "enterchronic" }).Translate;
-        var chronics = Comm.GET("/getchronics");
+        var chronics = Comm.POST("/getchronics", {});
         for (var c of chronics) {
             if (c.chronicid > -1)
                 $("#dChronic").append("<div class='row'><div class='col-md-12'><div class='form-check form-check-inline'><label class='form-check-label'><input type='checkbox' class='form-check-input' chronicid='" + c.chronicid + "'> " + c.chronicname + "</label></div></div>");

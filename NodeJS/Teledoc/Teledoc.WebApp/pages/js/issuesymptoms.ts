@@ -8,7 +8,7 @@ class IssueSymptoms extends BasePage {
         if (issue == null)
             issue = {};
 
-        var symptoms = Comm.GET("/getsymptoms");
+        var symptoms = Comm.POST("/getsymptoms", {});
         if (symptoms == null)
             return;
         for (var group of symptoms) {

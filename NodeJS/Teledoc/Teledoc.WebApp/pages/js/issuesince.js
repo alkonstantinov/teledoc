@@ -17,7 +17,7 @@ var IssueSince = (function (_super) {
         var issue = BasePage.LoadIssue();
         if (issue == null)
             issue = {};
-        var sinces = Comm.GET("/getsinces");
+        var sinces = Comm.POST("/getsinces", {});
         if (sinces == null)
             return;
         for (var _i = 0, sinces_1 = sinces; _i < sinces_1.length; _i++) {

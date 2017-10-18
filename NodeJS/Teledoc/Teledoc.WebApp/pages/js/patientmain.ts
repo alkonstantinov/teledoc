@@ -12,7 +12,6 @@ class PatientMain extends BasePage {
         if (issues == null)
             return;
         for (var issue of issues) {
-            alert(issue.answertypeid);
             var row = "<tr><td>" + BasePage.PostgreTimestamp(issue.ondate) + "</td><td>" + issue.description + "</td><td>" + issue.statusname + "</td><td>";
             if (issue.statusid == 2) {
                 switch (issue.answertypeid) {

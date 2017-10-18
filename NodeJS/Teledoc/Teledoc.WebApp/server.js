@@ -282,7 +282,7 @@ app.get('/getissuesymptomspage', function (req, res) {
     SendPage("pages/issuesymptoms.html", req, res);
 });
 
-app.get('/getsymptoms', function (req, res) {
+app.post('/getsymptoms', function (req, res) {
     if (!RequireLevel(4, req, res))
         return;
 
@@ -305,7 +305,7 @@ app.get('/getissuesincepage', function (req, res) {
     SendPage("pages/issuesince.html", req, res);
 });
 
-app.get('/getsinces', function (req, res) {
+app.post('/getsinces', function (req, res) {
     if (!RequireLevel(4, req, res))
         return;
 
@@ -337,7 +337,7 @@ app.get('/getissuemedicinespage', function (req, res) {
 });
 
 
-app.get('/getchronics', function (req, res) {
+app.post('/getchronics', function (req, res) {
     if (!RequireLevel(4, req, res))
         return;
 
@@ -406,8 +406,8 @@ app.get('/getregisterdoctorpage', function (req, res) {
 });
 
 app.post('/uploadimage', function (req, res) {
-    if (!RequireLevel(4, req, res) && !RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(1, req, res))
-        return;
+    //if (!RequireLevel(4, req, res) && !RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(1, req, res))
+    //    return;
 
     var guid = Guid();
 
@@ -756,8 +756,6 @@ app.get('/getchatpage', function (req, res) {
 });
 
 app.get("/getchatimage", function (req, res) {
-    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
-        return;
     dl.GetChatImage(Pool, req.query.ChatId, function (result) {
         res.end(result, 'binary');
     });
