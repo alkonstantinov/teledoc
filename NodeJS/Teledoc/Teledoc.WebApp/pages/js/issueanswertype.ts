@@ -57,7 +57,6 @@ class IssueAnswerType extends BasePage {
     public Next() {
         if (this.Save()) {
             var issue = BasePage.LoadIssue();
-            debugger;
             Comm.POST("/setissue", { issue: JSON.stringify(issue) });
             BasePage.RemoveIssue();
             BasePage.GotoPage("patientmain");

@@ -21,6 +21,20 @@ var ChatInfo = {
 
 var Sessions = [];
 
+function RemoveOldSessions() {
+    var i = 0;
+    while (i < Sessions.length) {
+        var diff = (new Date().getTime() - Sessions[i].at) / (1000 * 60);
+        if (diff > 15)
+            Sessions.splice(i, 1);
+        else
+            i++;
+    }
+
+}
+
+setInterval(RemoveOldSessions, 1000 * 60);
+
 function GetSession(sessionId) {
     for (var s of Sessions)
         if (s.sessionId === sessionId)
@@ -125,6 +139,10 @@ function GetLocale(req) {
 
 function GetLevelId(req) {
     var sess = GetSession(req.body.sessionId);
+    if (req.query.sid != null)
+        sess = GetSession(req.query.sid);
+
+
     if (sess == null)
         sess = AddSession("S" + Guid());
     if (sess.levelid == undefined)
@@ -417,12 +435,11 @@ app.post('/uploadimage', function (req, res) {
     busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
         guid += "." + getExtension(filename);
         var fstream = fileSystem.createWriteStream(__dirname + "/files/" + guid);
-        file.pipe(fstream);
-        file.on('end', function () {
-
+        file.pipe(fstream).on('finish', function () {
+            fstream.close();
             res.send({ imageId: guid });
             res.end();
-            fstream.close();
+
         });
     });
 
@@ -756,6 +773,11 @@ app.get('/getchatpage', function (req, res) {
 });
 
 app.get("/getchatimage", function (req, res) {
+    if (!RequireLevel(2, req, res) && !RequireLevel(3, req, res) && !RequireLevel(4, req, res))
+        return;
+
+
+
     dl.GetChatImage(Pool, req.query.ChatId, function (result) {
         res.end(result, 'binary');
     });

@@ -29,7 +29,8 @@ create table "User"
   IsFB boolean not null,
   Name text,
   ActivationString citext,
-  Active boolean not null default true
+  Active boolean not null default true,
+  LoginCount int not null default 0
   
 );
 insert into "User" (LevelId, UserName, Password, IsFB)
@@ -119,7 +120,7 @@ create table Issue
   BirthMonth smallint,
   BirthYear int,
   Description text not null, 
-  AnswerTypeId int not null references AnsweType(AnsweTypeId),
+  AnswerTypeId int not null references AnswerType(AnswerTypeId),
   AdditionalInfo text,
   Paid boolean not null  
 );

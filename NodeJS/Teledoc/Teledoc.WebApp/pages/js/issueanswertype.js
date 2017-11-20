@@ -66,7 +66,6 @@ var IssueAnswerType = (function (_super) {
     IssueAnswerType.prototype.Next = function () {
         if (this.Save()) {
             var issue = BasePage.LoadIssue();
-            debugger;
             Comm.POST("/setissue", { issue: JSON.stringify(issue) });
             BasePage.RemoveIssue();
             BasePage.GotoPage("patientmain");

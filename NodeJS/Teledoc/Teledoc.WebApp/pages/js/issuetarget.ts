@@ -36,7 +36,10 @@ class IssueTarget extends BasePage {
         else
             issue.reqexpertlevelid = 3;
 
+        
+
         var oldIssue = Comm.POST("/getlastissue", { whoId: issue.whoid });
+        
         if (oldIssue != null) {
             issue.allergy = oldIssue.allergies;
             issue.answertypeid = oldIssue.answertypeid;

@@ -128,7 +128,7 @@ begin
   end if;
   return _UserId;
 end $$ LANGUAGE plpgsql; 
- update "User" set levelid = 1 where userid =1
+ 
 -- drop function pUserSearch (_ss text, _pos integer, _pageSize integer)
 -- Извличане на всички потребители
 create or replace function pUserSearch (_ss text, _levelId int, _pos integer, _pageSize integer)
@@ -441,7 +441,9 @@ returns table (IssueId int, OnDate timestamp, Description text, StatusId int, St
     i.answertypeid
   from Issue i
   join IssueStatus st on st.IssueStatusId = i.IssueStatusId
-  where i.PatientUserId = _PatientUserId and i.IssueStatusId in (1,2);
+  where i.PatientUserId = _PatientUserId and i.IssueStatusId in (1,2)
+  order by i.issueid desc
+  limit 5;
 $$ LANGUAGE sql; 
 
 -- извличане на отворени и непоети ишута по вид експерт
@@ -456,7 +458,10 @@ returns table (IssueId int, OnDate timestamp, Description text)
     (select min(ondate) from IssueEvent where IssueId = i.IssueId) OnDate,
     i.Description
   from Issue i
-  where i.ReqExpertLevelId = _LevelId and i.IssueStatusId =1;
+  where i.ReqExpertLevelId = _LevelId and i.IssueStatusId =1
+  order by i.issueid
+  limit 5;
+  
 $$ LANGUAGE sql; 
 
 -- извличане на отворени и поети ишута по експерт
@@ -474,7 +479,9 @@ returns table (IssueId int, OnDate timestamp, Description text, StatusId int, St
     i.answertypeid
   from Issue i
   join IssueStatus st on st.IssueStatusId = i.IssueStatusId
-  where i.ExpertUserId = _ExpertUserId and i.IssueStatusId = 2;
+  where i.ExpertUserId = _ExpertUserId and i.IssueStatusId = 2
+  order by i.issueid
+  limit 5;
 $$ LANGUAGE sql; 
 
 
@@ -520,7 +527,8 @@ returns table (IssueId int, OnDate timestamp, Description text, AnswerTypeId int
     i.AnswerTypeid
   from Issue i  
   where (i.PatientUserId = _UserId  or i.ExpertUserId = _UserId) and i.IssueStatusId =3
-  LIMIT  10;
+  order by i.issueid desc
+  limit 5;
 $$ LANGUAGE sql; 
 
 
